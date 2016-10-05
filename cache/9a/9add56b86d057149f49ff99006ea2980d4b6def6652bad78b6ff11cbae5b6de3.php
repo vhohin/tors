@@ -59,10 +59,10 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
                 <option value=\"volvo\">Round trip</option>
                 <option value=\"saab\">One-way</option>                
             </select>
-            <p>From: </p><input type=\"text\" name=\"depart\" ></span>
-            <p>To: </p><input type=\"text\" name=\"arrive\"><br/>
-            <p>Depart on: </p><input type=\"datetime\" name=\"dateTimeDepart\">
-            <p>Arrive on: </p><input type=\"date\" name=\"dateTimeArrive\">
+            <p>From: </p><input type=\"text\" name=\"depart\"  placeholder=\"Place of departure\"></span>
+            <p>To: </p><input type=\"text\" name=\"arrive\"  placeholder=\"Place of arrival\"><br/>
+            <p>Depart on: </p><input type=\"date\" name=\"dateTimeDepart\" placeholder=\"Date of departure\">
+            <p>Arrive on: </p><input type=\"date\" name=\"dateTimeArrive\" placeholder=\"Date of arrival\">
             <button id=\"selectContinue\">CONTINUE</button>
         </form>    
     </div>
@@ -104,10 +104,10 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
                 <option value=\"volvo\">Round trip</option>
                 <option value=\"saab\">One-way</option>                
             </select>
-            <p>From: </p><input type=\"text\" name=\"depart\" ></span>
-            <p>To: </p><input type=\"text\" name=\"arrive\"><br/>
-            <p>Depart on: </p><input type=\"datetime\" name=\"dateTimeDepart\">
-            <p>Arrive on: </p><input type=\"date\" name=\"dateTimeArrive\">
+            <p>From: </p><input type=\"text\" name=\"depart\"  placeholder=\"Place of departure\"></span>
+            <p>To: </p><input type=\"text\" name=\"arrive\"  placeholder=\"Place of arrival\"><br/>
+            <p>Depart on: </p><input type=\"date\" name=\"dateTimeDepart\" placeholder=\"Date of departure\">
+            <p>Arrive on: </p><input type=\"date\" name=\"dateTimeArrive\" placeholder=\"Date of arrival\">
             <button id=\"selectContinue\">CONTINUE</button>
         </form>    
     </div>
