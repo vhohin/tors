@@ -1,0 +1,54 @@
+body {
+    background-color: #ffffcc;/*F8EBE4*/
+}
+#centerContent{
+    width: 800px;
+    margin: 0 auto;
+    padding: 0;
+    background-color: white;
+    border:1px solid lightgray;
+}
+
+#content{
+    border:1px solid lightgray;
+    padding:20px;
+}
+
+#content h1{
+    text-align: center;
+}
+
+#loginContent p{
+    width: 200px;
+    display: inline-block;
+}
+
+#loginContent input{
+    width: 200px;
+}
+
+#loginContent li{
+    color: red;
+}
+
+#registerContent p{
+    width: 200px;
+    display: inline-block;
+}
+
+#registerContent input{
+    width: 200px;
+}
+
+#registerContent li{
+    color: red;
+}
+
+#content a{
+    text-decoration: none;
+}
+
+#footer{    
+    text-align: center;
+    padding: 10px;
+}
