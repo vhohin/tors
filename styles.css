@@ -1,48 +1,133 @@
 body {
-    background-color: #ffffcc;/*F8EBE4*/
+    background-color: #ffffff;/*#ffffcc;/*F8EBE4*/
 }
 
+a{
+    text-decoration: none;
+    color: #05526B;
+    cursor: pointer;
+}
+
+a:hover{
+    color: red;
+    cursor: pointer;
+}
+/*
+******************* HEADER
+*/
 #header{
    margin: 0 auto;
-   height: 100px;
+   height: 80px;
    background-color: lightblue;
    text-align: center;
 }
-
-#header h1{
+#logo{
     display: inline-block;
+    height: 80px;
+    width: 600px;
+    position: relative;
+}
+#logo img{
+    position: absolute;
+    top:-5px;
+    left: 0;
+}
+#logo>h1{
+    display: inline-block;
+    position: absolute;
+    right: 20px;
+    font-size: 260%;
+    margin: 15px;
+    color:#05526B;
+}
+#topMenu{
+    position: absolute;
+    right: 20px;
+    top: 70px;
+    display: inline;/*-block;*/
+    margin: 0 auto;
+    height: 30px;
+    /*border: 1px solid blue;*/
+}
+#topMenu ul li a{
+    color:white;
+     -webkit-transition-duration: 1s; /* Safari */
+    transition-duration: 1s;
+    margin: 0;
+}
+#topMenu ul li a:hover{
+    color:#05526B;
+    background: lightblue;    
 }
 
+#topMenu ul li:hover{
+    -webkit-transition-duration: 0.5s; /* Safari */
+    transition-duration: 0.5s;
+    background: lightblue;
+    color:#05526B;
+}
 #header ul{
-    display: inline-block;
+    display: inline;/*-block;*/
+    text-align: right;
+    padding: 0;    
 }
 
 #header ul li{
     display: inline-block;
+    margin: 1px;
+    padding: 3px 5px;
+    background-color: #05526B;
+    color: #fff;
+    font-size: 80%;
 }
-
 
 #centerContent{
     width: 800px;
     margin: 0 auto;
     padding: 0;
     background-color: white;
-    border:1px solid lightgray;
+    
+    /*border:1px solid lightgray;*/
+}
+/*
+******************* INDEX.HTML.TWIG
+*/
+
+#loginBlock{
+   display: inline;/*-block; */
+}
+
+#loginBlock>p{
+   text-align: right;
+   margin: 0;
 }
 
 #content{
     border:1px solid lightgray;
-    padding:20px;
+    margin: 10px 0;
+    padding:10px;
 }
 
 #content h1{
     text-align: center;
 }
 
+/*
+******************* select form
+*/
+#selectForm p{
+    display: inline-block;
+ 
+}
+
+/*
+******************* FOOTER
+*/
 #footer{
    margin: 0 auto;
-   height: 50px;
+   height: 40px;
    background-color: lightblue;
    text-align: center;
+   padding-top: 15px;
 }
 

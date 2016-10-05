@@ -1,14 +1,26 @@
 {% extends "master.html.twig" %}
 
 {% block title %}TORS{% endblock %}
-        
-{% block content %}    
-    
-    {% if currentUser %}
-        <p>Hello {{currentUser}}, you can <a href="/logout">Logout</a></p>
+{% block login %}
+{% if currentUser %}
+        <p>Hello {{currentUser}}. <a href="/logout"> LOGOUT</a></p>
     {% else %}
-        <p>You are not logined. You can <a href="/login">Login</a> or <a href="/register">Register</a></p>       
+        <p><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
     {% endif %}
-    
+{% endblock %}        
+{% block content %}    
+    <div id="selectForm">
+        <form method="post">
+            <p>Trip: </p><select name="typeTrip">
+                <option value="volvo">Round trip</option>
+                <option value="saab">One-way</option>                
+            </select>
+            <p>From: </p><input type="text" name="depart" ></span>
+            <p>To: </p><input type="text" name="arrive"><br/>
+            <p>Depart on: </p><input type="date" name="dateTimeDepart">
+            <p>Arrive on: </p><input type="date" name="dateTimeArrive">
+            <button id="selectContinue">CONTINUE</button>
+        </form>    
+    </div>
     
 {% endblock %}

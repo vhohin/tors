@@ -11,6 +11,7 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
         $this->parent = $this->loadTemplate("master.html.twig", "index.html.twig", 1);
         $this->blocks = array(
             'title' => array($this, 'block_title'),
+            'login' => array($this, 'block_login'),
             'content' => array($this, 'block_content'),
         );
     }
@@ -31,26 +32,40 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
         echo "TORS";
     }
 
-    // line 5
+    // line 4
+    public function block_login($context, array $blocks = array())
+    {
+        // line 5
+        if ((isset($context["currentUser"]) ? $context["currentUser"] : null)) {
+            // line 6
+            echo "        <p>Hello ";
+            echo twig_escape_filter($this->env, (isset($context["currentUser"]) ? $context["currentUser"] : null), "html", null, true);
+            echo ". <a href=\"/logout\"> LOGOUT</a></p>
+    ";
+        } else {
+            // line 8
+            echo "        <p><a href=\"/login\">LOGIN </a> | <a href=\"/register\"> REGISTER</a></p>       
+    ";
+        }
+    }
+
+    // line 11
     public function block_content($context, array $blocks = array())
     {
         echo "    
-    
-    ";
-        // line 7
-        if ((isset($context["currentUser"]) ? $context["currentUser"] : null)) {
-            // line 8
-            echo "        <p>Hello ";
-            echo twig_escape_filter($this->env, (isset($context["currentUser"]) ? $context["currentUser"] : null), "html", null, true);
-            echo ", you can <a href=\"/logout\">Logout</a></p>
-    ";
-        } else {
-            // line 10
-            echo "        <p>You are not logined. You can <a href=\"/login\">Login</a> or <a href=\"/register\">Register</a></p>       
-    ";
-        }
-        // line 12
-        echo "    
+    <div id=\"selectForm\">
+        <form method=\"post\">
+            <p>Trip: </p><select name=\"typeTrip\">
+                <option value=\"volvo\">Round trip</option>
+                <option value=\"saab\">One-way</option>                
+            </select>
+            <p>From: </p><input type=\"text\" name=\"depart\" ></span>
+            <p>To: </p><input type=\"text\" name=\"arrive\"><br/>
+            <p>Depart on: </p><input type=\"datetime\" name=\"dateTimeDepart\">
+            <p>Arrive on: </p><input type=\"date\" name=\"dateTimeArrive\">
+            <button id=\"selectContinue\">CONTINUE</button>
+        </form>    
+    </div>
     
 ";
     }
@@ -67,7 +82,7 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
 
     public function getDebugInfo()
     {
-        return array (  53 => 12,  49 => 10,  43 => 8,  41 => 7,  35 => 5,  29 => 3,  11 => 1,);
+        return array (  53 => 11,  47 => 8,  41 => 6,  39 => 5,  36 => 4,  30 => 3,  11 => 1,);
     }
 
     public function getSource()
@@ -75,15 +90,27 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
         return "{% extends \"master.html.twig\" %}
 
 {% block title %}TORS{% endblock %}
-        
-{% block content %}    
-    
-    {% if currentUser %}
-        <p>Hello {{currentUser}}, you can <a href=\"/logout\">Logout</a></p>
+{% block login %}
+{% if currentUser %}
+        <p>Hello {{currentUser}}. <a href=\"/logout\"> LOGOUT</a></p>
     {% else %}
-        <p>You are not logined. You can <a href=\"/login\">Login</a> or <a href=\"/register\">Register</a></p>       
+        <p><a href=\"/login\">LOGIN </a> | <a href=\"/register\"> REGISTER</a></p>       
     {% endif %}
-    
+{% endblock %}        
+{% block content %}    
+    <div id=\"selectForm\">
+        <form method=\"post\">
+            <p>Trip: </p><select name=\"typeTrip\">
+                <option value=\"volvo\">Round trip</option>
+                <option value=\"saab\">One-way</option>                
+            </select>
+            <p>From: </p><input type=\"text\" name=\"depart\" ></span>
+            <p>To: </p><input type=\"text\" name=\"arrive\"><br/>
+            <p>Depart on: </p><input type=\"datetime\" name=\"dateTimeDepart\">
+            <p>Arrive on: </p><input type=\"date\" name=\"dateTimeArrive\">
+            <button id=\"selectContinue\">CONTINUE</button>
+        </form>    
+    </div>
     
 {% endblock %}
 ";
