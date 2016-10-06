@@ -20,7 +20,7 @@ $(document).ready(function () {
 {% endblock %} 
 
 {% block content %}
-    <div id="contentSelectedDestination">        
+    <div id="contentSelectedDestination">          
     {% if valueList %}
         <table id="SelectedBuses">
             <tr>
@@ -45,7 +45,10 @@ $(document).ready(function () {
         {% else %}
             <p>There are no buses for this destination or this date.</p>
     {% endif %}
+    <p> {{dateTimeDepart}}</p>
+    <p> {{dateTimeArrive}}</p>
     </div>
+    
     <div id="waitForIt" style="z-index: 2; position: absolute; top: 100px; left: 400px;">
         <img src="/images/swirl.gif">
     </div>

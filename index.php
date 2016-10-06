@@ -75,16 +75,35 @@ $app->post('/select', function() use ($app,$log) {
     $errorList = array();
     if (strlen($depart)<1 || strlen($depart)>50 || strlen($arrive)<1 || strlen($arrive)>50) {
         array_push($errorList, "Depart and Arrive must have from 1 to 50 characters");
+    } elseif ($depart==$arrive) {
+        array_push($errorList, "Depart and Arrive must de different places");
     }
+    
     $tempDateD = explode('-', $dateTimeDepart);
     $tempDateA = explode('-', $dateTimeArrive);
-    if ((count($tempDateD) != 3)||(count($tempDateA) != 3)) {
-        array_push($errorList, "Not enough datas in Depart or Arrive Date");
-    } elseif (!checkdate($tempDateD[1], $tempDateD[2], $tempDateD[0])
-            || !checkdate($tempDateA[1], $tempDateA[2], $tempDateA[0])) {
-        array_push($errorList, "Bad format Depart or Arrive Date");
-    }    
+    if (empty($dateTimeDepart) && empty($dateTimeArrive)) {
+        array_push($errorList, "Select Depart or Arrive Date");
+    } elseif (!empty($dateTimeDepart)){        
+        if (count($tempDateD) != 3) {
+            array_push($errorList, "Not enough datas in Depart Date");
+        } elseif (!checkdate($tempDateD[1], $tempDateD[2], $tempDateD[0])) {
+            array_push($errorList, "Bad format Depart Date");
+        }/* elseif (date("Y-m-d") > date($tempDateD,"Y-m-d")) {
+            array_push($errorList, "Depart Date must be later then Now");
+        }  */ 
+    } elseif (!empty($dateTimeArrive)){        
+        if (count($tempDateA) != 3) {
+            array_push($errorList, "Not enough datas in Arrive Date");
+        } elseif (!checkdate($tempDateA[1], $tempDateA[2], $tempDateA[0])) {
+            array_push($errorList, "Bad format Arrive Date");
+        }/*elseif (date("Y-m-d") > date($tempDateA,"Y-m-d")) {
+            array_push($errorList, "Arrive Date must be later then Now");
+        }  */        
+    } elseif (!empty($dateTimeDepart) && !empty($dateTimeArrive) && ($tempDateD > $tempDateA)){
+            array_push($errorList, "Depart Date later then Arrive Date");
+    }      
 // State 2: Submission    
+    //$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s and DateTimeDepart<%s and DateTimeArrive<%s", $depart,$arrive,$dateTimeDepart,$dateTimeArrive); 
     $result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s", $depart,$arrive); 
     //$result = DB::query("SELECT * FROM trips"); 
     if (!$result){
@@ -92,10 +111,10 @@ $app->post('/select', function() use ($app,$log) {
         }
     if ($errorList) {
 // State 3: failed submission
-        $app->render('index.html.twig', array('errorList' => $errorList));
+        $app->render('index.html.twig', array('errorList' => $errorList,'dateTimeDepart'=>$dateTimeDepart,'dateTimeArrive'=>$dateTimeArrive));
         //$log->debug("");
     } else {
-        $app->render('selected_destination.html.twig', array('valueList'=>$result,'currentUser'=>$_SESSION['user']));
+        $app->render('selected_destination.html.twig', array('valueList'=>$result,'currentUser'=>$_SESSION['user'],'dateTimeDepart'=>$dateTimeDepart,'dateTimeArrive'=>$dateTimeArrive));
     }        
 });
 
