@@ -113,7 +113,7 @@ a:hover{
 }
 
 /*
-******************* INDEX select form
+* INDEX select form
 */
 #selectForm p{
     display: inline-block;
@@ -122,13 +122,56 @@ a:hover{
     
 }
 #selectForm input{
-    width: 150px;
+    width: 170px;
 }
-#selectForm select{
-    width: 120px;
+input[type=submit] {
+    width: 200px;
+    height: 30px;
+    margin-left: 95px;
+    padding:5px 15px; 
+    background:lightblue; 
+    color: #05526B; 
+   
+    border:1px solid black;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+     -webkit-transition-duration: 1s; /* Safari */
+    transition-duration: 1s;
 }
+input[type=submit]:hover {     
+     background:#05526B; 
+    color: white;
+     -webkit-transition-duration: 1s; /* Safari */
+    transition-duration: 1s;
+}
+
 #errorList ul li{
     color: red;
+}
+.select_join {
+  width: 170px;
+  height: 28px;
+  overflow: hidden;
+  background:  #FEFEFE;
+  border: 1px solid lightblue;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0px 0px 10px 1px #FEFEFE;
+  box-shadow: inset 0px 0px 10px 1px #FEFEFE;
+}
+.select_join select {
+  background: transparent;
+  width: 170px;
+  font-size:7pt;
+  color:grey;
+  border: 0;
+  border-radius: 0;
+  height: 28px;
+  -webkit-appearance: none;
+}
+.select_join select:focus {
+  outline: none;
 }
 /*
 ******************* SELECTED_DESTINATION form
