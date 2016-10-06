@@ -1,8 +1,15 @@
 ---------------------------
-Octoberr 5, 2016 - DAY01
+October 5, 2016 - DAY01
 ---------------------------
 
 Valeriy
 1) Finished: DB tables - buses, drivers, seat, trips; files - master.html.twig;
 2) Didn't finished index.html.twig
 3) Finish files: index.html.twig, styles. 
+
+
+Nazar
+
+1) DONE: DB table - users; files - master.html.twig;
+2) TO DO: Continue working on registration/login page, styles and code
+ 
