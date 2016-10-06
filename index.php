@@ -69,68 +69,88 @@ $fb = new Facebook\Facebook([
 if (!isset($_SESSION['user'])) {           
     $_SESSION['user']=array();              
 }
+
+$cityList = array();
 //**************************************************** HOME select trip
 $app->get('/', function() use ($app,$log) {
-    $app->render('index.html.twig',array('currentUser'=>$_SESSION['user']));
+    GLOBAL $cityList;
+    $errorList = array();
+    $cityList = DB::query("SELECT * FROM citys ORDER BY name");
+    if (!$cityList){
+            array_push($errorList, "Not citys in database"); 
+        }
+    if ($errorList) {
+        $app->render('index.html.twig', array('errorList' => $errorList));
+    } else {
+        $app->render('index.html.twig',array('currentUser'=>$_SESSION['user'],'cityList'=>$cityList));
+    }      
 });
 //**************************************************** Selected trip
 $app->post('/select', function() use ($app,$log) {
-// State 0: Get datas from form    
-    $depart = $app->request->post('depart');
-    $arrive = $app->request->post('arrive');
+// State 0: Get datas from form   
+    GLOBAL $cityList;
+    $depart = $app->request->post('departID');
+    $arrive = $app->request->post('arriveID');
     $dateTimeDepart = $app->request->post('dateTimeDepart');
     $dateTimeArrive = $app->request->post('dateTimeArrive');
     $typeTrip = $app->request->post('typeTrip');
+    $v = array ('departID' => $depart, 'arriveID' => $arrive, 'dateTimeDepart' => $dateTimeDepart, 'dateTimeArrive' => $dateTimeArrive, 'typeTrip' => $typeTrip);
  // State 1: Verification
     $errorList = array();
-    if (strlen($depart)<1 || strlen($depart)>50 || strlen($arrive)<1 || strlen($arrive)>50) {
-        array_push($errorList, "Depart and Arrive must have from 1 to 50 characters");
+    if (!is_numeric($depart) || !is_numeric($depart)) {
+        $log->debug( "ERROR: Depart ID and Arrive ID must be numeric");
     } elseif ($depart==$arrive) {
-        array_push($errorList, "Depart and Arrive must de different places");
+        $log->debug("ERROR: Depart and Arrive must de different places");
     }
     
     $tempDateD = explode('-', $dateTimeDepart);
     $tempDateA = explode('-', $dateTimeArrive);
     if (empty($dateTimeDepart) && empty($dateTimeArrive)) {
-        array_push($errorList, "Select Depart or Arrive Date");
+        array_push($errorList, "ERROR: Select Depart or Arrive Date");
     } elseif (!empty($dateTimeDepart)){        
         if (count($tempDateD) != 3) {
-            array_push($errorList, "Not enough datas in Depart Date");
+            $log->debug("ERROR: Not enough datas in Depart Date");
         } elseif (!checkdate($tempDateD[1], $tempDateD[2], $tempDateD[0])) {
-            array_push($errorList, "Bad format Depart Date");
+            $log->debug("ERROR: Bad format Depart Date");
         }/* elseif (date("Y-m-d") > date($tempDateD,"Y-m-d")) {
             array_push($errorList, "Depart Date must be later then Now");
         }  */ 
     } elseif (!empty($dateTimeArrive)){        
         if (count($tempDateA) != 3) {
-            array_push($errorList, "Not enough datas in Arrive Date");
+            $log->debug("ERROR: Not enough datas in Arrive Date");
         } elseif (!checkdate($tempDateA[1], $tempDateA[2], $tempDateA[0])) {
-            array_push($errorList, "Bad format Arrive Date");
+            $log->debug("ERROR: Bad format Arrive Date");
         }/*elseif (date("Y-m-d") > date($tempDateA,"Y-m-d")) {
             array_push($errorList, "Arrive Date must be later then Now");
         }  */        
     } elseif (!empty($dateTimeDepart) && !empty($dateTimeArrive) && ($tempDateD > $tempDateA)){
-            array_push($errorList, "Depart Date later then Arrive Date");
+        $log->debug("ERROR: Depart Date later then Arrive Date");
     }      
 // State 2: Submission    
     //$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s and DateTimeDepart<%s and DateTimeArrive<%s", $depart,$arrive,$dateTimeDepart,$dateTimeArrive); 
-    $result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s", $depart,$arrive); 
-    //$result = DB::query("SELECT * FROM trips"); 
-    if (!$result){
-            array_push($errorList, "Not this dastination"); //password_hash ( string $password , integer $algo [, array $options ] )
-        }
-    if ($errorList) {
-// State 3: failed submission
-        $app->render('index.html.twig', array('errorList' => $errorList,'dateTimeDepart'=>$dateTimeDepart,'dateTimeArrive'=>$dateTimeArrive));
-        //$log->debug("");
+    $result = DB::query("SELECT trips.ID as ID,BusID,DepartID,ArriveID,DateTimeDepart,DateTimeArrive,Description,MakeModel,WiFi,AirConditioning,AirConditioning,PowerOutlets "
+            . "FROM trips,buses WHERE trips.BusID=buses.ID AND DepartID=%d AND ArriveID=%d", (int)$depart, (int)$arrive);
+    ////$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s", $depart,$arrive); 
+    GLOBAL $cityList;
+    if (!$result){        
+        $errorList = array();
+        $cityList = DB::query("SELECT * FROM citys ORDER BY name");
+        if (!$cityList){
+                array_push($errorList, "Not citys in database"); 
+            }         
+        $log->debug("ERROR: Not this dastination");
+        array_push($errorList, "Not this dastination, change date or destination and try again");
+        $app->render('index.html.twig', array('cityList'=>$cityList,'currentUser'=>$_SESSION['user'],'errorList' => $errorList,'v'=>$v));        
     } else {
-        $app->render('selected_destination.html.twig', array('valueList'=>$result,'currentUser'=>$_SESSION['user']));
+        $departCity = DB::queryFirstField("SELECT name FROM citys WHERE ID=%d",$depart);
+        $arriveCity = DB::queryFirstField("SELECT name FROM citys WHERE ID=%d",$arrive);
+        if (!$departCity || !$arriveCity){
+            $log->debug("ERROR: Not found names of city for select destination");
+        }
+        $app->render('selected_destination.html.twig', array('valueList'=>$result,'currentUser'=>$_SESSION['user'],'departCity'=>$departCity,'arriveCity'=>$arriveCity));
     }        
 });
-
-
 //**************************************************** REGISTER
-
 
 $app->get('/emailexists/:email', function($email) use ($app, $log) {
     $user = DB::queryFirstRow('SELECT ID FROM users WHERE email=%s', $email);

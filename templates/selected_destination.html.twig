@@ -20,7 +20,8 @@ $(document).ready(function () {
 {% endblock %} 
 
 {% block content %}
-    <div id="contentSelectedDestination">          
+    <div id="contentSelectedDestination">  
+        
     {% if valueList %}
         <table id="SelectedBuses">
             <tr>
@@ -31,12 +32,14 @@ $(document).ready(function () {
                 <th width="15" style="font-size: 150%; font-weight: bold;">?</th>
                 <th>Review</th>
             </tr>
-                {% for ad in valueList %}
+                {% for ad in valueList %}<!--
+                    $result = DB::query("SELECT trips.ID as ID,BusID,DepartID,ArriveID,DateTimeDepart,DateTimeArrive,Description,MakeModel,WiFi,AirConditioning,AirConditioning,PowerOutlets "
+            +"FROM trips,buses WHERE trips.BusID=buses.ID");-->
             <tr>   
-                <td>{{ad.Depart}}</td>
-                <td>{{ad.Arrive}}</td>
-                <td>{{ad.DateTimeArrive}}</td>
+                <td>{{departCity}}</td>
+                <td>{{arriveCity}}</td>                
                 <td>{{ad.DateTimeDepart}}</td>
+                <td>{{ad.DateTimeArrive}}</td>
                 <td style="font-size: 150%; font-weight: bold; cursor: pointer;">+</td>
                 <td><a href='/review/{{ad.ID}}'>REVIEW</a></td
             </tr>
