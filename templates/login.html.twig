@@ -8,8 +8,7 @@
         <p>Don't have an account? <a href='/register'>Sign up</a></p>
 
         <div id="divLoginFacebook">
-            <button type="button" id="buttonFbLogin"><img src="/facebook-login.png" 
-          style="width: 200px"></button>
+            <button type="button" class="btnFb"><span style="font-family:sans-serif; font-weight: bold; font-size: 20px;">f&nbsp</span> Log in with Facebook</button>
         </div>
         
         <p>---------------- or use your email---------------------</p>
@@ -19,13 +18,13 @@
         {% endif %}
 
 
-        <form method="post">
+        <form method="post" id="loginForm">
             <label for="loginEmail">Email Address</label><br>
-                <input type="text" name="email"><br><br>
-           <label for="loginEmail">Password</label><br>
-               <input type="password" name="pass"><br><br>
+                <input type="text" name="email" placeholder="Email Adress"><br><br>
+           <label for="loginEmail" >Password</label><br>
+               <input type="password" name="pass" placeholder="Password"><br><br>
                
-            <input type="submit" value="Log In"><br><br>
+            <input type="submit" value="Log In" class="btnLogIn"><br><br>
         </form>
         
         <a href="">Forgot your password?</a><br><br>

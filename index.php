@@ -56,6 +56,16 @@ $view->setTemplatesDirectory(dirname(__FILE__) . '/templates');
 ));
 */
 
+//************FACEBOOK********//
+$fb = new Facebook\Facebook([
+  'app_id' => '312636035778552',
+  'app_secret' => '9c0f1b20e345ae77cfd4d434a59e3049',
+  'default_graph_version' => 'v2.8',
+]);
+
+//************ END FACEBOOK *********//
+
+
 if (!isset($_SESSION['user'])) {           
     $_SESSION['user']=array();              
 }
@@ -221,8 +231,9 @@ $app->post('/login', function() use ($app, $log) {
         $app->render('login.html.twig', array('loginFailed' => TRUE));
     } else {
         // password MUST be compared in PHP because SQL is case-insenstive
-        //if ($user['password'] == hash('sha256', $pass)) {
-        if (password_verify($pass, $user['password'])) {
+        if ($user['password'] ==  $pass) {
+         //echo "psw ".$pass." pass ".$user['password'];
+        //if (password_verify($pass, $user['password'])) {
             // LOGIN successful
             unset($user['password']);
             $_SESSION['user'] = $user;
@@ -230,7 +241,7 @@ $app->post('/login', function() use ($app, $log) {
                     $user['ID'], $_SERVER['REMOTE_ADDR']));
             $app->render('login_success.html.twig');
         } else {
-            $log->debug(sprintf("User failed for email %s from IP %s",
+            $log->debug(sprintf("User failed again for email %s from IP %s",
                     $email, $_SERVER['REMOTE_ADDR']));
             $app->render('login.html.twig', array('loginFailed' => TRUE));            
         }

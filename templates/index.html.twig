@@ -3,7 +3,9 @@
 {% block title %}TORS{% endblock %}
 {% block login %}
 {% if currentUser %}
-        <p>Logined: {{currentUser.userName}}. <a href="/logout"> LOGOUT</a></p>
+
+        <p>Logined: {{currentUser.userName}}. <a href="index.php/logout"> LOGOUT</a></p>
+
     {% else %}
         <p><a href="index.php/login">LOGIN </a> | <a href="index.php/register"> REGISTER</a></p>       
     {% endif %}

@@ -23,7 +23,15 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Register user</h1>
+     <div id="divregister">
+        <h2>Sign Up</h2>
+        <p>Already have an account? <a href='index.php/login'>Log in</a></p>
+
+        <div id="divLoginFacebook">
+            <button type="button" id="buttonFbSignup"><img src="/facebook-login.png" ></button>
+        </div>
+        
+        <p>---------------- or sign up with your email address---------------------</p>
 
     {% if errorList %}
         <ul>
@@ -34,10 +42,13 @@
 
     {% endif %}
     <form method="post">
-        <label for="name">Name:</label> 
-        <input type="text" name="name" value="{{v.name}}"<br><br><br>
+        <label for="name">First Name</label> 
+        <input type="text" name="firstName" value="{{v.firstName}}"<br><br><br>
+        
+        <label for="name">Last Name</label> 
+        <input type="text" name="lastName" value="{{v.lastName}}"<br><br><br>
 
-        <label for="email"> Email: </label> 
+        <label for="email"> Email Address </label> 
         <input type="text" name="email" value="{{v.email}}">
         <span id="result"></span><br><br>
 
