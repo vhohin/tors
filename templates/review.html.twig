@@ -1,0 +1,51 @@
+% extends "master.html.twig" %}
+
+{% block title %}TORS{% endblock %}
+
+{% block head %}
+<script>
+    var currentID = 0; // 0 means nothing is selected
+    
+    function refreshTodoList() {
+        $.ajax({
+            url: "/api.php/selectdest",
+            // data: {},
+            type: "GET",
+            dataType: "json"
+        }).done(function (data) {
+            var result = '<tr><th>#</th><th>Title</th><th>Due date </th>'
+                        + '<th>Done?</th></tr>';
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                result += '<tr onclick="selectItem(' + item.ID + ')">';
+                result += '<td>' + item.ID + '</td>';
+                result += '<td>' + item.title + '</td>';
+                result += '<td>' + item.dueDate + '</td>';
+                result += '<td>' + item.isDone + '</td>';
+                result += '</tr>';
+            }
+        $("#listTable").html(result);
+        });
+    }
+            
+    $(document).ready(function () {
+        $("#waitForIt").hide();
+        refreshTodoList();
+        //$("#viewAddEditPane").hide();
+    });    
+</script> 
+{% endblock %}
+
+{% block login %}   
+{% if currentUser %}
+        <p>Logined: {{currentUser}}. <a href="/logout"> LOGOUT</a></p>
+    {% else %}
+        <p><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
+    {% endif %}
+    <hr/>
+{% endblock %} 
+
+{% block content %}
+
+{% endblock %}
+

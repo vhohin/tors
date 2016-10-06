@@ -35,7 +35,7 @@ a:hover{
 #logo>h1{
     display: inline-block;
     position: absolute;
-    right: 20px;
+    right: 50px;
     font-size: 260%;
     margin: 15px;
     color:#05526B;
@@ -43,7 +43,7 @@ a:hover{
 #topMenu{
     position: absolute;
     right: 20px;
-    top: 70px;
+    top: 75px;
     display: inline;/*-block;*/
     margin: 0 auto;
     height: 30px;
@@ -113,13 +113,41 @@ a:hover{
 }
 
 /*
-******************* select form
+******************* INDEX select form
 */
 #selectForm p{
     display: inline-block;
-    color: #05526B;;
+    color: #05526B;
+    width: 90px;
+    
+}
+#selectForm input{
+    width: 150px;
+}
+#selectForm select{
+    width: 120px;
+}
+#errorList ul li{
+    color: red;
+}
+/*
+******************* SELECTED_DESTINATION form
+*/
+#SelectedBuses {
+    width: 780px;    
 }
 
+#SelectedBuses th{
+    background-color: #05526B;
+    color: white;
+    height: 30px;
+}
+#slectedTD{
+    border: 1px solid lightblue;
+}
+#SelectedBuses td{    
+    text-align: center;
+}
 /*
 ******************* FOOTER
 */

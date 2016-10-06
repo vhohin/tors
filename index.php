@@ -55,19 +55,51 @@ $view->setTemplatesDirectory(dirname(__FILE__) . '/templates');
     'id' => '\d+'
 ));
 */
-//**************************************************** HOME
-if (!isset($_SESSION['user'])) {           
-    $_SESSION['user']=array();;              
-}
 
-$app->get('/', function() use ($app,$log) {    
-    /*if (isset($_SESSION['user'])) {           
-            $currentUser=$_SESSION['user'];              
-        } else {    
-            $currentUser="";           
-        }*/
-        $app->render('index.html.twig',array('currentUser'=>$_SESSION['user']));
+if (!isset($_SESSION['user'])) {           
+    $_SESSION['user']=array();              
+}
+//**************************************************** HOME select trip
+$app->get('/', function() use ($app,$log) {
+    $app->render('index.html.twig',array('currentUser'=>$_SESSION['user']));
 });
+//**************************************************** Selected trip
+$app->post('/select', function() use ($app,$log) {
+// State 0: Get datas from form    
+    $depart = $app->request->post('depart');
+    $arrive = $app->request->post('arrive');
+    $dateTimeDepart = $app->request->post('dateTimeDepart');
+    $dateTimeArrive = $app->request->post('dateTimeArrive');
+    $typeTrip = $app->request->post('typeTrip');
+ // State 1: Verification
+    $errorList = array();
+    if (strlen($depart)<1 || strlen($depart)>50 || strlen($arrive)<1 || strlen($arrive)>50) {
+        array_push($errorList, "Depart and Arrive must have from 1 to 50 characters");
+    }
+    $tempDateD = explode('-', $dateTimeDepart);
+    $tempDateA = explode('-', $dateTimeArrive);
+    if ((count($tempDateD) != 3)||(count($tempDateA) != 3)) {
+        array_push($errorList, "Not enough datas in Depart or Arrive Date");
+    } elseif (!checkdate($tempDateD[1], $tempDateD[2], $tempDateD[0])
+            || !checkdate($tempDateA[1], $tempDateA[2], $tempDateA[0])) {
+        array_push($errorList, "Bad format Depart or Arrive Date");
+    }    
+// State 2: Submission    
+    $result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s", $depart,$arrive); 
+    //$result = DB::query("SELECT * FROM trips"); 
+    if (!$result){
+            array_push($errorList, "Not this dastination"); //password_hash ( string $password , integer $algo [, array $options ] )
+        }
+    if ($errorList) {
+// State 3: failed submission
+        $app->render('index.html.twig', array('errorList' => $errorList));
+        //$log->debug("");
+    } else {
+        $app->render('selected_destination.html.twig', array('valueList'=>$result,'currentUser'=>$_SESSION['user']));
+    }        
+});
+
+
 
 
 $app->run();

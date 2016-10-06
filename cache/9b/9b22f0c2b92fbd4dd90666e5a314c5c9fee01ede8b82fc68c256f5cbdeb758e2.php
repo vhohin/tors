@@ -39,7 +39,7 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
     <body>
         <div id=\"header\">
             <div id=\"logo\">
-                <img src=\"images/ticket5.png\"  alt=\"Logo\">
+                <img src=\"/images/ticket5.png\"  alt=\"Logo\">
                 <h1>Reservation Service</h1>
             </div>            
             <div id=\"topMenu\">
@@ -117,7 +117,7 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
     <body>
         <div id=\"header\">
             <div id=\"logo\">
-                <img src=\"images/ticket5.png\"  alt=\"Logo\">
+                <img src=\"/images/ticket5.png\"  alt=\"Logo\">
                 <h1>Reservation Service</h1>
             </div>            
             <div id=\"topMenu\">
