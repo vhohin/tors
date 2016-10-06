@@ -165,16 +165,22 @@ $app->get('/register', function() use ($app, $log) {
 });
 // State 2: submission
 $app->post('/register', function() use ($app, $log) {
-    $name = $app->request->post('name');
+    $firstName = $app->request->post('firstName');
+    $lastName = $app->request->post('lastName');
+    $userName = $app->request->post('userName');
     $email = $app->request->post('email');
     $pass1 = $app->request->post('pass1');
     $pass2 = $app->request->post('pass2');
-    $valueList = array ('name' => $name, 'email' => $email);
+    $valueList = array ('firstName' => $firstName, 'lastName' => $lastName, 'email' => $email);
     // submission received - verify
     $errorList = array();
-    if (strlen($name) < 4) {
-        array_push($errorList, "Name must be at least 4 characters long");
-        unset($valueList['name']);
+    if (strlen($firstName) < 4) {
+        array_push($errorList, "First Name must be at least 4 characters long");
+        unset($valueList['firstName']);
+    }
+    if (strlen($lastName) < 4) {
+        array_push($errorList, "Last Name must be at least 4 characters long");
+        unset($valueList['lastName']);
     }
     if (filter_var($email, FILTER_VALIDATE_EMAIL) === FALSE) {
         array_push($errorList, "Email does not look like a valid email");
@@ -202,7 +208,9 @@ $app->post('/register', function() use ($app, $log) {
     } else {
         // STATE 2: submission successful
         DB::insert('users', array(
-            'name' => $name, 
+            'firstName' => $firstName, 
+            'lastName' => $lastName,
+            'userName' => $userName,
             'email' => $email,
             'password' => password_hash ($pass1, CRYPT_BLOWFISH)
             //'password' => hash ('sha256', $pass1)
@@ -231,9 +239,9 @@ $app->post('/login', function() use ($app, $log) {
         $app->render('login.html.twig', array('loginFailed' => TRUE));
     } else {
         // password MUST be compared in PHP because SQL is case-insenstive
-        if ($user['password'] ==  $pass) {
+        //if ($user['password'] ==  $pass) {
          //echo "psw ".$pass." pass ".$user['password'];
-        //if (password_verify($pass, $user['password'])) {
+        if (password_verify($pass, $user['password'])) {
             // LOGIN successful
             unset($user['password']);
             $_SESSION['user'] = $user;
