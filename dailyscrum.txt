@@ -10,6 +10,6 @@ Valeriy
 
 Nazar
 
-1) DONE: DB table - users; files - master.html.twig;
+1) DONE: DB table - users; files - html.twig; create Trello baord
 2) TO DO: Continue working on registration/login page, styles and code
  

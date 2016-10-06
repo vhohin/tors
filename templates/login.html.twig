@@ -1,0 +1,34 @@
+{% extends "master.html.twig" %}
+
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+    <div id="divLogin">
+        <h2>Log In</h2>
+        <p>Don't have an account? <a href='/register'>Sign up</a></p>
+
+        <div id="divLoginFacebook">
+            <button type="button" id="buttonFbLogin"><img src="/facebook-login.png" 
+          style="width: 200px"></button>
+        </div>
+        
+        <p>---------------- or use your email---------------------</p>
+
+        {% if loginFailed %}
+            <p>Invalid username or password</p>
+        {% endif %}
+
+
+        <form method="post">
+            <label for="loginEmail">Email Address</label><br>
+                <input type="text" name="email"><br><br>
+           <label for="loginEmail">Password</label><br>
+               <input type="password" name="pass"><br><br>
+               
+            <input type="submit" value="Log In"><br><br>
+        </form>
+        
+        <a href="">Forgot your password?</a><br><br>
+    </div>
+
+{% endblock %}

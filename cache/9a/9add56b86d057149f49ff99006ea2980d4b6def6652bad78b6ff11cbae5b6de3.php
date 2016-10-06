@@ -44,7 +44,7 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
     ";
         } else {
             // line 8
-            echo "        <p><a href=\"/login\">LOGIN </a> | <a href=\"/register\"> REGISTER</a></p>       
+            echo "        <p><a href=\"index.php/login\">LOGIN </a> | <a href=\"index.php/register\"> REGISTER</a></p>       
     ";
         }
         // line 10
@@ -124,7 +124,7 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
 {% if currentUser %}
         <p>Logined: {{currentUser}}. <a href=\"/logout\"> LOGOUT</a></p>
     {% else %}
-        <p><a href=\"/login\">LOGIN </a> | <a href=\"/register\"> REGISTER</a></p>       
+        <p><a href=\"index.php/login\">LOGIN </a> | <a href=\"index.php/register\"> REGISTER</a></p>       
     {% endif %}
     <hr/>
 {% endblock %}        
