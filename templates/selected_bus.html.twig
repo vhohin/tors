@@ -5,7 +5,7 @@
 {% block head %}
 <script>  
     var settings = {
-               rows: 5,
+               rows: 4,
                cols: 15,
                rowCssPrefix: 'row-',
                colCssPrefix: 'col-',
@@ -15,10 +15,7 @@
                selectedSeatCss: 'selectedSeat',
                selectingSeatCss: 'selectingSeat'
            };
-          
-$(document).ready(function () {
-    $("#waitForIt").hide();
-    var init = function (reservedSeat) {
+     var init = function (reservedSeat) {
                 var str = [], seatNo, className;
                 for (i = 0; i < settings.rows; i++) {
                     for (j = 0; j < settings.cols; j++) {
@@ -41,6 +38,10 @@ $(document).ready(function () {
             //Case II: If already booked
             var bookedSeats = [5, 10, 25];
             init(bookedSeats); 
+            
+$(document).ready(function () {
+    $("#waitForIt").hide();
+    init();
     $('.' + settings.seatCss).click(function () {
 if ($(this).hasClass(settings.selectedSeatCss)){
     alert('This seat is already reserved');
@@ -72,8 +73,8 @@ $('#btnShowNew').click(function () {
 
 {% block login %} 
     <p class="pLeft">
-        <a href="/" style="padding:5px 20px; background-color: lightblue;">STEP 1 </a> 
-        <a href="/select" style="padding:5px 20px; background-color: lightblue;">BACK </a>
+        <a href="/" style="padding:5px 20px; background-color: lightblue;">BACK </a> 
+        <!--<a href="#" onClick="history.go(-1);return true;" style="padding:5px 20px; background-color: lightblue;">BACK </a>-->
     </p>
 {% if currentUser %}
         <p class="pRight">Logined: {{currentUser}}. <a href="/logout"> LOGOUT</a></p>
@@ -91,6 +92,11 @@ $('#btnShowNew').click(function () {
         <ul  id="place">
         </ul>    
     </div>
+    <div id="infoChoiceSeats"> 
+        <h3>Your choice:</h3>
+        <ul  id="choiceSeats">
+        </ul>    
+    </div>
     <div style="float:left;"> 
     <ul id="seatDescription">
         <li style="background:url('/images/available_seat_img.jpg') no-repeat scroll 0 0 transparent;">Available Seat</li>
@@ -99,8 +105,8 @@ $('#btnShowNew').click(function () {
     </ul>
     </div>
         <div style="clear:both;width:100%">
-        <input type="button" id="btnShowNew" value="Show Selected Seats" />
-        <input type="button" id="btnShow" value="Show All" />           
+        <!--<input type="button" id="btnShowNew" value="Show Selected Seats" />
+        <input type="button" id="btnShow" value="Show All" />  -->         
     </div>
  <div id="waitForIt" style="z-index: 2; position: absolute; top: 100px; left: 400px;">
     <img src="/images/swirl.gif">
