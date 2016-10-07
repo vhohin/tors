@@ -41,7 +41,7 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
         // line 6
         if ((isset($context["currentUser"]) ? $context["currentUser"] : null)) {
             // line 7
-            echo "        <p class=\"pLongRight\">Logined: ";
+            echo "        <p class=\"pLongRight\">Welcome, ";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["currentUser"]) ? $context["currentUser"] : null), "userName", array()), "html", null, true);
             echo ". <a href=\"index.php/logout\"> LOGOUT</a></p>
     ";
@@ -238,7 +238,7 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
 {% block login %}
     
 {% if currentUser %}
-        <p class=\"pLongRight\">Logined: {{currentUser.userName}}. <a href=\"index.php/logout\"> LOGOUT</a></p>
+        <p class=\"pLongRight\">Welcome, {{currentUser.userName}}. <a href=\"index.php/logout\"> LOGOUT</a></p>
     {% else %}
         <p class=\"pLongRight\"><a href=\"index.php/login\">LOGIN </a> | <a href=\"index.php/register\"> REGISTER</a></p>       
     {% endif %}

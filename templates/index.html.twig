@@ -4,7 +4,7 @@
 {% block login %}
     
 {% if currentUser %}
-        <p class="pLongRight">Logined: {{currentUser.userName}}. <a href="index.php/logout"> LOGOUT</a></p>
+        <p class="pLongRight">Welcome, {{currentUser.userName}}. <a href="index.php/logout"> LOGOUT</a></p>
     {% else %}
         <p class="pLongRight"><a href="index.php/login">LOGIN </a> | <a href="index.php/register"> REGISTER</a></p>       
     {% endif %}

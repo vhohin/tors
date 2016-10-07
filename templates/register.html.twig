@@ -5,11 +5,29 @@
 {% block head %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>
-        $(document).ready(function (){
-          $('input[name=email]').keyup(function(){
-            $('#result').load('/emailexists/' + $(this).val()); 
-              
-          });  
+        
+        function checkEmail() {
+            var email = $('input[name=email]').val();
+            if (email != '') {
+                //$('#result').load('/emailexists/' + email);
+                // NOTE: .load is actually .ajax call like below
+                $.ajax({
+                    url: '/emailexists/' + email
+                }).done(function (data) {
+                    $("#result").html(data);
+                });                
+            } else {
+                $('#result').html("");
+            }
+        }
+        
+        $(document).ready(function() {
+            $('input[name=email]').keyup(function() {
+                checkEmail();
+            });
+            $('input[name=email]').bind('paste', function() {
+                checkEmail();
+            });
         });
 
     </script>
@@ -53,16 +71,19 @@
         <input type="text" name="userName" placeholder="User Name" value="{{v.userName}}"<br><br><br>
 
         <label for="email"> Email Address </label> <br> 
-        <input type="text" name="email"  placeholder="Email Adress" value="{{v.email}}">
+        <input type="text" name="email"  placeholder="Email Address" value="{{v.email}}">
         <span id="result"></span><br><br>
 
         <label for="pass1">Password: </label> <br> 
         <input type="password"  placeholder="Password" name="pass1"><br><br>
 
-        <label for="pass1">Password (repeated): </label> <br> 
+        <label for="pass1">Re-type Password: </label> <br> 
         <input type="password" placeholder="Password" name="pass2"><br><br>
+        
+        <label for="pass1">Phone: </label> <br> 
+        <input type="text" placeholder="Phone" name="phone" value="{{v.phone}}"><br><br>
 
-        <input type="submit" value="Register"><br><br>
+        <input type="submit" value="Register" name="btnSubmit"><br><br>
     </form>
 
 

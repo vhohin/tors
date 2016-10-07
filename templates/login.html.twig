@@ -14,20 +14,20 @@
         <p>---------------- or use your email---------------------</p>
 
         {% if loginFailed %}
-            <p>Invalid username or password</p>
+            <p>Invalid email or password</p>
         {% endif %}
 
 
         <form method="post" id="loginForm">
             <label for="loginEmail">Email Address</label><br>
-                <input type="text" name="email" placeholder="Email Adress"><br><br>
+                <input type="text" name="email" placeholder="Email Address"><br><br>
            <label for="loginEmail" >Password</label><br>
                <input type="password" name="pass" placeholder="Password"><br><br>
                
-            <input type="submit" value="Log In" class="btnLogIn"><br><br>
+            <input type="submit" value="Log In" class="btnLogIn" name="btnSubmit"><br><br>
         </form>
         
-        <a href="">Forgot your password?</a><br><br>
+        <a href="/passwordReset">Forgot your password?</a><br><br>
    </div>
 
 {% endblock %} 
