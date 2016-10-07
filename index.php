@@ -16,6 +16,7 @@ $log->pushHandler(new StreamHandler('logs/errors.log', Logger::ERROR));
 DB::$dbName = 'cp4724_tors';
 DB::$user = 'cp4724_tors';
 DB::$password = 'bAltllSiuAad';
+DB::$encoding = 'utf8';
 //DB::$host = '169.44.80.220';
 // DB::$host = '127.0.0.1'; // sometimes needed on Mac OSX
 DB::$error_handler = 'sql_error_handler';
@@ -152,7 +153,8 @@ $app->post('/select', function() use ($app,$log) {
 });
 //**************************************************** Selected bus
 $app->get('/selectbus', function() use ($app,$log) {
-$app->render('selected_bus.html.twig', array('currentUser'=>$_SESSION['user']));
+    
+    $app->render('selected_bus.html.twig', array('currentUser'=>$_SESSION['user']));
 });
 //**************************************************** REGISTER
 

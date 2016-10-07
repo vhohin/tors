@@ -65,7 +65,7 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
             
         </div>
         <div id=\"footer\">                
-            &copy; Copyright 2016 by <a href=\"http://tors.ipd8.info/\">TORS</a>.                
+            &copy; Copyright 2016 by <a href=\"/\">TORS</a>.                
         </div>
     </body>
 </html>
@@ -137,7 +137,7 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
             
         </div>
         <div id=\"footer\">                
-            &copy; Copyright 2016 by <a href=\"http://tors.ipd8.info/\">TORS</a>.                
+            &copy; Copyright 2016 by <a href=\"/\">TORS</a>.                
         </div>
     </body>
 </html>
