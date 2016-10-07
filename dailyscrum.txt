@@ -34,5 +34,14 @@ Nazar
  - implement FB API 
  - implement Forget password (on Login page)
 
+---------------------------
+October 7, 2016 - DAY03
+---------------------------
 
+Valeriy
+1) FINISHED: selected_destination.html.twig, table citys, basic datas itno tables for testing;
+2) DIDN'T FINISHED: selected_bus.html.twig, transfer the files to host and test them.
+3) TO DO: 
+   - files: selected_bus.html.twig, booking_form.html.twig.   
+   - put the files to host and test them.  
 
