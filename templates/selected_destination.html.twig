@@ -10,11 +10,12 @@ $(document).ready(function () {
 </script> 
 {% endblock %}
 
-{% block login %}   
+{% block login %} 
+    <p class="pLeft"><a href="/" style="padding:5px 20px; background-color: lightblue;">BACK </a> </p>
 {% if currentUser %}
-        <p>Logined: {{currentUser}}. <a href="/logout"> LOGOUT</a></p>
+        <p class="pRight">Logined: {{currentUser}}. <a href="/logout"> LOGOUT</a></p>
     {% else %}
-        <p><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
+        <p  class="pRight"><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
     {% endif %}
     <hr/>
 {% endblock %} 
@@ -29,22 +30,52 @@ $(document).ready(function () {
                 <th width="150">Arrive</th>
                 <th width="180">Date and Time Depart</th>
                 <th width="180">Date and Time Arrive</th>
-                <th width="15" style="font-size: 150%; font-weight: bold;">?</th>
-                <th>Review</th>
+                <!--<th width="15" style="font-size: 150%; font-weight: bold;">?</th>-->
+                <th>Selection</th>
             </tr>
                 {% for ad in valueList %}<!--
-                    $result = DB::query("SELECT trips.ID as ID,BusID,DepartID,ArriveID,DateTimeDepart,DateTimeArrive,Description,MakeModel,WiFi,AirConditioning,AirConditioning,PowerOutlets "
+                    $result = DB::query("SELECT trips.ID as ID,BusID,DepartID,ArriveID,DateTimeDepart,DateTimeArrive,Description,MakeModel,WiFi,AirConditioning,Toilet,PowerOutlets "
             +"FROM trips,buses WHERE trips.BusID=buses.ID");-->
             <tr>   
-                <td>{{departCity}}</td>
-                <td>{{arriveCity}}</td>                
+                <td style="font-size: 120%; font-weight: bold;">{{departCity}}</td>
+                <td style="font-size: 120%; font-weight: bold;">{{arriveCity}}</td>                
                 <td>{{ad.DateTimeDepart}}</td>
                 <td>{{ad.DateTimeArrive}}</td>
-                <td style="font-size: 150%; font-weight: bold; cursor: pointer;">+</td>
-                <td><a href='/review/{{ad.ID}}'>REVIEW</a></td
+                <!--<td style="font-size: 150%; font-weight: bold; cursor: pointer;">+</td>   /{{ad.ID}}-->
+                <td style="font-size: 120%; font-weight: bold; background-color: lightblue;"><a href='/selectbus'>Select</a></td
+            </tr>
+            <tr>   
+                <td >Amenities:</td>                
+                <td>
+                    {% if ad.WiFi==true %}
+                            <img src="/images/wifi2.png" height="25" alt="WiFi">                    
+                    {% endif %}
+                    {% if ad.AirConditioning==true %}
+                            <img src="/images/cond1.jpg" height="25" alt="AC">                    
+                    {% endif %}
+                    {% if ad.Toilet==true %}
+                            <img src="/images/t1.png" height="25" alt="WC">                    
+                    {% endif %}
+                    {% if ad.PowerOutlets==true %}
+                            <img src="/images/el1.jpg" height="25" alt="Power">                    
+                    {% endif %}
+                </td>
+                <td></td>
+                <td>Price:</td>
+                <!--<td style="font-size: 150%; font-weight: bold; cursor: pointer;">+</td>-->
+                <td>$ {{ad.Price}}</td>
+            </tr>
+            <tr>   
+                <td colspan="5" style="border-bottom: 1px solid grey; background-color: lightblue;"></td>                
             </tr>
                 {% endfor %}
         </table>
+        <br/><p style="margin: 0; vertical-align: top; line-height:15px;">
+            <img src="/images/wifi2.png" height="15" alt="WiFi">  WiFi &nbsp;|
+            <img src="/images/cond1.jpg" height="15" alt="AC">  AirConditioning &nbsp;|
+            <img src="/images/t1.png" height="15" alt="WC">  Toilet &nbsp;|
+            <img src="/images/el1.jpg" height="15" alt="Power">  Power Outlets &nbsp;
+        </p>
         {% else %}
             <p>There are no buses for this destination or this date.</p>
     {% endif %}

@@ -85,9 +85,26 @@ a:hover{
     width: 800px;
     margin: 0 auto;
     padding: 0;
-    background-color: white;
-    
+    background-color: white;    
     /*border:1px solid lightgray;*/
+}
+/*
+******************* LOGIN p
+*/
+.pLeft{
+   display:inline-block;
+   width: 385px;
+   text-align: left;
+}
+.pRight{
+   display:inline-block;
+   width: 385px;
+   text-align: right;   
+}
+.pLongRight{
+   display:inline-block;
+   width: 770px;
+   text-align: right;   
 }
 /*
 ******************* INDEX.HTML.TWIG
@@ -98,13 +115,13 @@ a:hover{
 }
 
 #loginBlock>p{
-   text-align: right;
+   /*text-align: right;*/
    margin: 0;
 }
 
 #content{
     border:1px solid lightgray;
-    margin: 10px 0;
+    margin: 15px 0;
     padding:10px;
 }
 
@@ -177,7 +194,8 @@ input[type=submit]:hover {
 ******************* SELECTED_DESTINATION form
 */
 #SelectedBuses {
-    width: 780px;    
+    width: 780px;  
+   
 }
 
 #SelectedBuses th{
@@ -185,11 +203,11 @@ input[type=submit]:hover {
     color: white;
     height: 30px;
 }
-#slectedTD{
-    border: 1px solid lightblue;
-}
+
 #SelectedBuses td{    
-    text-align: center;
+   text-align: center;
+   padding: 10px 0;
+   border-bottom: 1px lightblue dotted;
 }
 /*
 ******************* FOOTER
@@ -279,4 +297,53 @@ input[type=submit]:hover {
 
 .btnFb:hover {background-color: #002966}
 
-
+/*
+*************  seats
+*/
+#holder{    
+height:200px;    
+width:550px;
+background-color:#F5F5F5;
+border:1px solid #A4A4A4;
+margin-left:10px;   
+}
+#place {
+position:relative;
+margin:7px;
+}
+#place a{
+font-size:0.6em;
+}
+#place li
+{
+ list-style: none outside none;
+ position: absolute;   
+}    
+#place li:hover
+{
+background-color:yellow;      
+} 
+#place .seat{
+background:url("images/available_seat_img.gif") no-repeat scroll 0 0 transparent;
+height:33px;
+width:33px;
+display:block;   
+}
+#place .selectedSeat
+{ 
+background-image:url("images/booked_seat_img.gif");          
+}
+#place .selectingSeat
+{ 
+background-image:url("images/selected_seat_img.gif");        
+}
+#place .row-3, #place .row-4{
+margin-top:10px;
+}
+#seatDescription li{
+verticle-align:middle;    
+list-style: none outside none;
+padding-left:35px;
+height:35px;
+float:left;
+}
