@@ -128,8 +128,8 @@ $app->post('/select', function() use ($app,$log) {
     }      
 // State 2: Submission    
     //$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s and DateTimeDepart<%s and DateTimeArrive<%s", $depart,$arrive,$dateTimeDepart,$dateTimeArrive); 
-    $result = DB::query("SELECT trips.ID as ID,BusID,DepartID,ArriveID,DateTimeDepart,DateTimeArrive,Description,MakeModel,WiFi,AirConditioning,AirConditioning,PowerOutlets "
-            . "FROM trips,buses WHERE trips.BusID=buses.ID AND DepartID=%d AND ArriveID=%d", (int)$depart, (int)$arrive);
+    $result = DB::query("SELECT trips.ID as ID,BusID,DepartID,ArriveID,DateTimeDepart,DateTimeArrive, Price, Description,MakeModel,WiFi,AirConditioning,Toilet,PowerOutlets "
+            . "FROM trips,buses WHERE trips.BusID=buses.ID AND DepartID=%d AND ArriveID=%d ORDER BY DateTimeDepart", (int)$depart, (int)$arrive);
     ////$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s", $depart,$arrive); 
     GLOBAL $cityList;
     if (!$result){        
@@ -149,6 +149,10 @@ $app->post('/select', function() use ($app,$log) {
         }
         $app->render('selected_destination.html.twig', array('valueList'=>$result,'currentUser'=>$_SESSION['user'],'departCity'=>$departCity,'arriveCity'=>$arriveCity));
     }        
+});
+//**************************************************** Selected bus
+$app->get('/selectbus', function() use ($app,$log) {
+$app->render('selected_bus.html.twig', array('currentUser'=>$_SESSION['user']));
 });
 //**************************************************** REGISTER
 
