@@ -45,3 +45,15 @@ Valeriy
    - files: selected_bus.html.twig, booking_form.html.twig.   
    - put the files to host and test them.  
 
+Nazar
+
+1) DONE: tested LogIN and Register
+2) NOT FINISHED: 
+ - Facebook LogIn
+ - ForgetPassword created, but code has to be modified and tested yet
+2) TO DO:
+ - FB, ForgetPassword (send email)
+ - Ask teacher about Admin/User
+ - Ask teached about CartPage and implement, if needed  
+ - Emailexists/: does not work properly - FIX IT 
+
