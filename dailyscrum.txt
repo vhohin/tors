@@ -5,11 +5,34 @@ October 5, 2016 - DAY01
 Valeriy
 1) Finished: DB tables - buses, drivers, seat, trips; files - master.html.twig;
 2) Didn't finished index.html.twig
-3) Finish files: index.html.twig, styles. 
+3) TO DO: index.html.twig, styles. 
 
 
 Nazar
 
-1) DONE: DB table - users; files - html.twig; create Trello baord
+1) DONE: DB table - users; files - html.twig; create Trello board
 2) TO DO: Continue working on registration/login page, styles and code
  
+---------------------------
+October 6, 2016 - DAY02
+---------------------------
+
+Valeriy
+1) FINISHED: index.html.twig;
+2) DIDN'T FINISHED: verification dates in index.php
+3) TO DO: 
+   - table: citys, 
+   - files: selected_destination.html.twig, selected_bus.html.twig,
+   - fill tables with datas,
+   - put the files to host and test them.  
+
+Nazar
+
+1) DONE: basic login, but didn't tested yet
+2) TO DO:
+ - finish login/register page with full functionallity and test it with database on host
+ - implement FB API 
+ - implement Forget password (on Login page)
+
+
+

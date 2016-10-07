@@ -23,7 +23,16 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Register user</h1>
+     <div id="divRegister">
+        <h2>Sign Up</h2>
+        <p>Already have an account? <a href='index.php/login'>Log in</a></p>
+
+        <div id="divLoginFacebook">
+            <button type="button" class="btnFb"><span style="font-family:sans-serif; font-weight: bold; font-size: 20px;">f&nbsp</span> Register with Facebook</button>
+        </div>
+        
+        
+        <p>---------------- or sign up with your email address---------------------</p>
 
     {% if errorList %}
         <ul>
@@ -33,19 +42,25 @@
         </ul>
 
     {% endif %}
-    <form method="post">
-        <label for="name">Name:</label> 
-        <input type="text" name="name" value="{{v.name}}"<br><br><br>
+    <form method="post" id="registerForm">
+        <label for="name">First Name</label><br> 
+        <input type="text" name="firstName" placeholder="First Name" value="{{v.firstName}}"<br><br><br>
+        
+        <label for="name">Last Name</label> <br> 
+        <input type="text" name="lastName" placeholder="Last Name" value="{{v.lastName}}"<br><br><br>
+        
+        <label for="name">User Name</label> <br> 
+        <input type="text" name="userName" placeholder="User Name" value="{{v.userName}}"<br><br><br>
 
-        <label for="email"> Email: </label> 
-        <input type="text" name="email" value="{{v.email}}">
+        <label for="email"> Email Address </label> <br> 
+        <input type="text" name="email"  placeholder="Email Adress" value="{{v.email}}">
         <span id="result"></span><br><br>
 
-        <label for="pass1">Password: </label> 
-        <input type="password" name="pass1"><br><br>
+        <label for="pass1">Password: </label> <br> 
+        <input type="password"  placeholder="Password" name="pass1"><br><br>
 
-        <label for="pass1">Password (repeated): </label> 
-        <input type="password" name="pass2"><br><br>
+        <label for="pass1">Password (repeated): </label> <br> 
+        <input type="password" placeholder="Password" name="pass2"><br><br>
 
         <input type="submit" value="Register"><br><br>
     </form>
