@@ -54,11 +54,11 @@ $view->parserOptions = array(
     'cache' => dirname(__FILE__) . '/cache'
 );
 $view->setTemplatesDirectory(dirname(__FILE__) . '/templates');
-/*
+
   \Slim\Route::setDefaultConditions(array(
   'id' => '\d+'
   ));
- */
+ 
 
 //************FACEBOOK********//
 /* $fb = new Facebook\Facebook([
@@ -234,6 +234,7 @@ $app->post('/select', function() use ($app, $log) {
 
 $app->get('/selectbus', function() use ($app, $log) {
     $app->render('selected_bus.html.twig', array('currentUser' => $_SESSION['user']));
+});
 
 //**************************************************** REGISTER
 
