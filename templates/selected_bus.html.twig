@@ -77,7 +77,7 @@ $('#btnShowNew').click(function () {
         <!--<a href="#" onClick="history.go(-1);return true;" style="padding:5px 20px; background-color: lightblue;">BACK </a>-->
     </p>
 {% if currentUser %}
-        <p class="pRight">Logined: {{currentUser}}. <a href="/logout"> LOGOUT</a></p>
+        <p class="pRight">Logined: {{currentUser.userName}}. <a href="/logout"> LOGOUT</a></p>
     {% else %}
         <p  class="pRight"><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
     {% endif %}
@@ -94,6 +94,9 @@ $('#btnShowNew').click(function () {
     </div>
     <div id="infoChoiceSeats"> 
         <h3>Your choice:</h3>
+        {% if bus %}
+            <p>Bus: {{bas.MakeModel}} Plate No. {{bas.PlateNo}}</p>
+        {% endif %}
         <ul  id="choiceSeats">
         </ul>    
     </div>

@@ -13,7 +13,7 @@ $(document).ready(function () {
 {% block login %} 
     <p class="pLeft"><a href="/" style="padding:5px 20px; background-color: lightblue;">BACK </a> </p>
 {% if currentUser %}
-        <p class="pRight">Logined: {{currentUser}}. <a href="/logout"> LOGOUT</a></p>
+        <p class="pRight">Logined: {{currentUser.userName}}. <a href="/logout"> LOGOUT</a></p>
     {% else %}
         <p  class="pRight"><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
     {% endif %}
@@ -42,7 +42,7 @@ $(document).ready(function () {
                 <td>{{ad.DateTimeDepart}}</td>
                 <td>{{ad.DateTimeArrive}}</td>
                 <!--<td style="font-size: 150%; font-weight: bold; cursor: pointer;">+</td>   /{{ad.ID}}-->
-                <td style="font-size: 120%; font-weight: bold; background-color: lightblue;"><a href='/selectbus'>Select</a></td
+                <td style="font-size: 120%; font-weight: bold; background-color: lightblue;"><a href='/selectbus/{{ad.BusID}}'>Select</a></td
             </tr>
             <tr>   
                 <td >Amenities:</td>                
