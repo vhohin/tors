@@ -232,9 +232,12 @@ if (!$result) {
     $app->render('selected_destination.html.twig', array('valueList' => $result, 'currentUser' => $_SESSION['user'], 'departCity' => $departCity, 'arriveCity' => $arriveCity));
 }
 });
+//**************************************************** Booking Form
+$app->get('/bookingform', function() use ($app, $log) {
+$app->render('booking_form.html.twig', array('currentUser' => $_SESSION['user'],'bookedseats'=>$_SESSION['booking']));
+});
+
 //**************************************************** Selected bus
-
-
 $app->get('/selectbus/:BusID', function($BusID) use ($app, $log) {
     $bus = DB::queryFirstRow('SELECT * FROM buses WHERE ID=%d', $BusID);
     if (!$bus) {

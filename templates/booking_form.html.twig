@@ -1,0 +1,35 @@
+{% extends "master.html.twig" %}
+
+{% block title %}TORS{% endblock %}
+        
+{% block content %}
+{% if currentUser %}    
+    <div id="bookingForm">
+        <h2>Order information</h2>
+    <hr/>
+        <p>Passenger: <span style="font-weight: bold;">{{currentUser.userName}}</span></p>
+        <p>Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-weight: bold;"> {{currentUser.userName}}</span></p>
+        <p>-------------------------------------------------------------------------</p>
+        <p>Trip from:  <span style="font-weight: bold;">{{bookedseats.seats}}</span></p>
+        <p>--------to:  <span style="font-weight: bold;">{{bookedseats.seats}}</span></p>
+        <p>-------------------------------------------------------------------------</p>
+        <p>Depart:&nbsp;&nbsp;  <span style="font-weight: bold;">{{bookedseats.seats}}</span></p>
+        <p>Arrive:&nbsp;&nbsp;  <span style="font-weight: bold;">{{bookedseats.seats}}</span></p>
+        <p>-------------------------------------------------------------------------</p>
+        <p>Seats:&nbsp;&nbsp;&nbsp;  <span style="font-weight: bold;">{{bookedseats.seats}}</span></p>
+        <p>-------------------------------------------------------------------------</p>
+        <p>Bus:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span style="font-weight: bold;">{{bookedseats.seats}}</span></p>
+        <p>-------------------------------------------------------------------------</p>
+        <p>Amenities:</p>
+        <p>----------------------WiFi:  <span style="font-weight: bold;">{{bookedseats.seats}}</span></p>
+        <p>-------AirConditioning:  <span style="font-weight: bold;">{{bookedseats.seats}}</span></p>
+        <p>--------------------Toilet:  <span style="font-weight: bold;">{{bookedseats.seats}}</span></p>
+        <p>----------PowerOutlets:  <span style="font-weight: bold;">{{bookedseats.seats}}</span></p>
+        <p>-------------------------------------------------------------------------</p><br/>
+        <button id="selectContinue">CONTINUE</button>
+    </div>
+{% else %}
+    <p class="pLongRight"><a href="index.php/login">LOGIN </a> | <a href="index.php/register"> REGISTER</a></p>
+{% endif %}    
+{% endblock %}
+

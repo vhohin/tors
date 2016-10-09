@@ -193,6 +193,18 @@ input[type=submit]:hover {
 /*
 ******************* SELECTED_DESTINATION form
 */
+#bookingForm {
+    width: 780px;
+    padding: 20px;    
+}
+#bookingForm h2{
+    text-align: center;
+    font-weight: bold;
+}
+
+/*
+******************* SELECTED_DESTINATION form
+*/
 #SelectedBuses {
     width: 780px; 
 }
