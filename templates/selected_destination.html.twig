@@ -25,7 +25,7 @@
                 $('#place').html(str.join(''));
             };
             
-        function selectBus(BusID,ID){
+        function selectBus(userID,tripID){
             var result ="";
             var booked = false;
             var seats =0;
@@ -34,7 +34,7 @@
             bookedSeats = [];
             //alert("bookedSeats");
             $.ajax({
-                url: "/api.php/seats/"+ID,
+                url: "/api.php/seats/"+tripID,
                 type: "GET",
                 dataType: "json"
             }).done(function (data) {            
@@ -62,8 +62,8 @@
                 result += '<li style="background:url(\'/images/available_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Available Seat</li>';        
                 result += '<li style="background:url(\'/images/booked_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Booked Seat</li>';  
                 result += '<li style="background:url(\'/images/selected_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Selected Seat</li>'; 
-                result += '</ul></div><div style="clear:both;width:100%"></div></div></div>';
-                $("#seats"+ID).html(result);
+                result += '</ul></div><button id="btnBooking">Booking</button><div style="clear:both;width:100%"></div></div></div>';
+                $("#seats"+tripID).html(result);
                 init(bookedSeats); 
                 
                 $('.' + settings.seatCss).click(function () {
@@ -72,14 +72,23 @@
                 }
                 else{
                     $(this).toggleClass(settings.selectingSeatCss);
-                    if (result!=""){
+                    /*if (result!=""){
                         alert(settings.cols);                        
-                    }
+                    }*/
                     selectedSeats.push();
                     }
                 });                
-                $("#seats"+ID).show();//seats{{ad.BusID}}; 
+                $("#seats"+tripID).show();
+                $('#btnBooking').click(function () {
+                var str = [], item;
+                $.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
+                    item = $(this).attr('title');                   
+                    str.push(item);                   
+                });
+                alert(str.join(','));
+                })
             });
+            
             if (booked==false){
                 settings = {
                 rows: 4,
@@ -97,8 +106,8 @@
                 result += '<li style="background:url(\'/images/available_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Available Seat</li>';        
                 result += '<li style="background:url(\'/images/booked_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Booked Seat</li>';  
                 result += '<li style="background:url(\'/images/selected_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Selected Seat</li>'; 
-                result += '</ul></div><div style="clear:both;width:100%"></div></div></div>';
-                $("#seats"+ID).html(result);
+                result += '</ul><button id="btnBooking">Booking</button></div><div style="clear:both;width:100%"></div></div></div>';
+                $("#seats"+tripID).html(result);
                 init(bookedSeats);
                 
                 $('.' + settings.seatCss).click(function () {
@@ -109,23 +118,36 @@
                     $(this).toggleClass(settings.selectingSeatCss);
                     }
                 });                
-                $("#seats"+ID).show();//seats{{ad.BusID}}; 
+                $("#seats"+tripID).show();
+                $('#btnBooking').click(function () {
+                var str = [], item;
+                $.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
+                    item = $(this).attr('title');                   
+                    str.push(item);                   
+                });
+                if (userID>0){
+                    alert(str.join(',')+" is your choice, "+userID);
+                } else {
+                    alert(str.join(',')+" is your choice, but you must login or register "+userID);
+                }                
+                })
             }        
         } 
                 
 $(document).ready(function () {
     $("span").hide(); //selectBus
-    $("#waitForIt").hide();    
+    $("#waitForIt").hide();   
+    
 });    
 </script> 
 {% endblock %}
 
 {% block login %} 
     <p class="pLeft"><a href="/" style="padding:5px 20px; background-color: lightblue;">BACK </a> </p>
-{% if currentUser %}
-        <p class="pRight">Logined: {{currentUser.userName}}. <a href="/logout"> LOGOUT</a></p>
+    {% if currentUser %}
+        <p class="pRight">Logined: {{userID}}. <a href="/logout"> LOGOUT</a></p>        
     {% else %}
-        <p  class="pRight"><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
+        <p  class="pRight"><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p> 
     {% endif %}
     <hr/>
 {% endblock %} 
@@ -152,7 +174,7 @@ $(document).ready(function () {
                 <td>{{ad.DateTimeDepart}}</td>
                 <td>{{ad.DateTimeArrive}}</td>
                 <!--<td style="font-size: 150%; font-weight: bold; cursor: pointer;">+</td>-->
-                <td style="font-size: 120%; font-weight: bold; background-color: lightblue;" onclick="selectBus({{ad.BusID}},{{ad.ID}})">Select</td>
+                <td style="font-size: 120%; font-weight: bold; background-color: lightblue;" onclick="selectBus({{currentUser.ID?currentUser.ID:0}},{{ad.ID}})">Select</td>
             </tr>
             <tr>   
                 <td >Amenities:</td>                
