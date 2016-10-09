@@ -297,10 +297,11 @@ input[type=submit]:hover {
 *************  seats
 */
 #holder{    
-    height:170px;    
-    width:530px;
-    background-color:#F5F5F5;
+    height:170px;
+    width:730px;
     border:1px solid #A4A4A4;
+    background-color:#F5F5F5;
+    
     margin-left:10px;  
     padding: 10px;
     float: left;

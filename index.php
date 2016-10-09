@@ -17,9 +17,7 @@ $log->pushHandler(new StreamHandler('logs/errors.log', Logger::ERROR));
 DB::$dbName = 'cp4724_tors';
 DB::$user = 'cp4724_tors';
 DB::$password = 'bAltllSiuAad';
-
 DB::$encoding = 'utf8';
-
 //DB::$host = '169.44.80.220';
 // DB::$host = '127.0.0.1'; // sometimes needed on Mac OSX
 DB::$error_handler = 'sql_error_handler';
@@ -70,7 +68,7 @@ $view->setTemplatesDirectory(dirname(__FILE__) . '/templates');
 
 // Facebook Login I VERSION
 // INCLUSION OF LIBRARY FILES
-require_once('lib/Facebook/FacebookSession.php');
+/*require_once('lib/Facebook/FacebookSession.php');
 require_once('lib/Facebook/FacebookRequest.php');
 require_once('lib/Facebook/FacebookResponse.php');
 require_once('lib/Facebook/FacebookSDKException.php');
@@ -83,7 +81,7 @@ require_once('lib/Facebook/GraphSessionInfo.php');
 require_once('lib/Facebook/Entities/AccessToken.php');
 require_once('lib/Facebook/HttpClients/FacebookCurl.php');
 require_once('lib/Facebook/HttpClients/FacebookHttpable.php');
-require_once('lib/Facebook/HttpClients/FacebookCurlHttpClient.php');
+require_once('lib/Facebook/HttpClients/FacebookCurlHttpClient.php');*/
 
 // USE NAMESPACES
 
@@ -114,16 +112,16 @@ $redirect_url = 'http://tors.ipd8.info/';
 
 //Initialize application, create helper object and get fb sess
 
-FacebookSession::setDefaultApplication($app_id, $app_secret);
+/*FacebookSession::setDefaultApplication($app_id, $app_secret);
 $helper = new FacebookRedirectLoginHelper($redirect_url);
 $sess = $helper->getSessionFromRedirect();
 //check if facebook session exists
 if (isset($_SESSION['fb_token'])) {
     $sess = new FacebookSession($_SESSION['fb_token']);
-}
+}*/
 //If fb session exists echo name
 
-if (isset($sess)) {
+/*if (isset($sess)) {
     //store the token in the php session
     $_SESSION['fb_token'] = $sess->getToken();
     //create request object,execute and capture response
@@ -143,7 +141,7 @@ if (isset($sess)) {
 } else {
     //else echo login
     echo '<a href="'.$helper->getLoginUrl(array('email')).'" >Login with facebook</a>';
-}
+}*/
 // Facebook Login block
 
 
@@ -212,7 +210,7 @@ if (empty($dateTimeDepart) && empty($dateTimeArrive)) {
 }
 // State 2: Submission    
 //$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s and DateTimeDepart<%s and DateTimeArrive<%s", $depart,$arrive,$dateTimeDepart,$dateTimeArrive); 
-$result = DB::query("SELECT trips.ID as ID,BusID,DepartID,ArriveID,DateTimeDepart,DateTimeArrive, Price, Description,MakeModel,WiFi,AirConditioning,Toilet,PowerOutlets "
+$result = DB::query("SELECT trips.ID as ID,NumberOfSeats, BusID, DepartID, ArriveID, DateTimeDepart, DateTimeArrive, Price, Description,MakeModel, WiFi, AirConditioning, Toilet, PowerOutlets "
                 . "FROM trips,buses WHERE trips.BusID=buses.ID AND DepartID=%d AND ArriveID=%d ORDER BY DateTimeDepart", (int) $depart, (int) $arrive);
 ////$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s", $depart,$arrive); 
 GLOBAL $cityList;
@@ -236,7 +234,7 @@ if (!$result) {
 });
 //**************************************************** Selected bus
 
-<<<<<<< HEAD
+
 $app->get('/selectbus/:BusID', function($BusID) use ($app, $log) {
     $bus = DB::queryFirstRow('SELECT * FROM buses WHERE ID=%d', $BusID);
     if (!$bus) {
@@ -247,11 +245,11 @@ $app->get('/selectbus/:BusID', function($BusID) use ($app, $log) {
         $log->debug("ERROR: Not found seats for selected bus");
     }
     $app->render('selected_bus.html.twig', array('bus'=>$bus, 'currentUser' => $_SESSION['user']));
-=======
+});
 $app->get('/selectbus', function() use ($app, $log) {
 $app->render('selected_bus.html.twig', array('currentUser' => $_SESSION['user']));
->>>>>>> 8ce25237d995127fa6e09f4bf7e52d0bc060bcae
 });
+
 
 //**************************************************** REGISTER
 
