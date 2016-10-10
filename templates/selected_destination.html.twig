@@ -48,7 +48,7 @@
             booked = true;
             settings = {
                 rows: 4,
-                cols: seats/4,
+                cols: 80/4,
                 rowCssPrefix: 'row-',
                 colCssPrefix: 'col-',
                 seatWidth: 35,
@@ -85,8 +85,32 @@
                     item = $(this).attr('title');                   
                     str.push(item);                   
                 });
-                alert(str.join(','));
-                })
+                if (userID>0){
+                    alert(str.join(',')+" is your choice, "+userID+" array length is "+str.length);
+                    if (str.length > 0) {
+                        // INSERT
+                    $.ajax({
+                        url: "/api.php/selectedseats",
+                        data: JSON.stringify({                        
+                        user: userID,
+                        trip: tripID,
+                        seats: str.join(',')
+                        }),
+                        type: "POST",
+                        dataType: "json"
+                    }).done(function () {
+                            alert("Updated successfully");
+                            //refreshTodoList();
+                        }); 
+                        //alert("str is "+str.length);
+                        window.location = "http://localhost:8100/bookingform";
+                    }
+                    else alert("You no seats chosed");
+                    
+                } else {
+                    alert(str.join(',')+" is your choice, but you must login or register "+userID+" array length is "+str.length);
+                }  
+                });
             });
             
             if (booked==false){
@@ -151,7 +175,7 @@
                 } else {
                     alert(str.join(',')+" is your choice, but you must login or register "+userID+" array length is "+str.length);
                 }                
-                })
+                });
                 //*****finish
             }        
         } 

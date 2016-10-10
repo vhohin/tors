@@ -84,36 +84,63 @@ $app->post('/selectedseats', function() use ($app, $log) {
     // $app->render('booking_form.html.twig');
     $body = $app->request->getBody();
     $record = json_decode($body, TRUE);
-    // FIXME: verify $record contains all and only fields required with valid values
     if (!isTodoItemValid($record, $error)) {
         $app->response->setStatus(400);
         $log->debug("POST /selected seats verification failed: " . $error);
         echo json_encode($error);
         return;
     }
-    //$record = DB::query("SELECT BookedSeats,NumberOfSeats FROM booking,buses,trips WHERE trips.BusID=buses.ID AND booking.TripID=trips.ID AND booking.TripID=%d", $ID);
-    // 404 if record not found
-    if (!$record) {
+   $selectedTrip = array();
+   $userInfo = DB::query("SELECT userName,email FROM users WHERE ID=%d", $record['user']);   
+    if (!$userInfo) {
         $app->response->setStatus(404);
         echo json_encode("Record not found");
         return;
     }
-    $log->debug("Body: " . $body);
-    $_SESSION['booking']=$record;
-    //$_SESSION['tripID']=$record['tripID'];
-    //$_SESSION['seats']=$record['seats'];
-    //$_SESSION['tripID']=$record['tripID'];
-    //$app->render('booking_form.html.twig', array('valueList' => $body, 'currentUser' => $_SESSION['user']));*/
-    //$log->debug("POST /todoitems verification failed: " . $record);
-    //$seats=explode($record['seats']);
-    /*foreach($seats as $seat){
-        $recordtodb={"PassengerID":3,"TripID":10,"seats":"29,41,30,31"};
-        DB::insert('trips', $recordtodb);
-    }*/
+    //$tripInfo = DB::query("SELECT * FROM trips WHERE ID=%d", $record['trip']);   
+    $tripInfo = DB::query("SELECT trips.ID as ID,NumberOfSeats, BusID, DepartID, ArriveID, DateTimeDepart, DateTimeArrive, Price, Description,MakeModel, WiFi, AirConditioning, Toilet, PowerOutlets "
+                . "FROM trips,buses WHERE trips.BusID=buses.ID AND trips.ID=%d", $record['trip']);
+    if (!$tripInfo) {
+        $app->response->setStatus(404);
+        echo json_encode("Record not found");
+        return;
+    }
+    $busInfo = DB::query("SELECT BusID, MakeModel, WiFi, AirConditioning, Toilet, PowerOutlets "
+                . "FROM trips,buses WHERE trips.BusID=buses.ID AND trips.ID=%d", $record['trip']);
+    if (!$busInfo) {
+        $app->response->setStatus(404);
+        echo json_encode("Record not found");
+        return;
+    }
+    $departInfo = DB::query("SELECT citys.name, citys.Country FROM trips,citys WHERE trips.DepartID=citys.ID AND trips.ID=%d", $record['trip']);
+    if (!$tripInfo) {
+        $app->response->setStatus(404);
+        echo json_encode("Record not found");
+        return;
+    }
+    $arriveInfo = DB::query("SELECT citys.name, citys.Country FROM trips,citys WHERE trips.ArriveID=citys.ID AND trips.ID=%d", $record['trip']);
+    if (!$tripInfo) {
+        $app->response->setStatus(404);
+        echo json_encode("Record not found");
+        return;
+    }
+    $price = DB::queryOneField('Price',"SELECT * FROM trips WHERE ID=%d", $record['trip']);
+    if (!$tripInfo) {
+        $app->response->setStatus(404);
+        echo json_encode("Record not found");
+        return;
+    }
+    $arr=explode(",",$record['seats']);
+    $countSeats=count($arr);    
+    $paymentSum = sprintf("%1\$.2f", $countSeats*$price);
     
-    //echo DB::insertId();
-    // POST / INSERT is special - returns 201    
-    //print_r($record);
+    $selectedTrip=array_merge($userInfo,$tripInfo,$busInfo,$departInfo,$arriveInfo,$record);
+    //$selectedTrip{};
+    $_SESSION['booking']=$selectedTrip;
+    $_SESSION['countSeats']=$countSeats;
+    $_SESSION['paymentSum']=$paymentSum;
+    $_SESSION['price']=$price;
+    
    
 });
 

@@ -166,6 +166,19 @@ if ($errorList) {
 } else {
     $app->render('index.html.twig', array('currentUser' => $_SESSION['user'], 'cityList' => $cityList));
 }
+
+if (isset($_SESSION['countSeats'])) {
+$_SESSION['countSeats'] = array();
+}
+if (isset($_SESSION['booking'])) {
+$_SESSION['booking'] = array();
+}
+if (isset($_SESSION['paymentSum'])) {
+$_SESSION['paymentSum'] = array();
+}
+if (isset($_SESSION['price'])) {
+$_SESSION['price'] = array();
+}
 });
 //**************************************************** Selected trip
 $app->post('/select', function() use ($app, $log) {
@@ -234,7 +247,7 @@ if (!$result) {
 });
 //**************************************************** Booking Form
 $app->get('/bookingform', function() use ($app, $log) {
-$app->render('booking_form.html.twig', array('currentUser' => $_SESSION['user'],'bookedseats'=>$_SESSION['booking']));
+$app->render('booking_form.html.twig', array('currentUser' => $_SESSION['user'],'booking'=>$_SESSION['booking'],'countSeats'=>$_SESSION['countSeats'],'paymentSum'=>$_SESSION['paymentSum']));
 });
 
 //**************************************************** Selected bus
