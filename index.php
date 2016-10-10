@@ -63,8 +63,8 @@ $view->setTemplatesDirectory(dirname(__FILE__) . '/templates');
   'app_id' => '312636035778552',
   'app_secret' => '9c0f1b20e345ae77cfd4d434a59e3049',
   'default_graph_version' => 'v2.8',
-  ]); */
-
+  ]); 
+*/
 
 // Facebook Login I VERSION
 // INCLUSION OF LIBRARY FILES
@@ -81,7 +81,7 @@ require_once('lib/Facebook/GraphSessionInfo.php');
 require_once('lib/Facebook/Entities/AccessToken.php');
 require_once('lib/Facebook/HttpClients/FacebookCurl.php');
 require_once('lib/Facebook/HttpClients/FacebookHttpable.php');
-require_once('lib/Facebook/HttpClients/FacebookCurlHttpClient.php');*/
+require_once('lib/Facebook/HttpClients/FacebookCurlHttpClient.php');
 
 // USE NAMESPACES
 
@@ -109,6 +109,13 @@ if (isset($_REQUEST['logout'])) {
 $app_id = '312636035778552';
 $app_secret = '9c0f1b20e345ae77cfd4d434a59e3049';
 $redirect_url = 'http://tors.ipd8.info/';
+
+/* $fb = new Facebook\Facebook([
+  'app_id' => '312636035778552',
+  'app_secret' => '9c0f1b20e345ae77cfd4d434a59e3049',
+  'default_graph_version' => 'v2.8',
+  ]); 
+
 
 //Initialize application, create helper object and get fb sess
 
@@ -253,6 +260,38 @@ $app->get('/selectbus', function() use ($app, $log) {
 $app->render('selected_bus.html.twig', array('currentUser' => $_SESSION['user']));
 });
 
+
+
+//FACEBOOK login
+
+$fb = new Facebook\Facebook([
+    'app_id' => "312636035778552",
+    'app_secret' => "9c0f1b20e345ae77cfd4d434a59e3049",
+    'default_graph_version' => 'v2.5',
+    'persistent_data_handler' => 'session'
+        ]);
+
+
+
+
+$helper = $fb->getRedirectLoginHelper();
+$permissions = ['public_profile', 'email', 'user_location']; // optional
+
+$loginUrl = $helper->getLoginUrl('http://tors.ipd8.info/fblogin.php', $permissions);
+$logoutUrl = $helper->getLogoutUrl('http://tors.ipd8.info/fblogout.php', $permissions);
+
+$fbUser = array();
+if (isset($_SESSION['facebook_access_token'])) {
+    $fbUser = $_SESSION['facebook_access_token'];
+}
+
+$twig = $app->view()->getEnvironment();
+$twig->addGlobal('fbUser', $fbUser);
+$twig->addGlobal('loginUrl', $loginUrl);
+$twig->addGlobal('logoutUrl', $logoutUrl);
+
+//print_r($fbUser);
+//print_r($_SESSION['fbmetadata']);
 
 //**************************************************** REGISTER
 
