@@ -77,3 +77,17 @@ Nazar
  - finish Edit Profile (full working)
  - cart page?
 
+Valeriy
+
+1) FINISHED: 
+   - transfer the files to host and test them,
+   = selected_destination.html.twig (rebuild),
+   - booking_form.html.twig,
+   - table booking.
+2) DIDN'T FINISHED: booking (Paypal API), addition result to DB.
+3) TO DO: 
+   - booking (Paypal API),    
+   - addition result to DB.  
+
+
+
