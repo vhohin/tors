@@ -63,8 +63,8 @@ $view->setTemplatesDirectory(dirname(__FILE__) . '/templates');
   'app_id' => '312636035778552',
   'app_secret' => '9c0f1b20e345ae77cfd4d434a59e3049',
   'default_graph_version' => 'v2.8',
-  ]); */
-
+  ]); 
+*/
 
 // Facebook Login I VERSION
 // INCLUSION OF LIBRARY FILES
@@ -81,7 +81,7 @@ require_once('lib/Facebook/GraphSessionInfo.php');
 require_once('lib/Facebook/Entities/AccessToken.php');
 require_once('lib/Facebook/HttpClients/FacebookCurl.php');
 require_once('lib/Facebook/HttpClients/FacebookHttpable.php');
-require_once('lib/Facebook/HttpClients/FacebookCurlHttpClient.php');*/
+require_once('lib/Facebook/HttpClients/FacebookCurlHttpClient.php');
 
 // USE NAMESPACES
 
@@ -109,6 +109,13 @@ if (isset($_REQUEST['logout'])) {
 $app_id = '312636035778552';
 $app_secret = '9c0f1b20e345ae77cfd4d434a59e3049';
 $redirect_url = 'http://tors.ipd8.info/';
+
+/* $fb = new Facebook\Facebook([
+  'app_id' => '312636035778552',
+  'app_secret' => '9c0f1b20e345ae77cfd4d434a59e3049',
+  'default_graph_version' => 'v2.8',
+  ]); 
+
 
 //Initialize application, create helper object and get fb sess
 
@@ -267,6 +274,38 @@ $app->render('selected_bus.html.twig', array('currentUser' => $_SESSION['user'])
 });
 
 
+
+//FACEBOOK login
+
+$fb = new Facebook\Facebook([
+    'app_id' => "312636035778552",
+    'app_secret' => "9c0f1b20e345ae77cfd4d434a59e3049",
+    'default_graph_version' => 'v2.5',
+    'persistent_data_handler' => 'session'
+        ]);
+
+
+
+
+$helper = $fb->getRedirectLoginHelper();
+$permissions = ['public_profile', 'email', 'user_location']; // optional
+
+$loginUrl = $helper->getLoginUrl('http://tors.ipd8.info/fblogin.php', $permissions);
+$logoutUrl = $helper->getLogoutUrl('http://tors.ipd8.info/fblogout.php', $permissions);
+
+$fbUser = array();
+if (isset($_SESSION['facebook_access_token'])) {
+    $fbUser = $_SESSION['facebook_access_token'];
+}
+
+$twig = $app->view()->getEnvironment();
+$twig->addGlobal('fbUser', $fbUser);
+$twig->addGlobal('loginUrl', $loginUrl);
+$twig->addGlobal('logoutUrl', $logoutUrl);
+
+//print_r($fbUser);
+//print_r($_SESSION['fbmetadata']);
+
 //**************************************************** REGISTER
 
 $app->get('/emailexists/:email', function($email) use ($app, $log) {
@@ -398,26 +437,19 @@ $app->render('passwordForgot.html.twig');
 
 
 $app->post('/passwordForgot', function() use ($app, $log) {
-//include "connect.php"; //connects to the database
-if (isset($_POST['email'])) {
-    //$username = $_POST['username'];
-    //$query = "SELECT * FROM users WHERE username='$username'";
-    //$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-    // $count = mysqli_num_rows($result);
-    // If the count is equal to one, we will send message other wise display an error message.
 
+if (isset($_POST['email'])) {
+    
     $email = $app->request->post('email');
     $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
 
     if ($user) {
-        //$rows = mysqli_fetch_array($result);
+        
         $pass = $user['password']; //FETCHING PASS
-        //echo "your pass is ::".($pass)."";
         $to = $email;
-        //echo "your email is ::".$email;
         //Details for sending E-mail
         $from = "TORS";
-        $url = "http://tors.ipd8.ingo/";
+        $url = "http://tors.ipd8.info";
         $body = "TORS password recovery Script
 		-----------------------------------------------
 		Url : $url;
@@ -441,7 +473,8 @@ if (isset($_POST['email'])) {
     }
     //If the message is sent successfully, display sucess message otherwise display an error message.
     if ($sentmail == 1) {
-        echo "Your Password Has Been Sent To Your Email Address.";
+         $app->render('passwordForgot_success.html.twig');
+//echo "Your Password Has Been Sent To Your Email Address.";
         $log->debug("Your Password Has Been Sent To Your Email Address.");
     } else {
         if ($_POST['email'] != "")

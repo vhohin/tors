@@ -11,7 +11,7 @@
             <button type="button" class="btnFb"><span style="font-family:sans-serif; font-weight: bold; font-size: 20px;">f&nbsp</span> Log in with Facebook</button>
         </div>
         
-        <p>---------------- or use your email---------------------</p>
+        <p>----------- or use your email---------------</p>
 
         {% if loginFailed %}
             <p>Invalid email or password</p>
@@ -19,6 +19,8 @@
 
 
         <form method="post" id="loginForm">
+            <a href="{{loginUrl}}"> Facebook login </a>
+            
             <label for="loginEmail">Email Address</label><br>
                 <input type="text" name="email" placeholder="Email Address"><br><br>
            <label for="loginEmail" >Password</label><br>
