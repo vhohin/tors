@@ -57,3 +57,23 @@ Nazar
  - Ask teached about CartPage and implement, if needed  
  - Emailexists/: does not work properly - FIX IT 
 
+
+---------------------------
+October 11, 2016 - DAY06
+---------------------------
+
+
+Nazar
+
+1) DONE: 
+  - FB and ForgetPassword page (twig, login, logout)
+  - Emailexists/: - FIXED
+  - Edit Profile twig
+
+2) NOT FINISHED: 
+ - to be tested FB and forgetpassword
+ - password to encrypt while send email
+2) TO DO:
+ - finish Edit Profile (full working)
+ - cart page?
+
