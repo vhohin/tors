@@ -424,26 +424,19 @@ $app->render('passwordForgot.html.twig');
 
 
 $app->post('/passwordForgot', function() use ($app, $log) {
-//include "connect.php"; //connects to the database
-if (isset($_POST['email'])) {
-    //$username = $_POST['username'];
-    //$query = "SELECT * FROM users WHERE username='$username'";
-    //$result = mysqli_query($connection, $query) or die(mysqli_error($connection));
-    // $count = mysqli_num_rows($result);
-    // If the count is equal to one, we will send message other wise display an error message.
 
+if (isset($_POST['email'])) {
+    
     $email = $app->request->post('email');
     $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
 
     if ($user) {
-        //$rows = mysqli_fetch_array($result);
+        
         $pass = $user['password']; //FETCHING PASS
-        //echo "your pass is ::".($pass)."";
         $to = $email;
-        //echo "your email is ::".$email;
         //Details for sending E-mail
         $from = "TORS";
-        $url = "http://tors.ipd8.ingo/";
+        $url = "http://tors.ipd8.info";
         $body = "TORS password recovery Script
 		-----------------------------------------------
 		Url : $url;
@@ -467,7 +460,8 @@ if (isset($_POST['email'])) {
     }
     //If the message is sent successfully, display sucess message otherwise display an error message.
     if ($sentmail == 1) {
-        echo "Your Password Has Been Sent To Your Email Address.";
+         $app->render('passwordForgot_success.html.twig');
+//echo "Your Password Has Been Sent To Your Email Address.";
         $log->debug("Your Password Has Been Sent To Your Email Address.");
     } else {
         if ($_POST['email'] != "")
