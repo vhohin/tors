@@ -38,7 +38,7 @@
 
 {% block login %}   
 {% if currentUser %}
-        <p>Logined: {{currentUser}}. <a href="/logout"> LOGOUT</a></p>
+        <p>Logined: {{currentUser.email}}. <a href="/logout"> LOGOUT</a></p>
     {% else %}
         <p><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
     {% endif %}

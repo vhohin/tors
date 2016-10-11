@@ -3,19 +3,197 @@
 {% block title %}TORS{% endblock %}
 
 {% block head %}
-<script>           
+<script>  
+    var settings = {};
+    var bookedSeats = [];//[5, 10, 25];
+    var selectedSeats = [];       
+     var init = function (reservedSeat) {
+                var str = [], seatNo, className;
+                for (i = 0; i < settings.rows; i++) {
+                    for (j = 0; j < settings.cols; j++) {
+                        seatNo = (i + j * settings.rows + 1);  
+                        className = settings.seatCss + ' ' + settings.rowCssPrefix + i.toString() + ' ' + settings.colCssPrefix + j.toString();
+                        if ($.isArray(reservedSeat) && $.inArray(seatNo, reservedSeat) != -1) {
+                            className += ' ' + settings.selectedSeatCss;
+                        }
+                        str.push('<li class="' + className + '"' +
+                                  'style="top:' + (i * settings.seatHeight).toString() + 'px;left:' + (j * settings.seatWidth).toString() + 'px">' +
+                                  '<a title="' + seatNo + '">' + seatNo + '</a>' +
+                                  '</li>');
+                    }
+                }
+                $('#place').html(str.join(''));
+            };
+            
+        function selectBus(userID,tripID){
+            var result ="";
+            var booked = false;
+            var seats =0;
+            $("span").html(result);
+            $("span").hide();
+            bookedSeats = [];
+            //alert("bookedSeats");
+            $.ajax({
+                url: "/api.php/seats/"+tripID,
+                type: "GET",
+                dataType: "json"
+            }).done(function (data) {            
+                for (var i = 0; i < data.length; i++) {                    
+                var item = data[i];
+                //alert("booked Seats "+item.SeatNumber);
+                bookedSeats.push(parseInt(item.BookedSeats)); 
+                    //bookedSeats = [3,4,5,30];
+                seats=item.NumberOfSeats;
+                }
+            booked = true;
+            settings = {
+                rows: 4,
+                cols: 80/4,
+                rowCssPrefix: 'row-',
+                colCssPrefix: 'col-',
+                seatWidth: 35,
+                seatHeight: 35,
+                seatCss: 'seat',
+                selectedSeatCss: 'selectedSeat',
+                selectingSeatCss: 'selectingSeat'
+            };              
+                result ='<div id="seats"><div id="holder"><ul id="place"></ul></div>';
+                result += '<div style="float:left;"><ul id="seatDescription">';
+                result += '<li style="background:url(\'/images/available_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Available Seat</li>';        
+                result += '<li style="background:url(\'/images/booked_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Booked Seat</li>';  
+                result += '<li style="background:url(\'/images/selected_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Selected Seat</li>'; 
+                result += '</ul></div><button id="btnBooking">Booking</button><div style="clear:both;width:100%"></div></div></div>';
+                $("#seats"+tripID).html(result);
+                init(bookedSeats); 
+                
+                $('.' + settings.seatCss).click(function () {
+                if ($(this).hasClass(settings.selectedSeatCss)){
+                    alert('This seat is already reserved');
+                }
+                else{
+                    $(this).toggleClass(settings.selectingSeatCss);
+                    /*if (result!=""){
+                        alert(settings.cols);                        
+                    }*/
+                    selectedSeats.push();
+                    }
+                });                
+                $("#seats"+tripID).show();
+                $('#btnBooking').click(function () {
+                var str = [], item;
+                $.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
+                    item = $(this).attr('title');                   
+                    str.push(item);                   
+                });
+                if (userID>0){
+                    alert(str.join(',')+" is your choice, "+userID+" array length is "+str.length);
+                    if (str.length > 0) {
+                        // INSERT
+                    $.ajax({
+                        url: "/api.php/selectedseats",
+                        data: JSON.stringify({                        
+                        user: userID,
+                        trip: tripID,
+                        seats: str.join(',')
+                        }),
+                        type: "POST",
+                        dataType: "json"
+                    }).done(function () {
+                            alert("Updated successfully");
+                            //refreshTodoList();
+                        }); 
+                        //alert("str is "+str.length);
+                        window.location = "http://localhost:8100/bookingform";
+                    }
+                    else alert("You no seats chosed");
+                    
+                } else {
+                    alert(str.join(',')+" is your choice, but you must login or register "+userID+" array length is "+str.length);
+                }  
+                });
+            });
+            
+            if (booked==false){
+                
+                settings = {
+                rows: 4,
+                cols: 80/4,
+                rowCssPrefix: 'row-',
+                colCssPrefix: 'col-',
+                seatWidth: 35,
+                seatHeight: 35,
+                seatCss: 'seat',
+                selectedSeatCss: 'selectedSeat',
+                selectingSeatCss: 'selectingSeat'
+            };              
+                result ='<div id="seats"><div id="holder"><ul id="place"></ul></div>';
+                result += '<div style="float:left;"><ul id="seatDescription">';
+                result += '<li style="background:url(\'/images/available_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Available Seat</li>';        
+                result += '<li style="background:url(\'/images/booked_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Booked Seat</li>';  
+                result += '<li style="background:url(\'/images/selected_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Selected Seat</li>'; 
+                result += '</ul><button id="btnBooking">Booking</button></div><div style="clear:both;width:100%"></div></div></div>';
+                $("#seats"+tripID).html(result);
+                init(bookedSeats);
+                
+                $('.' + settings.seatCss).click(function () {
+                if ($(this).hasClass(settings.selectedSeatCss)){
+                    alert('This seat is already reserved');
+                }
+                else{
+                    $(this).toggleClass(settings.selectingSeatCss);
+                    }
+                });                
+                $("#seats"+tripID).show();
+                $('#btnBooking').click(function () {
+                var str = [], item;
+                $.each($('#place li.' + settings.selectingSeatCss + ' a'), function (index, value) {
+                    item = $(this).attr('title');                   
+                    str.push(item);                   
+                });
+                if (userID>0){
+                    alert(str.join(',')+" is your choice, "+userID+" array length is "+str.length);
+                    if (str.length > 0) {
+                        // INSERT
+                    $.ajax({
+                        url: "/api.php/selectedseats",
+                        data: JSON.stringify({                        
+                        user: userID,
+                        trip: tripID,
+                        seats: str.join(',')
+                        }),
+                        type: "POST",
+                        dataType: "json"
+                    }).done(function () {
+                            alert("Updated successfully");
+                            //refreshTodoList();
+                        }); 
+                        //alert("str is "+str.length);
+                        window.location = "http://localhost:8100/bookingform";
+                    }
+                    else alert("You no seats chosed");
+                    
+                } else {
+                    alert(str.join(',')+" is your choice, but you must login or register "+userID+" array length is "+str.length);
+                }                
+                });
+                //*****finish
+            }        
+        } 
+                
 $(document).ready(function () {
-    $("#waitForIt").hide();
+    $("span").hide(); //selectBus
+    $("#waitForIt").hide();   
+    
 });    
 </script> 
 {% endblock %}
 
 {% block login %} 
     <p class="pLeft"><a href="/" style="padding:5px 20px; background-color: lightblue;">BACK </a> </p>
-{% if currentUser %}
-        <p class="pRight">Logined: {{currentUser.userName}}. <a href="/logout"> LOGOUT</a></p>
+    {% if currentUser %}
+        <p class="pRight">Logined: {{userID}}. <a href="/logout"> LOGOUT</a></p>        
     {% else %}
-        <p  class="pRight"><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
+        <p  class="pRight"><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p> 
     {% endif %}
     <hr/>
 {% endblock %} 
@@ -41,8 +219,8 @@ $(document).ready(function () {
                 <td style="font-size: 120%; font-weight: bold;">{{arriveCity}}</td>                
                 <td>{{ad.DateTimeDepart}}</td>
                 <td>{{ad.DateTimeArrive}}</td>
-                <!--<td style="font-size: 150%; font-weight: bold; cursor: pointer;">+</td>   /{{ad.ID}}-->
-                <td style="font-size: 120%; font-weight: bold; background-color: lightblue;"><a href='/selectbus/{{ad.BusID}}'>Select</a></td
+                <!--<td style="font-size: 150%; font-weight: bold; cursor: pointer;">+</td>-->
+                <td style="font-size: 120%; font-weight: bold; background-color: lightblue;" onclick="selectBus({{currentUser.ID?currentUser.ID:0}},{{ad.ID}})">Select</td>
             </tr>
             <tr>   
                 <td >Amenities:</td>                
@@ -61,9 +239,15 @@ $(document).ready(function () {
                     {% endif %}
                 </td>
                 <td></td>
-                <td>Price:</td>
+                <td>Price:</td>                
                 <!--<td style="font-size: 150%; font-weight: bold; cursor: pointer;">+</td>-->
                 <td>$ {{ad.Price}}</td>
+            </tr>
+            <tr>
+                <td colspan="5" style="border-bottom: 1px solid grey; text-align: left;">
+                    <span id="seats{{ad.ID}}"> 
+                    </span>                     
+                </td>
             </tr>
             <tr>   
                 <td colspan="5" style="border-bottom: 1px solid grey; background-color: lightblue;"></td>                

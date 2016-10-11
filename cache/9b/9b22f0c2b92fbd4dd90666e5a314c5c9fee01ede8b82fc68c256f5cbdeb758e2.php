@@ -20,11 +20,12 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
     protected function doDisplay(array $context, array $blocks = array())
     {
         // line 1
-        echo "<!DOCTYPE html>
+        echo "<?php session_start(); ?>
+<!DOCTYPE html>
 <html>
     <head>
         <title>";
-        // line 4
+        // line 5
         $this->displayBlock('title', $context, $blocks);
         echo "</title>
         <meta charset=\"UTF-8\">
@@ -32,9 +33,9 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
         <link rel=\"stylesheet\" href=\"/styles.css\" />
         <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js\"></script>
 ";
-        // line 9
-        $this->displayBlock('head', $context, $blocks);
         // line 10
+        $this->displayBlock('head', $context, $blocks);
+        // line 11
         echo "    </head>
     <body>
         <div id=\"header\">
@@ -54,13 +55,13 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
              
 <div id=\"content\">
     <div id=\"loginBlock\">";
-        // line 28
+        // line 29
         $this->displayBlock('login', $context, $blocks);
         echo "</div>    
 ";
-        // line 29
-        $this->displayBlock('content', $context, $blocks);
         // line 30
+        $this->displayBlock('content', $context, $blocks);
+        // line 31
         echo " </div>
             
         </div>
@@ -72,22 +73,22 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
 ";
     }
 
-    // line 4
+    // line 5
     public function block_title($context, array $blocks = array())
     {
     }
 
-    // line 9
+    // line 10
     public function block_head($context, array $blocks = array())
     {
     }
 
-    // line 28
+    // line 29
     public function block_login($context, array $blocks = array())
     {
     }
 
-    // line 29
+    // line 30
     public function block_content($context, array $blocks = array())
     {
     }
@@ -99,12 +100,13 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
 
     public function getDebugInfo()
     {
-        return array (  91 => 29,  86 => 28,  81 => 9,  76 => 4,  64 => 30,  62 => 29,  58 => 28,  38 => 10,  36 => 9,  28 => 4,  23 => 1,);
+        return array (  92 => 30,  87 => 29,  82 => 10,  77 => 5,  65 => 31,  63 => 30,  59 => 29,  39 => 11,  37 => 10,  29 => 5,  23 => 1,);
     }
 
     public function getSource()
     {
-        return "<!DOCTYPE html>
+        return "<?php session_start(); ?>
+<!DOCTYPE html>
 <html>
     <head>
         <title>{% block title %}{% endblock %}</title>
