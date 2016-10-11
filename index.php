@@ -289,14 +289,15 @@ $loginUrl = $helper->getLoginUrl('http://tors.ipd8.info/fblogin.php', $permissio
 $logoutUrl = $helper->getLogoutUrl('http://tors.ipd8.info/fblogout.php', $permissions);
 
 $fbUser = array();
+
 if (isset($_SESSION['facebook_access_token'])) {
     $fbUser = $_SESSION['facebook_access_token'];
-    /*DB::insert('users', array(
-  'email' => $_SESSION['email'],
-        'FBID' => $_SESSION['ID']
+    DB::insert('users', array(
+  'email' => $_SESSION['facebook_access_token']['email'],
+        'FBID' => $_SESSION['facebook_access_token']['ID']
   
-));*/
-    
+));
+ $app->render('/');   
 }
 
 $twig = $app->view()->getEnvironment();
@@ -435,8 +436,8 @@ $app->get('/profile', function() use ($app, $log) {
     $app->render('profile.html.twig', array('userInfo' => $userInfo, 'currentUser' => $_SESSION['user']));
 });
 
-$app->put('/profile', function() use ($app, $log) {
-    // UPDATE
+$app->post('/profile/:ID', function($ID) use ($app, $log) {
+    // UPDATE DB::update
 });
 
 
