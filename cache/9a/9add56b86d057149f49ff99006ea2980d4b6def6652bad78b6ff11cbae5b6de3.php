@@ -44,13 +44,13 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
             echo "        <p class=\"pLongRight\">Welcome, ";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["currentUser"]) ? $context["currentUser"] : null), "email", array()), "html", null, true);
             echo ". <a href=\"index.php/profile\">EDIT PROFILE </a>  | <a href=\"index.php/logout\"> LOGOUT</a></p>
-    ";
+     ";
         } elseif (        // line 8
 (isset($context["fbUser"]) ? $context["fbUser"] : null)) {
             // line 9
             echo "         <p class=\"pLongRight\">Welcome, ";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["fbUser"]) ? $context["fbUser"] : null), "email", array()), "html", null, true);
-            echo ".
+            echo ". <a href=\"fblogout.php\"> LOGOUT</a></p>
 ";
         } else {
             // line 11
@@ -246,8 +246,8 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
     
 {% if currentUser %}
         <p class=\"pLongRight\">Welcome, {{currentUser.email}}. <a href=\"index.php/profile\">EDIT PROFILE </a>  | <a href=\"index.php/logout\"> LOGOUT</a></p>
-    {% elseif fbUser %}
-         <p class=\"pLongRight\">Welcome, {{fbUser.email}}.
+     {% elseif fbUser %}
+         <p class=\"pLongRight\">Welcome, {{fbUser.email}}. <a href=\"fblogout.php\"> LOGOUT</a></p>
 {% else %}
         <p class=\"pLongRight\"><a href=\"index.php/login\">LOGIN </a> | <a href=\"index.php/register\"> REGISTER</a></p>       
     {% endif %}

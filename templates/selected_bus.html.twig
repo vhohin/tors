@@ -77,7 +77,9 @@ $('#btnShowNew').click(function () {
         <!--<a href="#" onClick="history.go(-1);return true;" style="padding:5px 20px; background-color: lightblue;">BACK </a>-->
     </p>
 {% if currentUser %}
-        <p class="pRight">Logined: {{currentUser.userName}}. <a href="/logout"> LOGOUT</a></p>
+        <p class="pRight">Logged as : {{currentUser.email}}. <a href="/logout"> LOGOUT</a></p>
+         {% elseif fbUser %}
+         <p class="pLongRight">Logged as : {{fbUser.email}}. <a href="fblogout.php"> LOGOUT</a></p>
     {% else %}
         <p  class="pRight"><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
     {% endif %}
