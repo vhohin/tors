@@ -140,8 +140,54 @@ $app->post('/selectedseats', function() use ($app, $log) {
     $_SESSION['countSeats']=$countSeats;
     $_SESSION['paymentSum']=$paymentSum;
     $_SESSION['price']=$price;
-    
-   
+});
+
+$app->post('/payment', function() use ($app, $log) {
+//header( 'Location: www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=' . urlencode($token) );    
+$requestParams = array(
+   'IPADDRESS' => $_SERVER['REMOTE_ADDR'],
+   'PAYMENTACTION' => 'Sale'
+);
+
+$creditCardDetails = array(
+   'CREDITCARDTYPE' => 'Visa',
+   'ACCT' => '4929802607281663',
+   'EXPDATE' => '062012',
+   'CVV2' => '984'
+);
+
+$payerDetails = array(
+   'FIRSTNAME' => 'John',
+   'LASTNAME' => 'Doe',
+   'COUNTRYCODE' => 'US',
+   'STATE' => 'NY',
+   'CITY' => 'New York',
+   'STREET' => '14 Argyle Rd.',
+   'ZIP' => '10010'
+);
+
+$orderParams = array(
+   'AMT' => '500',
+   'ITEMAMT' => '496',
+   'SHIPPINGAMT' => '4',
+   'CURRENCYCODE' => 'GBP'
+);
+
+$item = array(
+   'L_NAME0' => 'iPhone',
+   'L_DESC0' => 'White iPhone, 16GB',
+   'L_AMT0' => '496',
+   'L_QTY0' => '1'
+);
+
+$paypal = new Paypal();
+$response = $paypal -> request('DoDirectPayment',
+   $requestParams + $creditCardDetails + $payerDetails + $orderParams + $item
+);
+
+if( is_array($response) && $response['ACK'] == 'Success') { 
+   $transactionId = $response['TRANSACTIONID'];
+}    
 });
 
 $app->run();
