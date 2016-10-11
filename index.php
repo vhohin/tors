@@ -291,6 +291,12 @@ $logoutUrl = $helper->getLogoutUrl('http://tors.ipd8.info/fblogout.php', $permis
 $fbUser = array();
 if (isset($_SESSION['facebook_access_token'])) {
     $fbUser = $_SESSION['facebook_access_token'];
+    /*DB::insert('users', array(
+  'email' => $_SESSION['email'],
+        'FBID' => $_SESSION['ID']
+  
+));*/
+    
 }
 
 $twig = $app->view()->getEnvironment();
