@@ -229,28 +229,33 @@ $logoutUrl = $helper->getLogoutUrl('http://tors.ipd8.info/fblogout.php', $permis
 
 $fbUser = array();
 if (!isset($_SESSION['facebook_access_token'])) {
-    $_SESSION['facebook_access_token'] = $fbUser;
+    $_SESSION['facebook_access_token'] = array();
+} else {
+    $fbUser = $_SESSION['facebook_access_token'];
 }
 
-
+$uID=0;
 if ($_SESSION['facebook_access_token']) {
-    $userID = DB::queryFirstField('SELECT fbID from users WHERE fbID = %s', $_SESSION['facebook_access_token']['ID']);
+    $userID = DB::queryFirstRow('SELECT * from users WHERE fbID = %s', $fbUser['ID']);
     if (!$userID) {
         $result = DB::insert('users', array(
-                    'fbID' => $_SESSION['facebook_access_token']['ID'],
+                    'userName' => $fbUser['name'],
+                    'email' => $fbUser['email'],
+                    'fbID' => $fbUser['ID']
         ));
         if ($result) {
-            $userID = DB::insertId();
-            $log->debug(sprintf("Registred facebook user %s with id %s", $_SESSION['facebook_access_token']['ID'], $userID));
-            $_SESSION['facebook_access_token']['userID'] = $userID;
+            $uID = DB::insertId();
+            $_SESSION['user']=$userID;
+            $log->debug(sprintf("Registred facebook user %s with id %s", $_SESSION['facebook_access_token']['ID'], $uID));
+            $_SESSION['facebook_access_token']['userID'] = array();
         } else {
-            
             $log->debug(sprintf("Failed to register facebook user %d", $_SESSION['facebook_access_token']['ID']));
-            $_SESSION['facebook_access_token'] = null;
+            $_SESSION['facebook_access_token'] = array();
+            
             //$app->render('fblogin_failed.html.twig');
         }
     } else {
-        $_SESSION['facebook_access_token']['userID'] = $userID;
+        $_SESSION['user']=$userID;
     }
 }
 /* DB::insert('users', array(
@@ -271,137 +276,6 @@ $twig->addGlobal('logoutUrl', $logoutUrl);
 //**************************REGISTER************************** 
 require_once 'register.php';
 
-/*
-
-  $app->get('/emailexists/:email', function($email) use ($app, $log) {
-  $user = DB::queryFirstRow('SELECT * FROM users WHERE email=%s', $email);
-  if ($user) {
-  echo "Email already registered";
-  }
-  });
-
-  // State 1: first show
-  $app->get('/register', function() use ($app, $log) {
-  $app->render('register.html.twig');
-  });
-  // State 2: submission
-  $app->post('/register', function() use ($app, $log) {
-  $firstName = $app->request->post('firstName');
-  $lastName = $app->request->post('lastName');
-  $userName = $app->request->post('userName');
-  $email = $app->request->post('email');
-  $pass1 = $app->request->post('pass1');
-  $pass2 = $app->request->post('pass2');
-  $phone = $app->request->post('phone');
-
-  $valueList = array('firstName' => $firstName, 'lastName' => $lastName, 'userName' => $userName, 'email' => $email, 'phone' => $phone);
-  // submission received - verify
-  $errorList = array();
-  if (!empty($firstName)) {
-  if (strlen($firstName) < 2) {
-  array_push($errorList, "First Name must be at least 2 characters long");
-  unset($valueList['firstName']);
-  }
-  }
-  if (!empty($lastName)) {
-  if (strlen($lastName) < 2) {
-  array_push($errorList, "Last Name must be at least 2 characters long");
-  unset($valueList['lastName']);
-  }
-  }
-  if (filter_var($email, FILTER_VALIDATE_EMAIL) === FALSE) {
-  array_push($errorList, "Email does not look like a valid email");
-  unset($valueList['email']);
-  } else {
-  $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
-  if ($user) {
-  array_push($errorList, "Email already registered");
-  unset($valueList['email']);
-  }
-  }
-  if (!preg_match('/[0-9;\'".,<>`~|!@#$%^&*()_+=-]/', $pass1) || (!preg_match('/[a-z]/', $pass1)) || (!preg_match('/[A-Z]/', $pass1)) || (strlen($pass1) < 8)) {
-  array_push($errorList, "Password must be at least 8 characters " .
-  "long, contain at least one upper case, one lower case, " .
-  " one digit or special character");
-  } else if ($pass1 != $pass2) {
-  array_push($errorList, "Passwords don't match");
-  }
-  if (!empty($phone)) {
-  if (!preg_match("/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/", $phone)) {
-  array_push($errorList, "Phone number is invalid");
-  unset($valueList['phone']);
-  }
-  }
-  //
-  if ($errorList) {
-  // STATE 3: submission failed
-  $app->render('register.html.twig', array(
-  'errorList' => $errorList, 'v' => $valueList
-  ));
-  } else {
-  // STATE 2: submission successful
-  DB::insert('users', array(
-  'firstName' => $firstName,
-  'lastName' => $lastName,
-  'userName' => $userName,
-  'email' => $email,
-  'phone' => $phone,
-  'password' => password_hash($pass1, CRYPT_BLOWFISH)
-  //'password' => hash ('sha256', $pass1)
-  ));
-  $id = DB::insertId();
-  $log->debug(sprintf("User %s created", $id));
-  $app->render('register_success.html.twig');
-  }
-  });
- */
-
-//************************ LOGIN/LOGOUT****************************
-require_once 'login.php';
-
-/*
-
-  // State 1: first show
-  $app->get('/login', function() use ($app, $log) {
-
-  //ADDED - unset users
-  $_SESSION['user'] = array();
-  $_SESSION['facebook_access_token'] = array();
-
-  $app->render('login.html.twig');
-  });
-  // State 2: submission
-  $app->post('/login', function() use ($app, $log) {
-  $email = $app->request->post('email');
-  $pass = $app->request->post('pass');
-  $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
-  if (!$user) {
-  $log->debug(sprintf("User failed for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
-  $app->render('login.html.twig', array('loginFailed' => TRUE));
-  } else {
-  // password MUST be compared in PHP because SQL is case-insenstive
-  //if ($user['password'] ==  $pass) {
-  //echo "psw ".$pass." pass ".$user['password'];
-  if (password_verify($pass, $user['password'])) {
-  // LOGIN successful
-  unset($user['password']);
-  $_SESSION['user'] = $user;
-  $_SESSION['facebook_access_token'] = array(); // ADDED
-  $log->debug(sprintf("User %s logged in successfuly from IP %s", $user['ID'], $_SERVER['REMOTE_ADDR']));
-  $app->render('login_success.html.twig');
-  } else {
-  $log->debug(sprintf("User failed again for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
-  $app->render('login.html.twig', array('loginFailed' => TRUE));
-  }
-  }
-  });
-
-  $app->get('/logout', function() use ($app, $log) {
-  $_SESSION['user'] = array();
-  $_SESSION['facebook_access_token'] = array(); // ADDED
-  $app->render('logout_success.html.twig');
-  });
- */
 
 // *************************** EDIT PROFILE *********************
 $app->get('/profile/:ID', function($ID) use ($app, $log) {
