@@ -4,7 +4,7 @@
 {% block login %}
     
 {% if currentUser %}
-        <p class="pLongRight">Welcome, {{currentUser.email}}. <a href="index.php/profile">EDIT PROFILE </a>  | <a href="index.php/logout"> LOGOUT</a></p>
+        <p class="pLongRight">Welcome, {{currentUser.email}}. <a href="index.php/profile/{{currentUser.ID}}">EDIT PROFILE </a>  | <a href="index.php/logout"> LOGOUT</a></p>
      {% elseif fbUser %}
          <p class="pLongRight">Welcome, {{fbUser.email}}. <a href="fblogout.php"> LOGOUT</a></p>
 {% else %}

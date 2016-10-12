@@ -1,8 +1,44 @@
 {% extends "master.html.twig" %}
 
 {% block title %}Update your profile{% endblock %}
-{% block head %}<script src='https://code.jquery.com/jquery-3.1.1.js'></script>
+{% block head %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+        
+        function checkEmail() {
+            var email = $('input[name=email]').val();
+            if (email != '') {
+                //$('#result').load('/emailexists/' + email);
+                // NOTE: .load is actually .ajax call like below
+                $.ajax({
+                    url: '/emailexists/' + email
+                }).done(function (data) {
+                    $("#result").html(data);
+                });                
+            } else {
+                $('#result').html("");
+            }
+        }
+        
+        $(document).ready(function() {
+            $('input[name=email]').keyup(function() {
+                checkEmail();
+            });
+            $('input[name=email]').bind('paste', function() {
+                checkEmail();
+            });
+        });
+
+    </script>
+
+    <style>
+        .message{
+            color: red;
+            
+        }
+    </style>
 {% endblock %}
+
 {% block content %}
 <h1>Update your profile</h1>
 {% if errorList %}
@@ -12,7 +48,7 @@
     {% endfor %}
     </ul>
 {% endif %}
-
+<p><span class="message">* required field</span></p>
 <form method="post">
     <label for="name">First Name</label><br> 
         <input type="text" name="firstName" placeholder="First Name" value="{{currentUser.firstName}}"><br><br><br>
@@ -36,8 +72,11 @@
         <label for="pass1">Phone: </label> <br> 
         <input type="text" placeholder="Phone" name="phone" value="{{currentUser.phone}}"><br><br>
 
-        <input type="submit" value="Update" name="btnSubmit"><br><br>
+        <input type="submit" value="Update" ><br><br>
    
 </form>
+        
+        <button class="submitButton" style="font-weight: bold;"><a href="/">Back </a></button>
+         
 
 {% endblock %}

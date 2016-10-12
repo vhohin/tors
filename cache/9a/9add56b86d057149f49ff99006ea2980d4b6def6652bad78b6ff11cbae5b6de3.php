@@ -43,7 +43,9 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
             // line 7
             echo "        <p class=\"pLongRight\">Welcome, ";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["currentUser"]) ? $context["currentUser"] : null), "email", array()), "html", null, true);
-            echo ". <a href=\"index.php/profile\">EDIT PROFILE </a>  | <a href=\"index.php/logout\"> LOGOUT</a></p>
+            echo ". <a href=\"index.php/profile/";
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["currentUser"]) ? $context["currentUser"] : null), "ID", array()), "html", null, true);
+            echo "\">EDIT PROFILE </a>  | <a href=\"index.php/logout\"> LOGOUT</a></p>
      ";
         } elseif (        // line 8
 (isset($context["fbUser"]) ? $context["fbUser"] : null)) {
@@ -234,7 +236,7 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
 
     public function getDebugInfo()
     {
-        return array (  215 => 66,  210 => 63,  206 => 62,  203 => 61,  198 => 58,  194 => 57,  192 => 56,  184 => 50,  180 => 49,  173 => 48,  166 => 47,  163 => 46,  155 => 45,  152 => 44,  147 => 43,  145 => 42,  140 => 39,  136 => 37,  130 => 36,  123 => 34,  120 => 33,  112 => 32,  110 => 31,  103 => 30,  101 => 29,  95 => 25,  90 => 22,  81 => 20,  77 => 19,  73 => 17,  71 => 16,  66 => 15,  61 => 13,  57 => 11,  51 => 9,  49 => 8,  44 => 7,  42 => 6,  39 => 5,  36 => 4,  30 => 3,  11 => 1,);
+        return array (  217 => 66,  212 => 63,  208 => 62,  205 => 61,  200 => 58,  196 => 57,  194 => 56,  186 => 50,  182 => 49,  175 => 48,  168 => 47,  165 => 46,  157 => 45,  154 => 44,  149 => 43,  147 => 42,  142 => 39,  138 => 37,  132 => 36,  125 => 34,  122 => 33,  114 => 32,  112 => 31,  105 => 30,  103 => 29,  97 => 25,  92 => 22,  83 => 20,  79 => 19,  75 => 17,  73 => 16,  68 => 15,  63 => 13,  59 => 11,  53 => 9,  51 => 8,  44 => 7,  42 => 6,  39 => 5,  36 => 4,  30 => 3,  11 => 1,);
     }
 
     public function getSource()
@@ -245,7 +247,7 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
 {% block login %}
     
 {% if currentUser %}
-        <p class=\"pLongRight\">Welcome, {{currentUser.email}}. <a href=\"index.php/profile\">EDIT PROFILE </a>  | <a href=\"index.php/logout\"> LOGOUT</a></p>
+        <p class=\"pLongRight\">Welcome, {{currentUser.email}}. <a href=\"index.php/profile/{{currentUser.ID}}\">EDIT PROFILE </a>  | <a href=\"index.php/logout\"> LOGOUT</a></p>
      {% elseif fbUser %}
          <p class=\"pLongRight\">Welcome, {{fbUser.email}}. <a href=\"fblogout.php\"> LOGOUT</a></p>
 {% else %}
