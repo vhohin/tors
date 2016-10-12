@@ -478,7 +478,34 @@ $app->post('/profile/:ID', function($ID) use ($app, $log) {
             'phone' => $phone,
             'password' => password_hash($pass1, CRYPT_BLOWFISH)
                 ), 'ID=%s', $ID);
-
+/////////////////////////////////////////////////////////////////////////////////////////////
+        if (isset($_SESSION['user'])) {
+            $_SESSION['user'] = array();
+        }
+        
+    /*$pass = password_hash($pass1, CRYPT_BLOWFISH);
+    $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
+    if (!$user) {
+        $log->debug(sprintf("User failed for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
+        $app->render('login.html.twig', array('loginFailed' => TRUE));
+    } else {
+        // password MUST be compared in PHP because SQL is case-insenstive
+        //if ($user['password'] ==  $pass) {
+        //echo "psw ".$pass." pass ".$user['password'];
+        if (password_verify($pass, $user['password'])) {
+            // LOGIN successful
+            unset($user['password']);
+            $_SESSION['user'] = $user;
+            $_SESSION['facebook_access_token'] = array();
+            $log->debug(sprintf("User %s logged in successfuly from IP %s", $user['ID'], $_SERVER['REMOTE_ADDR']));
+            $app->render('login_success.html.twig');
+        } else {
+            $log->debug(sprintf("User failed again for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
+            $app->render('login.html.twig', array('loginFailed' => TRUE));
+        }
+    }*/
+        
+        
         $log->debug("User profile updated with ID =" . $ID);
         $app->render('update_success.html.twig');
     }

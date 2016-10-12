@@ -105,6 +105,21 @@ Valeriy
    - connection Pypal to DB,    
    - admin part. 
 
+Nazar
+
+1) DONE: 
+  - Edit Profile page 
+  - ask Valera how to save changes to updated profile - DONE
+  
+
+2) NOT FINISHED: 
+ - to be tested FB and forgetpassword
+ - password to encrypt while send email
+2) TO DO:
+ - finish Edit Profile (full working)
+ - FACEBOOK!!!!!!  HELP ME!!!!
+ - cart page?
+
 
 
 
