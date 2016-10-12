@@ -3,7 +3,7 @@
 session_start();
 // enable on-demand class loader
 require_once 'vendor/autoload.php';
-
+//require_once 'lock.php';
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
