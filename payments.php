@@ -12,7 +12,7 @@
 	$notify_url = 'http://tors.ipd8.info/payments.php';
 	 
 	$item_name = 'Test Item';
-	$item_amount = 5.00;
+	$item_amount = 150.00;
 	 
 	// Include Functions
 	include("functions.php");
