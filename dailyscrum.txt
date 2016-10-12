@@ -81,13 +81,30 @@ Valeriy
 
 1) FINISHED: 
    - transfer the files to host and test them,
-   = selected_destination.html.twig (rebuild),
+   -selected_destination.html.twig (rebuild),
    - booking_form.html.twig,
    - table booking.
 2) DIDN'T FINISHED: booking (Paypal API), addition result to DB.
 3) TO DO: 
    - booking (Paypal API),    
    - addition result to DB.  
+
+---------------------------
+October 12, 2016 - DAY07
+---------------------------
+
+Valeriy
+
+1) FINISHED: 
+   - addition result to DB,   
+   - booking (Paypal test files),
+   - table booking.
+2) DIDN'T FINISHED: 
+   - connection Pypal to DB.
+3) TO DO: 
+   - connection Pypal to DB,    
+   - admin part. 
+
 
 
 
