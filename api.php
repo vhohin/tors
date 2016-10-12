@@ -191,4 +191,24 @@ if( is_array($response) && $response['ACK'] == 'Success') {
 }    
 });
 
+$app->post('/payment', function() use ($app, $log) {
+if( isset($_GET['token']) && !empty($_GET['token']) ) { // Токен присутствует
+   // Получаем детали оплаты, включая информацию о покупателе.
+   // Эти данные могут пригодиться в будущем для создания, к примеру, базы постоянных покупателей
+   $paypal = new Paypal();
+   $checkoutDetails = $paypal -> request('GetExpressCheckoutDetails', array('TOKEN' => $_GET['token']));
+
+   // Завершаем транзакцию
+   $requestParams = array(
+      'PAYMENTREQUEST_0_PAYMENTACTION' => 'Sale',
+      'PAYERID' => $_GET['PayerID']
+   );
+
+   $response = $paypal -> request('DoExpressCheckoutPayment',$requestParams);
+   if( is_array($response) && $response['ACK'] == 'Success') { // Оплата успешно проведена
+      // Здесь мы сохраняем ID транзакции, может пригодиться во внутреннем учете
+      $transactionId = $response['PAYMENTINFO_0_TRANSACTIONID'];
+   }
+}
+    });
 $app->run();
