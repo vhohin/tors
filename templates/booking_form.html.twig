@@ -66,8 +66,16 @@ $(document).ready(function () {
         <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
         <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
         </form>
-        <p>or</p>
-        <p style="font-weight: bold;"><a href="/">CANCEL</a></p>
+        <p style="display:inline-block;"> or <a href="/"> CANCEL </a> or </p>
+        <!-- Saved information to DB - test  -->
+        <form action="/payment" method="post" style="display:inline-block;">
+            <input type="hidden" name="PassengerID" value="{{booking.user}}">
+            <input type="hidden" name="TripID" value="{{booking.1.ID}}">
+            <input type="hidden" name="PaymentInfo" value="VISA">
+            <input type="hidden" name="PaymentDate" value={{booking.1.DateTimeDepart}}>
+            <input type="hidden" name="BookesSeats" value="{{booking.seats}}">
+            <input type="submit" value="SAVE">
+        </form>
     </div>
 {% else %}
     <p class="pLongRight"><a href="index.php/login">LOGIN </a> | <a href="index.php/register"> REGISTER</a></p>

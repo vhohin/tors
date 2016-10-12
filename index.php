@@ -250,6 +250,32 @@ $app->post('/select', function() use ($app, $log) {
         $app->render('selected_destination.html.twig', array('valueList' => $result, 'currentUser' => $_SESSION['user'], 'departCity' => $departCity, 'arriveCity' => $arriveCity));
     }
 });
+//**************************************************** Payment
+$app->post('/payment', function() use ($app, $log) {
+    $PassengerID = $app->request->post('PassengerID');
+    $TripID = $app->request->post('TripID');
+    $PaymentInfo = $app->request->post('PaymentInfo');
+    $PaymentDate = $app->request->post('PaymentDate');
+    $BookesSeats= $app->request->post('BookesSeats');
+    
+    $log->debug(sprintf("Booking %s seat to trip %s information", $BookesSeats, $TripID));
+    
+    $arr=explode(",",$BookesSeats);
+    $countSeats=count($arr); 
+    
+    foreach ($arr as $seat){
+        DB::insert('booking', array(
+            'PassengerID' => $PassengerID,
+            'TripID' => $TripID,
+            'PaymentInfo' => $PaymentInfo,
+            'PaymentDate' => $PaymentDate,
+            'BookedSeats' => $seat
+        ));
+        $id = DB::insertId();
+        $log->debug(sprintf("Booking %s seat to trip %s information was added to DB with id=%id", $BookesSeats, $TripID, $id));
+    }
+    $app->render('payment_success.html.twig', array('currentUser' => $_SESSION['user']));
+});
 //**************************************************** Booking Form
 $app->get('/bookingform', function() use ($app, $log) {
     $app->render('booking_form.html.twig', array('currentUser' => $_SESSION['user'], 'booking' => $_SESSION['booking'], 'countSeats' => $_SESSION['countSeats'], 'paymentSum' => $_SESSION['paymentSum']));
