@@ -276,6 +276,13 @@ $app->post('/payment', function() use ($app, $log) {
     }
     $app->render('payment_success.html.twig', array('currentUser' => $_SESSION['user']));
 });
+
+$app->get('/paymentsuccess', function() use ($app, $log) {
+    $app->render('payment_success.html.twig', array('currentUser' => $_SESSION['user']));
+});
+$app->get('/paymentcancelled', function() use ($app, $log) {
+    $app->render('payment_cancel.html.twig', array('currentUser' => $_SESSION['user']));
+});
 //**************************************************** Booking Form
 $app->get('/bookingform', function() use ($app, $log) {
     $app->render('booking_form.html.twig', array('currentUser' => $_SESSION['user'], 'booking' => $_SESSION['booking'], 'countSeats' => $_SESSION['countSeats'], 'paymentSum' => $_SESSION['paymentSum']));
