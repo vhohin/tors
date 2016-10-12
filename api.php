@@ -140,6 +140,7 @@ $app->post('/selectedseats', function() use ($app, $log) {
     $_SESSION['countSeats']=$countSeats;
     $_SESSION['paymentSum']=$paymentSum;
     $_SESSION['price']=$price;
+    $app->render('/booking_form.html.twig');
 });
 
 $app->post('/payment', function() use ($app, $log) {
