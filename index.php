@@ -183,7 +183,7 @@ $app->post('/payment', function() use ($app, $log) {
     $app->render('payment_success.html.twig', array('currentUser' => $_SESSION['user']));
 });
 
-$app->get('/paymentsuccess', function() use ($app, $log) {
+$app->get('paymentsuccess', function() use ($app, $log) {
     $app->render('payment_success.html.twig', array('currentUser' => $_SESSION['user']));
 });
 $app->get('/paymentcancelled', function() use ($app, $log) {
@@ -191,7 +191,16 @@ $app->get('/paymentcancelled', function() use ($app, $log) {
 });
 //**************************************************** Booking Form
 $app->get('/bookingform', function() use ($app, $log) {
-    $app->render('booking_form.html.twig', array('currentUser' => $_SESSION['user'], 'booking' => $_SESSION['booking'], 'countSeats' => $_SESSION['countSeats'], 'paymentSum' => $_SESSION['paymentSum']));
+    $browserName=$_SERVER['HTTP_USER_AGENT'];
+    if (strpos(strtolower($browserName), "firefox/")) {
+    // FIREFOX
+        print '<script type="text/javascript">'; 
+        print 'alert("The browser Firefox not supported, change browser.")'; 
+        print '</script>';
+        $app->render('index.html.twig');
+    } else{    
+    $app->render('booking_form.html.twig', array('currentUser' => $_SESSION['user'], 'booking' => $_SESSION['booking'], 'countSeats' => $_SESSION['countSeats'], 'paymentSum' => $_SESSION['paymentSum'],'countSeats' => $_SESSION['countSeats']));
+    }
 });
 
 //**************************************************** Selected bus

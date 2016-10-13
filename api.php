@@ -91,12 +91,17 @@ $app->post('/selectedseats', function() use ($app, $log) {
         return;
     }
    $selectedTrip = array();
-   $userInfo = DB::query("SELECT userName,email FROM users WHERE ID=%d", $record['user']);   
-    if (!$userInfo) {
-        $app->response->setStatus(404);
-        echo json_encode("Record not found");
-        return;
-    }
+   
+   /*if ($record['user']>0){
+        $userInfo = DB::query("SELECT userName,email FROM users WHERE ID=%d", $record['user']);   
+         if (!$userInfo) {
+             $app->response->setStatus(404);
+             echo json_encode("Record not found");
+             return;
+         }
+   } else {
+       
+   }   */
     //$tripInfo = DB::query("SELECT * FROM trips WHERE ID=%d", $record['trip']);   
     $tripInfo = DB::query("SELECT trips.ID as ID,NumberOfSeats, BusID, DepartID, ArriveID, DateTimeDepart, DateTimeArrive, Price, Description,MakeModel, WiFi, AirConditioning, Toilet, PowerOutlets "
                 . "FROM trips,buses WHERE trips.BusID=buses.ID AND trips.ID=%d", $record['trip']);
@@ -134,16 +139,21 @@ $app->post('/selectedseats', function() use ($app, $log) {
     $countSeats=count($arr);    
     $paymentSum = sprintf("%1\$.2f", $countSeats*$price);
     
-    $selectedTrip=array_merge($userInfo,$tripInfo,$busInfo,$departInfo,$arriveInfo,$record);
+    $selectedTrip=array_merge($tripInfo,$busInfo,$departInfo,$arriveInfo,$record);//$userInfo,
     //$selectedTrip{};
     $_SESSION['booking']=$selectedTrip;
-    $_SESSION['countSeats']=$countSeats;
-    $_SESSION['paymentSum']=$paymentSum;
+    $_SESSION['countSeats']['seats']=$countSeats;
+    $_SESSION['paymentSum']['sum']=$paymentSum;    
     $_SESSION['price']=$price;
     $app->render('booking_form.html.twig');
 });
 
 $app->post('/payment', function() use ($app, $log) {
+    
+});
+
+$app->post('/paymentpaypal', function() use ($app, $log) {
+
 //header( 'Location: www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=' . urlencode($token) );    
 $requestParams = array(
    'IPADDRESS' => $_SERVER['REMOTE_ADDR'],

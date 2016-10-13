@@ -5,14 +5,14 @@
 <script>
 $(document).ready(function () {
 //Check if the current URL contains '#'
-    if(document.URL.indexOf("#")==-1){
+    /*if(document.URL.indexOf("#")==-1){
         // Set the URL to whatever it was plus "#".
         url = document.URL+"#";
         location = "#";
 
         //Reload the page
         location.reload(true);
-    }
+    }*/
 });      
 </script> 
 {% endblock %}       
@@ -24,41 +24,41 @@ $(document).ready(function () {
         <p>Passenger: <span style="font-weight: bold;">{{currentUser.userName}}</span></p>
         <p>Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-weight: bold;"> {{currentUser.email}}</span></p>
         <p>-------------------------------------------------------------------------</p>
-        <p>Trip from:  <span style="font-weight: bold;">{{booking.3.name}} ({{booking.3.Country}})</span></p>
-        <p>--------to:  <span style="font-weight: bold;">{{booking.4.name}} ({{booking.4.Country}})</span></p>
+        <p>Trip from:  <span style="font-weight: bold;">{{booking.2.name}} ({{booking.2.Country}})</span></p>
+        <p>--------to:  <span style="font-weight: bold;">{{booking.3.name}} ({{booking.3.Country}})</span></p>
         <p>-------------------------------------------------------------------------</p>
-        <p>Depart:&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.1.DateTimeDepart}}</span></p>
-        <p>Arrive:&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.1.DateTimeArrive}}</span></p>
+        <p>Depart:&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.0.DateTimeDepart}}</span></p>
+        <p>Arrive:&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.0.DateTimeArrive}}</span></p>
         <p>-------------------------------------------------------------------------</p>
         <p>Seats:&nbsp;&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.seats}}</span></p>
         <p>-------------------------------------------------------------------------</p>
-        <p>Bus:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.2.MakeModel}}</span></p>
+        <p>Bus:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.1.MakeModel}}</span></p>
         <p>-------------------------------------------------------------------------</p>
         <p>Amenities:</p>
-        {% if booking.1.WiFi==1 %}  
+        {% if booking.0.WiFi==1 %}  
             <p>----------------------WiFi:  <span style="font-weight: bold;">YES</span></p>
         {% else %}
             <p>----------------------WiFi:  <span style="font-weight: bold;">NO</span></p>
         {% endif %} 
-        {% if booking.1.AirConditioning==1 %}  
+        {% if booking.0.AirConditioning==1 %}  
             <p>-------AirConditioning:  <span style="font-weight: bold;">YES</span></p>
         {% else %}
             <p>-------AirConditioning:  <span style="font-weight: bold;">NO</span></p>
         {% endif %} 
-        {% if booking.1.Toilet==1 %}  
+        {% if booking.0.Toilet==1 %}  
             <p>--------------------Toilet:  <span style="font-weight: bold;">YES</span></p>
         {% else %}
             <p>--------------------Toilet:  <span style="font-weight: bold;">NO</span></p>
         {% endif %} 
-        {% if booking.1.PowerOutlets==1 %}  
+        {% if booking.0.PowerOutlets==1 %}  
             <p>----------PowerOutlets:  <span style="font-weight: bold;">YES</span></p>
         {% else %}
             <p>----------PowerOutlets:  <span style="font-weight: bold;">NO</span></p>
         {% endif %} 
         <p>-------------------------------------------------------------------------</p><br/>
-        <p>Price one ticket:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span style="font-weight: bold;">$ {{booking.1.Price}}</span></p>
+        <p>Price one ticket:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span style="font-weight: bold;">$ {{booking.0.Price}}</span></p>
         <p>-------------------------------------------------------------------------</p><br/>
-        <p>Summary price:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span style="font-weight: bold;">$ {{paymentSum}}</span></p>
+        <p>Summary price:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span style="font-weight: bold;">$ {{paymentSum.sum}}</span></p>
         <p>-------------------------------------------------------------------------</p><br/>
         
     <!--    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
@@ -71,8 +71,32 @@ $(document).ready(function () {
         <p style="font-weight: bold;"><a href="/">CANCEL</a></p>   -->
         <!--<a href="/api.php/payment"><button id="selectContinue">PAYPAL PAYMENT</button></a>
         <a href="/"><button id="selectContinue">CANCEL</button></a>-->
-
+        <form action="/payment" method="post" style="display:inline-block;">
+            <input type="hidden" name="PassengerID" value="{{booking.user}}">
+            <input type="hidden" name="TripID" value="{{booking.0.ID}}">
+            <input type="hidden" name="PaymentInfo" value="VISA">
+            <input type="hidden" name="PaymentDate" value={{booking.0.DateTimeDepart}}>
+            <input type="hidden" name="BookesSeats" value="{{booking.seats}}">
+            <input type="submit" value="ADD TO CART">
+        </form>
+        <p style="padding-left:140px;"> or <a href="/"> CANCEL </a> or </p>
         <form class="paypal" action="payments.php" method="post" id="paypal_form" target="_blank">
+	    <input type="hidden" name="item_name" value="{{booking.2.name}} ({{booking.2.Country}}) - {{booking.3.name}} ({{booking.3.Country}}) trip. Depart at: {{booking.0.DateTimeDepart}}. Seats: {{booking.seats}}" />
+            <input type="hidden" name="amount" value="{{booking.0.Price}}" />        
+            <input type="hidden" name="cmd" value="_xclick" />
+            <input type="hidden" name="quantity" value="{{countSeats.seats}}" />
+	        <input type="hidden" name="no_note" value="1" />
+	        <input type="hidden" name="lc" value="CA" />
+	        <input type="hidden" name="currency_code" value="CAD" />
+	        <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynow_LG.gif:NonHostedGuest" />
+	        <input type="hidden" name="first_name" value="{{currentUser.userName}}" />
+	        <input type="hidden" name="email" value="{{currentUser.email}}" />
+	        <!--input type="hidden" name="item_number" value="123456" /-->
+                
+                
+	        <input type="submit" name="submit" value="PAYPAL PAYMENT"/>
+	    </form>
+        <!--<form class="paypal" action="payments.php" method="post" id="paypal_form" target="_blank">
 	        <input type="hidden" name="cmd" value="_xclick" />
 	        <input type="hidden" name="no_note" value="1" />
 	        <input type="hidden" name="lc" value="UK" />
@@ -83,17 +107,7 @@ $(document).ready(function () {
 	        <input type="hidden" name="payer_email" value="customer@example.com" />
 	        <input type="hidden" name="item_number" value="123456" />
 	        <input type="submit" name="submit" value="Submit Payment"/>
-	    </form>
-        <p > or <a href="/"> CANCEL </a> or </p>
-        <!-- Saved information to DB - test  -->
-        <form action="/payment" method="post" style="display:inline-block;">
-            <input type="hidden" name="PassengerID" value="{{booking.user}}">
-            <input type="hidden" name="TripID" value="{{booking.1.ID}}">
-            <input type="hidden" name="PaymentInfo" value="VISA">
-            <input type="hidden" name="PaymentDate" value={{booking.1.DateTimeDepart}}>
-            <input type="hidden" name="BookesSeats" value="{{booking.seats}}">
-            <input type="submit" value="SAVE">
-        </form>
+	    </form> -->       
     </div>
 {% else %}
     <p class="pLongRight"><a href="index.php/login">LOGIN </a> | <a href="index.php/register"> REGISTER</a></p>
