@@ -7,7 +7,7 @@
         
 	// PayPal settings
 	$paypal_email = 'user@domain.com';
-	$return_url = 'http://tors.ipd8.info/paymentsuccess';
+	$return_url = 'http://tors.ipd8.info';
 	$cancel_url = 'http://tors.ipd8.info/paymentcancelled';
 	$notify_url = 'http://tors.ipd8.info/payments.php';
 	 
