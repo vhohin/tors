@@ -51,7 +51,7 @@ Nazar
 2) NOT FINISHED: 
  - Facebook LogIn
  - ForgetPassword created, but code has to be modified and tested yet
-2) TO DO:
+3) TO DO:
  - FB, ForgetPassword (send email)
  - Ask teacher about Admin/User
  - Ask teached about CartPage and implement, if needed  
@@ -73,7 +73,7 @@ Nazar
 2) NOT FINISHED: 
  - to be tested FB and forgetpassword
  - password to encrypt while send email
-2) TO DO:
+3) TO DO:
  - finish Edit Profile (full working)
  - cart page?
 
@@ -115,11 +115,32 @@ Nazar
 2) NOT FINISHED: 
  - to be tested FB and forgetpassword
  - password to encrypt while send email
-2) TO DO:
+
+3) TO DO:
  - finish Edit Profile (full working)
  - FACEBOOK!!!!!!  HELP ME!!!!
  - cart page?
 
 
+---------------------------
+October 13, 2016 - DAY08
+---------------------------
+
+
+Nazar
+
+1) DONE: 
+  - Edit Profile 
+  - Facebook login (with database storing)
+  - css style for forms
+  
+
+2) NOT FINISHED: 
+ - to be tested FB and forgetpassword
+ - password to encrypt while send email
+
+2) TO DO:
+ - cart page???
+ - Admin part
 
 
