@@ -229,28 +229,32 @@ $logoutUrl = $helper->getLogoutUrl('http://tors.ipd8.info/fblogout.php', $permis
 
 $fbUser = array();
 if (!isset($_SESSION['facebook_access_token'])) {
-    $_SESSION['facebook_access_token'] = $fbUser;
+    $_SESSION['facebook_access_token'] = array();
+} else {
+    $fbUser = $_SESSION['facebook_access_token'];
 }
 
 
+$uID=0;
 if ($_SESSION['facebook_access_token']) {
-    $userID = DB::queryFirstField('SELECT fbID from users WHERE fbID = %s', $_SESSION['facebook_access_token']['ID']);
+    $userID = DB::queryFirstRow('SELECT * from users WHERE fbID = %s', $fbUser['ID']);
     if (!$userID) {
         $result = DB::insert('users', array(
-                    'fbID' => $_SESSION['facebook_access_token']['ID'],
+                    'fbID' => $fbUser['ID']
         ));
         if ($result) {
-            $userID = DB::insertId();
-            $log->debug(sprintf("Registred facebook user %s with id %s", $_SESSION['facebook_access_token']['ID'], $userID));
-            $_SESSION['facebook_access_token']['userID'] = $userID;
+            $uID = DB::insertId();
+            $_SESSION['user']=$userID;
+            $log->debug(sprintf("Registred facebook user %s with id %s", $_SESSION['facebook_access_token']['ID'], $uID));
+            $_SESSION['facebook_access_token']['userID'] = array();
         } else {
-            
             $log->debug(sprintf("Failed to register facebook user %d", $_SESSION['facebook_access_token']['ID']));
-            $_SESSION['facebook_access_token'] = null;
+            $_SESSION['facebook_access_token'] = array();
+            
             //$app->render('fblogin_failed.html.twig');
         }
     } else {
-        $_SESSION['facebook_access_token']['userID'] = $userID;
+        $_SESSION['user']=$userID;
     }
 }
 /* DB::insert('users', array(
@@ -266,9 +270,10 @@ $twig->addGlobal('fbUser', $fbUser);
 $twig->addGlobal('loginUrl', $loginUrl);
 $twig->addGlobal('logoutUrl', $logoutUrl);
 
-//print_r($fbUser);
+print_r($fbUser);
 //print_r($_SESSION['fbmetadata']);
 //**************************REGISTER************************** 
+
 require_once 'register.php';
 
 /*
@@ -478,7 +483,34 @@ $app->post('/profile/:ID', function($ID) use ($app, $log) {
             'phone' => $phone,
             'password' => password_hash($pass1, CRYPT_BLOWFISH)
                 ), 'ID=%s', $ID);
-
+/////////////////////////////////////////////////////////////////////////////////////////////
+        if (isset($_SESSION['user'])) {
+            $_SESSION['user'] = array();
+        }
+        
+    /*$pass = password_hash($pass1, CRYPT_BLOWFISH);
+    $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
+    if (!$user) {
+        $log->debug(sprintf("User failed for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
+        $app->render('login.html.twig', array('loginFailed' => TRUE));
+    } else {
+        // password MUST be compared in PHP because SQL is case-insenstive
+        //if ($user['password'] ==  $pass) {
+        //echo "psw ".$pass." pass ".$user['password'];
+        if (password_verify($pass, $user['password'])) {
+            // LOGIN successful
+            unset($user['password']);
+            $_SESSION['user'] = $user;
+            $_SESSION['facebook_access_token'] = array();
+            $log->debug(sprintf("User %s logged in successfuly from IP %s", $user['ID'], $_SERVER['REMOTE_ADDR']));
+            $app->render('login_success.html.twig');
+        } else {
+            $log->debug(sprintf("User failed again for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
+            $app->render('login.html.twig', array('loginFailed' => TRUE));
+        }
+    }*/
+        
+        
         $log->debug("User profile updated with ID =" . $ID);
         $app->render('update_success.html.twig');
     }
