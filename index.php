@@ -240,7 +240,9 @@ if ($_SESSION['facebook_access_token']) {
     $userID = DB::queryFirstRow('SELECT * from users WHERE fbID = %s', $fbUser['ID']);
     if (!$userID) {
         $result = DB::insert('users', array(
-                    'fbID' => $fbUser['ID']
+                    'fbID' => $fbUser['ID'],
+                    'userName' => $fbUser['name'],
+                    'email' => $fbUser['email']
         ));
         if ($result) {
             $uID = DB::insertId();
@@ -273,7 +275,6 @@ $twig->addGlobal('logoutUrl', $logoutUrl);
 print_r($fbUser);
 //print_r($_SESSION['fbmetadata']);
 //**************************REGISTER************************** 
-
 require_once 'register.php';
 
 /*
