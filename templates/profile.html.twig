@@ -4,7 +4,7 @@
 {% block head %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>
-        
+
         function checkEmail() {
             var email = $('input[name=email]').val();
             if (email != '') {
@@ -14,17 +14,17 @@
                     url: '/emailexists/' + email
                 }).done(function (data) {
                     $("#result").html(data);
-                });                
+                });
             } else {
                 $('#result').html("");
             }
         }
-        
-        $(document).ready(function() {
-            $('input[name=email]').keyup(function() {
+
+        $(document).ready(function () {
+            $('input[name=email]').keyup(function () {
                 checkEmail();
             });
-            $('input[name=email]').bind('paste', function() {
+            $('input[name=email]').bind('paste', function () {
                 checkEmail();
             });
         });
@@ -34,49 +34,50 @@
     <style>
         .message{
             color: red;
-            
+
         }
     </style>
 {% endblock %}
 
 {% block content %}
-<h1>Update your profile</h1>
-{% if errorList %}
-    <ul>
-    {% for error in errorList %}
-        <li>{{ error }}</li>
-    {% endfor %}
-    </ul>
-{% endif %}
-<p><span class="message">* required field</span></p>
-<form method="post">
-    <label for="name">First Name</label><br> 
-        <input type="text" name="firstName" placeholder="First Name" value="{{currentUser.firstName}}"><br><br><br>
-        
-        <label for="name">Last Name</label> <br> 
-        <input type="text" name="lastName" placeholder="Last Name" value="{{currentUser.lastName}}"><br><br><br>
-        
-        <label for="name">User Name <span class="message">&nbsp*</span></label><br> 
-        <input type="text" name="userName" placeholder="User Name" value="{{currentUser.userName}}"><br><br><br>
+    <div id="divProfile">
+        <h2 style="font-family: sans-serif;">Update your profile</h2>
+        {% if errorList %}
+            <ul>
+                {% for error in errorList %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+            </ul>
+        {% endif %}
+        <p><span class="message">* required field</span></p>
+        <form method="post">
+            <label for="name">First Name</label><br> 
+            <input type="text" name="firstName" placeholder="First Name" value="{{currentUser.firstName}}"><br><br><br>
 
-        <label for="email"> Email Address <span class="message">&nbsp*</span> </label> <br> 
-        <input type="text" name="email"  placeholder="Email Address" value="{{currentUser.email}}">
-        <span id="result" class="message" ></span><br><br>
+            <label for="name">Last Name</label> <br> 
+            <input type="text" name="lastName" placeholder="Last Name" value="{{currentUser.lastName}}"><br><br><br>
 
-        <label for="pass1">Password: <span class="message">&nbsp*</span></label> <br> 
-        <input type="password"  placeholder="Password" name="pass1"><br><br>
+            <label for="name">User Name <span class="message">&nbsp*</span></label><br> 
+            <input type="text" name="userName" placeholder="User Name" value="{{currentUser.userName}}"><br><br><br>
 
-        <label for="pass1">Re-type Password: <span class="message">&nbsp*</span></label> <br> 
-        <input type="password" placeholder="Password" name="pass2"><br><br>
+            <label for="email"> Email Address <span class="message">&nbsp*</span> </label> <br> 
+            <input type="text" name="email"  placeholder="Email Address" value="{{currentUser.email}}">
+            <span id="result" class="message" ></span><br><br>
+
+            <label for="pass1">Password: <span class="message">&nbsp*</span></label> <br> 
+            <input type="password"  placeholder="Password" name="pass1"><br><br>
+
+            <label for="pass1">Re-type Password: <span class="message">&nbsp*</span></label> <br> 
+            <input type="password" placeholder="Password" name="pass2"><br><br>
+
+            <label for="pass1">Phone: </label> <br> 
+            <input type="text" placeholder="Phone" name="phone" value="{{currentUser.phone}}"><br><br><br>
+
+            <input type="submit" value="Update" ><br><br>
+        </form>
+
         
-        <label for="pass1">Phone: </label> <br> 
-        <input type="text" placeholder="Phone" name="phone" value="{{currentUser.phone}}"><br><br>
-
-        <input type="submit" value="Update" ><br><br>
-   
-</form>
-        
-        <button class="submitButton" style="font-weight: bold;"><a href="/">Back </a></button>
-         
+        <input type="button" onClick="location.href='/'" value="Back"> 
+    </div>
 
 {% endblock %}

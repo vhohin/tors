@@ -42,15 +42,15 @@
 
 {% block content %}
      <div id="divRegister">
-        <h2>Sign Up</h2>
+        <h2 style="font-family: sans-serif;">Sign Up</h2>
         <p>Already have an account? <a href='login'>Log in</a></p>
 
-        <div id="divLoginFacebook">
+        
             <button type="button" class="btnFb"><span style="font-family:sans-serif; font-weight: bold; font-size: 20px;">f&nbsp</span> Register with Facebook</button>
-        </div>
         
         
-        <p>---------------- or sign up with your email address---------------------</p>
+        
+        <p>---or sign up with your email address---</p>
 
     {% if errorList %}
         <ul>
@@ -82,7 +82,7 @@
         <input type="password" placeholder="Password" name="pass2"><br><br>
         
         <label for="pass1">Phone: </label> <br> 
-        <input type="text" placeholder="Phone" name="phone" value="{{v.phone}}"><br><br>
+        <input type="text" placeholder="Phone" name="phone" value="{{v.phone}}"><br><br><br>
 
         <input type="submit" value="Register" name="btnSubmit"><br><br>
     </form>

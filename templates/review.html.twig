@@ -37,10 +37,12 @@
 {% endblock %}
 
 {% block login %}   
-{% if currentUser %}
-        <p>Logined: {{currentUser.email}}. <a href="/logout"> LOGOUT</a></p>
+    {% if currentUser %}
+        <p class="pRight">Logged as : {{currentUser.email}}. <a href="/logout"> LOGOUT</a></p>
+    {% elseif fbUser %}
+        <p class="pLongRight">Logged as : {{fbUser.email}}. <a href="fblogout.php"> LOGOUT</a></p>
     {% else %}
-        <p><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
+        <p  class="pRight"><a href="/login">LOGIN </a> | <a href="/register"> REGISTER</a></p>       
     {% endif %}
     <hr/>
 {% endblock %} 

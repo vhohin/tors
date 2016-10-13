@@ -4,33 +4,34 @@
 
 {% block content %}
     <div id="divLogin">
-        <h2>Log In</h2>
+       
+        <h2 style="font-family: sans-serif;">Log In</h2>
         <p>Don't have an account? <a href='/register'>Sign up</a></p>
 
-        <div id="divLoginFacebook">
-             <a href="{{loginUrl}}"> <button type="button" class="btnFb"><span style="font-family:sans-serif; font-weight: bold; font-size: 20px;">f&nbsp</span> Log in with Facebook</button> </a>
 
-        </div>
-        
+        <a href="{{loginUrl}}"> <button type="button" class="btnFb"><span style="font-family:sans-serif; font-weight: bold; font-size: 20px;">f&nbsp</span> Log in with Facebook</button> </a>
+
+
+
         <p>----------- or use your email---------------</p>
 
         {% if loginFailed %}
-            <p style="color:red; font-size: 12px;">Invalid email or password</p>
+            <p style="color:red; font-size: 18px;">Invalid email or password</p>
         {% endif %}
 
 
         <form method="post" id="loginForm">
-           
-            
+
+
             <label for="loginEmail">Email Address</label><br>
-                <input type="text" name="email" placeholder="Email Address"><br><br>
-           <label for="loginEmail" >Password</label><br>
-               <input type="password" name="pass" placeholder="Password"><br><br>
-               
-            <input type="submit" value="Log In" class="btnLogIn" name="btnSubmit"><br><br>
+            <input type="text" name="email" placeholder="Email Address"><br><br>
+            <label for="loginEmail" >Password</label><br>
+            <input type="password" name="pass" placeholder="Password"><br><br><br>
+
+            <input type="submit" value="Log In" class="btnLogIn" name="btnSubmit"  ><br><br>
         </form>
-        
+
         <a href="/passwordForgot">Forgot your password?</a><br><br>
-   </div>
+    </div>
 
 {% endblock %} 

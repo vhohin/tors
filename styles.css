@@ -125,7 +125,7 @@ a:hover{
     padding:10px;
 }
 
-#content h1{
+#divLogin h1{
     text-align: center;
 }
 
@@ -246,17 +246,65 @@ input[type=submit]:hover {
     left: 0;
 }
 */
-#divLogin {
-    border: 1px solid red;
+#divLogin, #divRegister, #divProfile {
+    width: 260px;
+    background-color: lightyellow;
+    border: 1px solid grey;
     margin: 0 auto;
-    padding: 0;
+    padding: 20px 60px;
+    text-align: left;
+    font-size: 16px;
+    
+ }
  
+#divPasswordReminder {
+    width: 340px;
+    background-color: lightyellow;
+    border: 1px solid grey;
+    margin: 0 auto;
+    padding: 20px 60px;
+    text-align: left;
+    font-size: 16px;
+     
+ }
+#loginForm input[type=submit], #divRegister input[type=submit], #divPasswordReminder input[type=submit], #divProfile input[type=submit], #divProfile input[type=button] {
+    width: 120px;
+    height: 30px;
+    margin-left: 65px;
+    padding:5px 15px; 
+    background: #3385ff; 
+    color: white; 
+    font-size: 16px;
+    font-weight: bold;
+   
+    border:1px solid #3385ff;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+     -webkit-transition-duration: 1s; /* Safari */
+    transition-duration: 1s;
 }
+
+#divPasswordReminder input[type=submit] {
+   
+    margin-left: 100px;
+    
+}
+
+#loginForm input[type=submit]:hover, #divRegister input[type=submit]:hover, #divPasswordReminder input[type=submit]:hover, #divProfile input[type=submit]:hover, #divProfile input[type=button]:hover {     
+    background:#05526B; 
+     border:1px solid #05526B;
+    color: white;
+     -webkit-transition-duration: 1s; /* Safari */
+    transition-duration: 1s;
+}
+
 
 #loginForm p, #registerForm p{
     display: inline-block;
     color: #05526B;
     width: 90px;
+    font-size: 16px;
     
 }
 #loginForm input, #registerForm input{
@@ -264,7 +312,7 @@ input[type=submit]:hover {
     height: 25px;
 }
 
-#loginForm label, #registerForm label{
+#loginForm label, #registerForm label, #divProfile label{
     font-weight: bold;
     height: 25px;
     width:200px;
@@ -275,7 +323,7 @@ input[type=submit]:hover {
     color: red;
 }
 
-.btnLogIn, .btnRegister {
+.btnLogIn, .btnRegister  {
     background-color: #3385ff;
     border-radius: 8px;
     color: white;
@@ -301,6 +349,7 @@ input[type=submit]:hover {
     cursor: pointer;
     width: 250px;
     height: 40px;
+    
 }
 
 .btnFb:hover {background-color: #002966}
