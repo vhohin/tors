@@ -63,6 +63,9 @@ if (!isset($_SESSION['user'])) {
     $_SESSION['user'] = array();
 }
 
+$twig = $app->view()->getEnvironment();
+$twig->addGlobal('currentUser', $_SESSION['user']); // replace 'currentUser' => $_SESSION['user'],
+
 $cityList = array();
 //**************************************************** HOME select trip
 $app->get('/', function() use ($app, $log) {
@@ -268,12 +271,7 @@ if ($_SESSION['facebook_access_token']) {
         $_SESSION['user']=$userID;
     }
 }
-/* DB::insert('users', array(
-  'email' => $_SESSION['facebook_access_token']['email'],
-  'FBID' => $_SESSION['facebook_access_token']['ID']
 
-  ));
-  $app->render('/'); */
 
 
 $twig = $app->view()->getEnvironment();
@@ -418,6 +416,65 @@ require_once 'login.php';
   });
  */
 
+// PASSWORD RESET via map
+
+function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
+$app->map('/passreset', function () use ($app, $log) {
+
+    if ($app->request()->isGet()) { // GET method via map
+        $app->render('passreset.html.twig');
+    } else { // else POST method via map
+        $email = $app->request()->post('email');
+        $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
+        if ($user) {
+            $app->render('passreset_success.html.twig');
+            $secretToken = generateRandomString(50);
+            // VERSION 1: delete and insert
+            
+              /*DB::delete('passreset', 'userID=%d', $user['ID']);
+              DB::insert('passreset', array(
+              'userID' => $user['ID'],
+              'secretToken' => $secretToken,
+              'expirydateTime' => date("Y-m-d H:i:s", strtotime("+5 hours"))
+              ));*/
+             
+          
+            // VERSION 2: insert-update "passresets" table
+            DB::insertUpdate('passresets', array(
+                'userID' => $user['ID'],
+                'secretToken' => $secretToken,
+                'expiryDateTime' => date("Y-m-d H:i:s", strtotime("+5 hours"))
+            ));
+            // email user
+            $html = $app->view()->render('email_passreset.html.twig', array(
+                'email' => $user['email'],
+                'url' => 'http://' . $_SERVER['SERVER_NAME'] . '/passreset/' . $secretToken
+            ));
+            $headers = "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+            mail($email, "Password reset from TORS", $html, $headers);
+        } else {
+            $app->render('passreset.html.twig', array('error' => TRUE));
+        }
+    }
+})->via("GET", "POST");
+
+
+$app->map('/passreset/:secretToken', function() {
+    echo "TODO";
+})->via('GET', 'POST');
+
+
+
 // *************************** EDIT PROFILE *********************
 $app->get('/profile/:ID', function($ID) use ($app, $log) {
     $userInfo = DB::query("SELECT * FROM users");
@@ -527,7 +584,7 @@ $app->post('/profile/:ID', function($ID) use ($app, $log) {
 });
 
 // ************************* PASSWORD FORGOT*********************
-$app->get('/passwordForgot', function() use ($app, $log) {
+/*$app->get('/passwordForgot', function() use ($app, $log) {
     $app->render('passwordForgot.html.twig');
 });
 
@@ -578,6 +635,6 @@ $app->post('/passwordForgot', function() use ($app, $log) {
         }
     }
 });
-
+*/
 
 $app->run();
