@@ -279,7 +279,7 @@ $twig->addGlobal('fbUser', $fbUser);
 $twig->addGlobal('loginUrl', $loginUrl);
 $twig->addGlobal('logoutUrl', $logoutUrl);
 
-print_r($fbUser);
+//print_r($fbUser);
 //print_r($_SESSION['fbmetadata']);
 //**************************REGISTER************************** 
 require_once 'register.php';

@@ -62,7 +62,7 @@
                 result += '<li style="background:url(\'/images/available_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Available Seat</li>';        
                 result += '<li style="background:url(\'/images/booked_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Booked Seat</li>';  
                 result += '<li style="background:url(\'/images/selected_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Selected Seat</li>'; 
-                result += '</ul></div><button id="btnBooking">Booking</button><div style="clear:both;width:100%"></div></div></div>';
+                result += '</ul></div><div style="clear:both;width:100%"></div><button id="btnBooking">Booking</button>';
                 $("#seats"+tripID).html(result);
                 init(bookedSeats); 
                 
@@ -139,7 +139,7 @@
                 result += '<li style="background:url(\'/images/available_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Available Seat</li>';        
                 result += '<li style="background:url(\'/images/booked_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Booked Seat</li>';  
                 result += '<li style="background:url(\'/images/selected_seat_img.jpg\') no-repeat scroll 0 0 transparent;">Selected Seat</li>'; 
-                result += '</ul><button id="btnBooking">Booking</button></div><div style="clear:both;width:100%"></div></div></div>';
+                result += '</ul></div><button id="btnBooking">Booking</button><div style="clear:both;width:100%"></div>';
                 $("#seats"+tripID).html(result);
                 init(bookedSeats);
                 
@@ -238,7 +238,7 @@ $(document).ready(function () {
                 <td>{{ad.DateTimeDepart}}</td>
                 <td>{{ad.DateTimeArrive}}</td>
                 <!--<td style="font-size: 150%; font-weight: bold; cursor: pointer;">+</td>-->
-                <td style="font-size: 120%; font-weight: bold; background-color: lightblue;" onclick="selectBus({{currentUser.ID?currentUser.ID:0}},{{ad.ID}})">Select</td>
+                <td style="font-size: 120%; font-weight: bold; background-color: lightblue; cursor:pointer;" onclick="selectBus({{currentUser.ID?currentUser.ID:0}},{{ad.ID}})">Select</td>
             </tr>
             <tr>   
                 <td >Amenities:</td>                
@@ -262,7 +262,7 @@ $(document).ready(function () {
                 <td>$ {{ad.Price}}</td>
             </tr>
             <tr>
-                <td colspan="5" style="border-bottom: 1px solid grey; text-align: left;">
+                <td colspan="5" style=" text-align: left;">
                     <span id="seats{{ad.ID}}"> 
                     </span>                     
                 </td>
@@ -272,7 +272,7 @@ $(document).ready(function () {
             </tr>
                 {% endfor %}
         </table>
-        <br/><p style="margin: 0; vertical-align: top; line-height:15px;">
+        <br/><p style="margin: 0 0 0 20px; vertical-align: top; line-height:15px;">
             <img src="/images/wifi2.png" height="15" alt="WiFi">  WiFi &nbsp;|
             <img src="/images/cond1.jpg" height="15" alt="AC">  AirConditioning &nbsp;|
             <img src="/images/t1.png" height="15" alt="WC">  Toilet &nbsp;|

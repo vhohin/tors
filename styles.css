@@ -120,9 +120,20 @@ a:hover{
 }
 
 #content{
-    border:1px solid lightgray;
+    /*border:1px solid lightgray;*/
     margin: 15px 0;
     padding:10px;
+}
+
+#indexForm{
+    border:1px solid lightgray;
+    margin: 0;
+    padding: 20px;    
+}
+
+#contentSelectedDestination{
+    border:1px solid lightgray;
+    margin: 0;        
 }
 
 #divLogin h1{
@@ -194,14 +205,23 @@ input[type=submit]:hover {
 ******************* SELECTED_DESTINATION form
 */
 #bookingForm {
-    width: 780px;
-    padding: 20px;    
+    border: 1px solid lightgray;
+    width: 400px;
+    margin: 0 auto;
+    padding: 20px;   
 }
 #bookingForm h2{
     text-align: center;
     font-weight: bold;
 }
 
+#btnBooking{
+    width: 375px;
+    height: 40px;
+    margin-left: 35px;
+    cursor: pointer;
+    color: #05526B;
+}
 /*
 ******************* SELECTED_DESTINATION form
 */
