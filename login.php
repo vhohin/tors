@@ -1,6 +1,6 @@
 <?php
 //**************************************************** LOGIN/LOGOUT
-session_start();
+//session_start();
 // State 1: first show
 $app->get('/login', function() use ($app, $log) {
     $app->render('login.html.twig');

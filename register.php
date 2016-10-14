@@ -7,6 +7,19 @@ $app->get('/emailexists/:email', function($email) use ($app, $log) {
     }
 });
 
+// returns TRUE if password is strong enought, otherwise returns STRING describing the problem
+function verifyPassword($pass1) {
+    if (!preg_match('/[0-9;\'".,<>`~|!@#$%^&*()_+=-]/', $pass1) 
+            || (!preg_match('/[a-z]/', $pass1)) 
+            || (!preg_match('/[A-Z]/', $pass1)) 
+            || (strlen($pass1) < 8)) {
+        return "Password must be at least 8 characters " .
+                "long, contain at least one upper case, one lower case, " .
+                " one digit or special character";
+    }
+    return TRUE;
+}
+
 // State 1: first show
 $app->get('/register', function() use ($app, $log) {
 
@@ -58,10 +71,10 @@ $app->post('/register', function() use ($app, $log) {
             unset($valueList['email']);
         }
     }
-    if (!preg_match('/[0-9;\'".,<>`~|!@#$%^&*()_+=-]/', $pass1) || (!preg_match('/[a-z]/', $pass1)) || (!preg_match('/[A-Z]/', $pass1)) || (strlen($pass1) < 8)) {
-        array_push($errorList, "Password must be at least 8 characters " .
-                "long, contain at least one upper case, one lower case, " .
-                " one digit or special character");
+    $msg = verifyPassword($pass1);
+    
+    if ($msg !== TRUE) {
+        array_push($errorList, $msg);
     } else if ($pass1 != $pass2) {
         array_push($errorList, "Passwords don't match");
     }
@@ -90,7 +103,7 @@ $app->post('/register', function() use ($app, $log) {
         ));
         $id = DB::insertId();
         $log->debug(sprintf("User %s created", $id));
-        $app->render('register_success.html.twig', array('registerSuccess'=> TRUE));
+        $app->render('register_success.html.twig', array('registerSuccess' => TRUE));
     }
 });
 

@@ -1,0 +1,13 @@
+{% extends "master.html.twig" %}
+
+{% block title %}Successful Password reset{% endblock %}
+
+{% block content %}
+    
+<h1>Password reset successful</h1>
+    {% if booking %}
+        <a href="/bookingform">Click to continue</a>
+    {% else %}
+        <a href="/">Click to continue</a>
+    {% endif %}
+{% endblock %}

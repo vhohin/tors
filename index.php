@@ -15,10 +15,17 @@ $log->pushHandler(new StreamHandler('logs/errors.log', Logger::ERROR));
 
 //
 //bAltllSiuAad   cp4724_tors
-DB::$dbName = 'cp4724_tors';
-DB::$user = 'cp4724_tors';
-DB::$password = 'bAltllSiuAad';
-DB::$encoding = 'utf8';
+if ($_SERVER['SERVER_NAME'] == 'localhost') {
+    DB::$dbName = 'cp4724_tors';
+    DB::$user = 'cp4724_tors';
+    DB::$password = 'bAltllSiuAad';
+    DB::$encoding = 'utf8';
+} else {
+    DB::$dbName = 'cp4724_tors';
+    DB::$user = 'cp4724_tors';
+    DB::$password = 'bAltllSiuAad';
+    DB::$encoding = 'utf8';
+}
 //DB::$host = '169.44.80.220';
 // DB::$host = '127.0.0.1'; // sometimes needed on Mac OSX
 DB::$error_handler = 'sql_error_handler';
@@ -194,15 +201,15 @@ $app->get('/paymentcancelled', function() use ($app, $log) {
 });
 //**************************************************** Booking Form
 $app->get('/bookingform', function() use ($app, $log) {
-    $browserName=$_SERVER['HTTP_USER_AGENT'];
+    $browserName = $_SERVER['HTTP_USER_AGENT'];
     if (strpos(strtolower($browserName), "firefox/")) {
-    // FIREFOX
-        print '<script type="text/javascript">'; 
-        print 'alert("The browser Firefox not supported, change browser.")'; 
+        // FIREFOX
+        print '<script type="text/javascript">';
+        print 'alert("The browser Firefox not supported, change browser.")';
         print '</script>';
         $app->render('index.html.twig');
-    } else{    
-    $app->render('booking_form.html.twig', array('currentUser' => $_SESSION['user'], 'booking' => $_SESSION['booking'], 'countSeats' => $_SESSION['countSeats'], 'paymentSum' => $_SESSION['paymentSum'],'countSeats' => $_SESSION['countSeats']));
+    } else {
+        $app->render('booking_form.html.twig', array('currentUser' => $_SESSION['user'], 'booking' => $_SESSION['booking'], 'countSeats' => $_SESSION['countSeats'], 'paymentSum' => $_SESSION['paymentSum'], 'countSeats' => $_SESSION['countSeats']));
     }
 });
 
@@ -247,7 +254,7 @@ if (!isset($_SESSION['facebook_access_token'])) {
 }
 
 
-$uID=0;
+$uID = 0;
 if ($_SESSION['facebook_access_token']) {
     $userID = DB::queryFirstRow('SELECT * from users WHERE fbID = %s', $fbUser['ID']);
     if (!$userID) {
@@ -258,17 +265,17 @@ if ($_SESSION['facebook_access_token']) {
         ));
         if ($result) {
             $uID = DB::insertId();
-            $_SESSION['user']=$userID;
+            $_SESSION['user'] = $userID;
             $log->debug(sprintf("Registred facebook user %s with id %s", $_SESSION['facebook_access_token']['ID'], $uID));
             $_SESSION['facebook_access_token']['userID'] = array();
         } else {
             $log->debug(sprintf("Failed to register facebook user %d", $_SESSION['facebook_access_token']['ID']));
             $_SESSION['facebook_access_token'] = array();
-            
+
             //$app->render('fblogin_failed.html.twig');
         }
     } else {
-        $_SESSION['user']=$userID;
+        $_SESSION['user'] = $userID;
     }
 }
 
@@ -279,142 +286,164 @@ $twig->addGlobal('fbUser', $fbUser);
 $twig->addGlobal('loginUrl', $loginUrl);
 $twig->addGlobal('logoutUrl', $logoutUrl);
 
-print_r($fbUser);
+//print_r($fbUser);
 //print_r($_SESSION['fbmetadata']);
+//
+//
 //**************************REGISTER************************** 
-require_once 'register.php';
+//require_once 'register.php';
 
-/*
 
-  $app->get('/emailexists/:email', function($email) use ($app, $log) {
-  $user = DB::queryFirstRow('SELECT * FROM users WHERE email=%s', $email);
-  if ($user) {
-  echo "Email already registered";
-  }
-  });
+$app->get('/emailexists/:email', function($email) use ($app, $log) {
+    $user = DB::queryFirstRow('SELECT * FROM users WHERE email=%s', $email);
+    if ($user) {
+        echo "Email already registered";
+    }
+});
 
-  // State 1: first show
-  $app->get('/register', function() use ($app, $log) {
-  $app->render('register.html.twig');
-  });
-  // State 2: submission
-  $app->post('/register', function() use ($app, $log) {
-  $firstName = $app->request->post('firstName');
-  $lastName = $app->request->post('lastName');
-  $userName = $app->request->post('userName');
-  $email = $app->request->post('email');
-  $pass1 = $app->request->post('pass1');
-  $pass2 = $app->request->post('pass2');
-  $phone = $app->request->post('phone');
+// returns TRUE if password is strong enought, otherwise returns STRING describing the problem
+function verifyPassword($pass1) {
+    if (!preg_match('/[0-9;\'".,<>`~|!@#$%^&*()_+=-]/', $pass1) || (!preg_match('/[a-z]/', $pass1)) || (!preg_match('/[A-Z]/', $pass1)) || (strlen($pass1) < 8)) {
+        return "Password must be at least 8 characters " .
+                "long, contain at least one upper case, one lower case, " .
+                " one digit or special character";
+    }
+    return TRUE;
+}
 
-  $valueList = array('firstName' => $firstName, 'lastName' => $lastName, 'userName' => $userName, 'email' => $email, 'phone' => $phone);
-  // submission received - verify
-  $errorList = array();
-  if (!empty($firstName)) {
-  if (strlen($firstName) < 2) {
-  array_push($errorList, "First Name must be at least 2 characters long");
-  unset($valueList['firstName']);
-  }
-  }
-  if (!empty($lastName)) {
-  if (strlen($lastName) < 2) {
-  array_push($errorList, "Last Name must be at least 2 characters long");
-  unset($valueList['lastName']);
-  }
-  }
-  if (filter_var($email, FILTER_VALIDATE_EMAIL) === FALSE) {
-  array_push($errorList, "Email does not look like a valid email");
-  unset($valueList['email']);
-  } else {
-  $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
-  if ($user) {
-  array_push($errorList, "Email already registered");
-  unset($valueList['email']);
-  }
-  }
-  if (!preg_match('/[0-9;\'".,<>`~|!@#$%^&*()_+=-]/', $pass1) || (!preg_match('/[a-z]/', $pass1)) || (!preg_match('/[A-Z]/', $pass1)) || (strlen($pass1) < 8)) {
-  array_push($errorList, "Password must be at least 8 characters " .
-  "long, contain at least one upper case, one lower case, " .
-  " one digit or special character");
-  } else if ($pass1 != $pass2) {
-  array_push($errorList, "Passwords don't match");
-  }
-  if (!empty($phone)) {
-  if (!preg_match("/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/", $phone)) {
-  array_push($errorList, "Phone number is invalid");
-  unset($valueList['phone']);
-  }
-  }
-  //
-  if ($errorList) {
-  // STATE 3: submission failed
-  $app->render('register.html.twig', array(
-  'errorList' => $errorList, 'v' => $valueList
-  ));
-  } else {
-  // STATE 2: submission successful
-  DB::insert('users', array(
-  'firstName' => $firstName,
-  'lastName' => $lastName,
-  'userName' => $userName,
-  'email' => $email,
-  'phone' => $phone,
-  'password' => password_hash($pass1, CRYPT_BLOWFISH)
-  //'password' => hash ('sha256', $pass1)
-  ));
-  $id = DB::insertId();
-  $log->debug(sprintf("User %s created", $id));
-  $app->render('register_success.html.twig');
-  }
-  });
- */
+// State 1: first show
+$app->get('/register', function() use ($app, $log) {
+
+    //unset users
+    $_SESSION['user'] = array();
+    $_SESSION['facebook_access_token'] = array();
+
+
+    $app->render('register.html.twig');
+});
+// State 2: submission
+$app->post('/register', function() use ($app, $log) {
+    $firstName = $app->request->post('firstName');
+    $lastName = $app->request->post('lastName');
+    $userName = $app->request->post('userName');
+    $email = $app->request->post('email');
+    $pass1 = $app->request->post('pass1');
+    $pass2 = $app->request->post('pass2');
+    $phone = $app->request->post('phone');
+
+    $valueList = array(
+        'firstName' => $firstName,
+        'lastName' => $lastName,
+        'userName' => $userName,
+        'email' => $email,
+        'phone' => $phone
+    );
+// submission received - verify
+    $errorList = array();
+    if (!empty($firstName)) {
+        if (strlen($firstName) < 2 || strlen($firstName) > 50) {
+            array_push($errorList, "First Name must be at least 2 and not longer than 50 characters long");
+            unset($valueList['firstName']);
+        }
+    }
+    if (!empty($lastName)) {
+        if (strlen($lastName) < 2 || strlen($lastName) > 50) {
+            array_push($errorList, "Last Name must be at least 2 and not longer than 50  characters long");
+            unset($valueList['lastName']);
+        }
+    }
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) === FALSE) {
+        array_push($errorList, "Email does not look like a valid email");
+        unset($valueList['email']);
+    } else {
+        $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
+        if ($user) {
+            array_push($errorList, "Email already registered");
+            unset($valueList['email']);
+        }
+    }
+    
+    // verify password
+    $msg = verifyPassword($pass1);
+
+    if ($msg !== TRUE) {
+        array_push($errorList, $msg);
+    } else if ($pass1 != $pass2) {
+        array_push($errorList, "Passwords don't match");
+    }
+    if (!empty($phone)) {
+        if (!preg_match("/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/", $phone)) {
+            array_push($errorList, "Canadian phone number is invalid");
+            unset($valueList['phone']);
+        }
+    }
+//
+    if ($errorList) {
+        // STATE 3: submission failed        
+        $app->render('register.html.twig', array(
+            'errorList' => $errorList, 'v' => $valueList
+        ));
+    } else {
+        // STATE 2: submission successful
+        DB::insert('users', array(
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'userName' => $userName,
+            'email' => $email,
+            'phone' => $phone,
+            'password' => password_hash($pass1, CRYPT_BLOWFISH)
+                //'password' => hash ('sha256', $pass1)
+        ));
+        $id = DB::insertId();
+        $log->debug(sprintf("User %s created", $id));
+        $app->render('register_success.html.twig', array('registerSuccess' => TRUE));
+    }
+});
+
 
 //************************ LOGIN/LOGOUT****************************
-require_once 'login.php';
+//require_once 'login.php';
 
-/*
+//session_start();
+// State 1: first show
+$app->get('/login', function() use ($app, $log) {
+    $app->render('login.html.twig');
+});
+// State 2: submission
+$app->post('/login', function() use ($app, $log) {
+    $email = $app->request->post('email');
+    $pass = $app->request->post('pass');
+    $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
+    if (!$user) {
+        $log->debug(sprintf("User failed for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
+        $app->render('login.html.twig', array('loginFailed' => TRUE));
+    } else {
+        // password MUST be compared in PHP because SQL is case-insenstive
+        //if ($user['password'] ==  $pass) {
+        //echo "psw ".$pass." pass ".$user['password'];
+        if (password_verify($pass, $user['password'])) {
+            // LOGIN successful
+            unset($user['password']);
+            $_SESSION['user'] = $user;
+            $_SESSION['facebook_access_token'] = array();
+            $log->debug(sprintf("User %s logged in successfuly from IP %s", $user['ID'], $_SERVER['REMOTE_ADDR']));
+            if (isset($_SESSION['booking']) && !empty($_SESSION['booking'])){
+                $app->render('login_success.html.twig',array('booking' => "TRUE"));
+            } else {
+                $app->render('login_success.html.twig');
+            }            
+        } else {
+            $log->debug(sprintf("User failed again for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
+            $app->render('login.html.twig', array('loginFailed' => TRUE));
+        }
+    }
+});
 
-  // State 1: first show
-  $app->get('/login', function() use ($app, $log) {
-
-  //ADDED - unset users
-  $_SESSION['user'] = array();
-  $_SESSION['facebook_access_token'] = array();
-
-  $app->render('login.html.twig');
-  });
-  // State 2: submission
-  $app->post('/login', function() use ($app, $log) {
-  $email = $app->request->post('email');
-  $pass = $app->request->post('pass');
-  $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
-  if (!$user) {
-  $log->debug(sprintf("User failed for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
-  $app->render('login.html.twig', array('loginFailed' => TRUE));
-  } else {
-  // password MUST be compared in PHP because SQL is case-insenstive
-  //if ($user['password'] ==  $pass) {
-  //echo "psw ".$pass." pass ".$user['password'];
-  if (password_verify($pass, $user['password'])) {
-  // LOGIN successful
-  unset($user['password']);
-  $_SESSION['user'] = $user;
-  $_SESSION['facebook_access_token'] = array(); // ADDED
-  $log->debug(sprintf("User %s logged in successfuly from IP %s", $user['ID'], $_SERVER['REMOTE_ADDR']));
-  $app->render('login_success.html.twig');
-  } else {
-  $log->debug(sprintf("User failed again for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
-  $app->render('login.html.twig', array('loginFailed' => TRUE));
-  }
-  }
-  });
-
-  $app->get('/logout', function() use ($app, $log) {
-  $_SESSION['user'] = array();
-  $_SESSION['facebook_access_token'] = array(); // ADDED
-  $app->render('logout_success.html.twig');
-  });
- */
+$app->get('/logout', function() use ($app, $log) {
+    $_SESSION['user'] = array();
+    $_SESSION['facebook_access_token'] = array();
+    $app->render('logout_success.html.twig');
+});
 
 // PASSWORD RESET via map
 
@@ -439,15 +468,15 @@ $app->map('/passreset', function () use ($app, $log) {
             $app->render('passreset_success.html.twig');
             $secretToken = generateRandomString(50);
             // VERSION 1: delete and insert
-            
-              /*DB::delete('passreset', 'userID=%d', $user['ID']);
+
+            /* DB::delete('passreset', 'userID=%d', $user['ID']);
               DB::insert('passreset', array(
               'userID' => $user['ID'],
               'secretToken' => $secretToken,
               'expirydateTime' => date("Y-m-d H:i:s", strtotime("+5 hours"))
-              ));*/
-             
-          
+              )); */
+
+
             // VERSION 2: insert-update "passresets" table
             DB::insertUpdate('passresets', array(
                 'userID' => $user['ID'],
@@ -455,12 +484,15 @@ $app->map('/passreset', function () use ($app, $log) {
                 'expiryDateTime' => date("Y-m-d H:i:s", strtotime("+5 hours"))
             ));
             // email user
+            $url = 'http://' . $_SERVER['SERVER_NAME'] . '/passreset/' . $secretToken;
             $html = $app->view()->render('email_passreset.html.twig', array(
                 'email' => $user['email'],
-                'url' => 'http://' . $_SERVER['SERVER_NAME'] . '/passreset/' . $secretToken
+                'url' => $url
             ));
             $headers = "MIME-Version: 1.0\r\n";
-            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+            $headers.= "Content-Type: text/html; charset=UTF-8\r\n";
+            $headers.= "From: Noreply <noreply@ipd8.info>\r\n";
+            $headers.= "To :" . htmlentities($user['email'] . "\r\n");
             mail($email, "Password reset from TORS", $html, $headers);
         } else {
             $app->render('passreset.html.twig', array('error' => TRUE));
@@ -469,8 +501,45 @@ $app->map('/passreset', function () use ($app, $log) {
 })->via("GET", "POST");
 
 
-$app->map('/passreset/:secretToken', function() {
-    echo "TODO";
+$app->map('/passreset/:secretToken', function() use ($app) {
+    $row = DB::queryFirstRow("SELECT * FROM passresets WHERE secretToken=%s", $secretToken);
+    /*if (!$row) {
+        $app->render('passreset_notfound_expired.html.twig');
+        return;
+    }*/
+    if (strtotime($row['expiryDateTime']) < time()) {
+        $app->render('passreset_notfound_expired.html.twig');
+        return;
+    }
+    // 
+    if ($app->request()->isGet()) {
+        $app->render('passreset_form.html.twig');
+    } else {
+        $pass1 = $app->request()->post('pass1');
+        $pass2 = $app->request()->post('pass2');
+
+        //TODO: veryfy password quality and that pass1 matchs pass2
+        $errorList = array();
+        $msg = verifyPassword($pass1);
+        if ($msg !== TRUE) {
+            array_push($errorList, $msg);
+        } else if ($pass1 != $pass2) {
+            array_push($errorList, "Passwords don't match");
+        }
+        //
+        if ($errorList) {
+            $app->render('passreset_form.html.twig', array(
+                'errorList' => $errorList
+            ));
+        } else {
+            // success - reset the password
+            DB::update('users', array(
+                'password' => password_hash($pass1, CRYPT_BLOWFISH)
+                    ), "ID=%d", $row['userID']);
+            DB::delete('passresets', 'secretToken=%s', $secretToken);
+            $app->render('passreset_form_success.html.twig');
+        }
+    }
 })->via('GET', 'POST');
 
 
@@ -554,87 +623,87 @@ $app->post('/profile/:ID', function($ID) use ($app, $log) {
         if (isset($_SESSION['user'])) {
             $_SESSION['user'] = array();
         }
-        
-    /*$pass = password_hash($pass1, CRYPT_BLOWFISH);
-    $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
-    if (!$user) {
-        $log->debug(sprintf("User failed for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
-        $app->render('login.html.twig', array('loginFailed' => TRUE));
-    } else {
-        // password MUST be compared in PHP because SQL is case-insenstive
-        //if ($user['password'] ==  $pass) {
-        //echo "psw ".$pass." pass ".$user['password'];
-        if (password_verify($pass, $user['password'])) {
-            // LOGIN successful
-            unset($user['password']);
-            $_SESSION['user'] = $user;
-            $_SESSION['facebook_access_token'] = array();
-            $log->debug(sprintf("User %s logged in successfuly from IP %s", $user['ID'], $_SERVER['REMOTE_ADDR']));
-            $app->render('login_success.html.twig');
-        } else {
-            $log->debug(sprintf("User failed again for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
-            $app->render('login.html.twig', array('loginFailed' => TRUE));
-        }
-    }*/
-        
-        
+
+        /* $pass = password_hash($pass1, CRYPT_BLOWFISH);
+          $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
+          if (!$user) {
+          $log->debug(sprintf("User failed for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
+          $app->render('login.html.twig', array('loginFailed' => TRUE));
+          } else {
+          // password MUST be compared in PHP because SQL is case-insenstive
+          //if ($user['password'] ==  $pass) {
+          //echo "psw ".$pass." pass ".$user['password'];
+          if (password_verify($pass, $user['password'])) {
+          // LOGIN successful
+          unset($user['password']);
+          $_SESSION['user'] = $user;
+          $_SESSION['facebook_access_token'] = array();
+          $log->debug(sprintf("User %s logged in successfuly from IP %s", $user['ID'], $_SERVER['REMOTE_ADDR']));
+          $app->render('login_success.html.twig');
+          } else {
+          $log->debug(sprintf("User failed again for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
+          $app->render('login.html.twig', array('loginFailed' => TRUE));
+          }
+          } */
+
+
         $log->debug("User profile updated with ID =" . $ID);
         $app->render('update_success.html.twig');
     }
 });
 
 // ************************* PASSWORD FORGOT*********************
-/*$app->get('/passwordForgot', function() use ($app, $log) {
-    $app->render('passwordForgot.html.twig');
-});
+/* $app->get('/passwordForgot', function() use ($app, $log) {
+  $app->render('passwordForgot.html.twig');
+  });
 
 
-$app->post('/passwordForgot', function() use ($app, $log) {
+  $app->post('/passwordForgot', function() use ($app, $log) {
 
-    if (isset($_POST['email'])) {
+  if (isset($_POST['email'])) {
 
-        $email = $app->request->post('email');
-        $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
+  $email = $app->request->post('email');
+  $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
 
-        if ($user) {
+  if ($user) {
 
-            $pass = $user['password']; //FETCHING PASS
-            $to = $email;
-            //Details for sending E-mail
-            $from = "TORS";
-            $url = "http://tors.ipd8.info";
-            $body = "TORS password recovery Script
-		-----------------------------------------------
-		Url : $url;
-		email Details is : $to;
-		Here is your password  : $pass;
-		Sincerely,
-		TORS";
-            $from = "Your-email-address@domaindotcom";
-            $subject = "TORS Password recovered";
-            $headers1 = "From: $from\n";
-            //$headers1 .= "Content-type: text/html;charset=iso-8859-1\r\n";
-            // $headers1 .= "X-Priority: 1\r\n";
-            //$headers1 .= "X-MSMail-Priority: High\r\n";
-            // $headers1 .= "X-Mailer: Just My Server\r\n";
-            $sentmail = mail($to, $subject, $body, $headers1);
-        } else {
-            if ($_POST ['email'] != "") {
-                echo "Not found your email in our database";
-                $log->debug("Not found your email in our database");
-            }
-        }
-        //If the message is sent successfully, display sucess message otherwise display an error message.
-        if ($sentmail == 1) {
-            $app->render('passwordForgot_success.html.twig');
-//echo "Your Password Has Been Sent To Your Email Address.";
-            $log->debug("Your Password Has Been Sent To Your Email Address.");
-        } else {
-            if ($_POST['email'] != "")
-                $log->debug("Your Password Has NOT Been Sent To Your Email Address.");
-        }
-    }
-});
-*/
+  $pass = $user['password']; //FETCHING PASS
+  $to = $email;
+  //Details for sending E-mail
+  $from = "TORS";
+  $url = "http://tors.ipd8.info";
+  $body = "TORS password recovery Script
+  -----------------------------------------------
+  Url : $url;
+  email Details is : $to;
+  Here is your password  : $pass;
+  Sincerely,
+  TORS";
+  $from = "Your-email-address@domaindotcom";
+  $subject = "TORS Password recovered";
+  $headers1 = "From: $from\n";
+  //$headers1 .= "Content-type: text/html;charset=iso-8859-1\r\n";
+  // $headers1 .= "X-Priority: 1\r\n";
+  //$headers1 .= "X-MSMail-Priority: High\r\n";
+  // $headers1 .= "X-Mailer: Just My Server\r\n";
+  $sentmail = mail($to, $subject, $body, $headers1);
+  } else {
+  if ($_POST ['email'] != "") {
+  echo "Not found your email in our database";
+  $log->debug("Not found your email in our database");
+  }
+  }
+  //If the message is sent successfully, display sucess message otherwise display an error message.
+  if ($sentmail == 1) {
+  $app->render('passwordForgot_success.html.twig');
+  //echo "Your Password Has Been Sent To Your Email Address.";
+  $log->debug("Your Password Has Been Sent To Your Email Address.");
+  } else {
+  if ($_POST['email'] != "")
+  $log->debug("Your Password Has NOT Been Sent To Your Email Address.");
+  }
+  }
+  });
+ */
 
 $app->run();
