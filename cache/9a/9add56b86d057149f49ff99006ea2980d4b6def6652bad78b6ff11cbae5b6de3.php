@@ -32,12 +32,9 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
         echo "TORS";
     }
 
-    // line 4
+    // line 5
     public function block_login($context, array $blocks = array())
     {
-        // line 5
-        echo "    
-";
         // line 6
         if ((isset($context["currentUser"]) ? $context["currentUser"] : null)) {
             // line 7
@@ -67,19 +64,20 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
     // line 15
     public function block_content($context, array $blocks = array())
     {
-        echo " 
-    ";
         // line 16
+        echo "<div id=\"indexForm\">    
+    ";
+        // line 17
         if ((isset($context["errorList"]) ? $context["errorList"] : null)) {
-            // line 17
+            // line 18
             echo "    <div id=\"errorList\">    
 \t<ul>
             ";
-            // line 19
+            // line 20
             $context['_parent'] = $context;
             $context['_seq'] = twig_ensure_traversable((isset($context["errorList"]) ? $context["errorList"] : null));
             foreach ($context['_seq'] as $context["_key"] => $context["error"]) {
-                // line 20
+                // line 21
                 echo "\t\t<li>";
                 echo twig_escape_filter($this->env, $context["error"], "html", null, true);
                 echo "</li>
@@ -88,29 +86,29 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['error'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 22
+            // line 23
             echo "\t</ul>
     </div>
     ";
         }
-        // line 25
+        // line 26
         echo "    <div id=\"selectForm\">
         <form method=\"post\"  action=\"/index.php/select\">            
             <p>Depart From: </p><select name=\"departID\" class=\"select_join\">
                 <option>-- Select City From--</option>
                 ";
-        // line 29
+        // line 30
         if ((isset($context["cityList"]) ? $context["cityList"] : null)) {
-            // line 30
+            // line 31
             echo "                    ";
             $context['_parent'] = $context;
             $context['_seq'] = twig_ensure_traversable((isset($context["cityList"]) ? $context["cityList"] : null));
             foreach ($context['_seq'] as $context["_key"] => $context["city"]) {
                 echo "                    
                         ";
-                // line 31
+                // line 32
                 if (($this->getAttribute((isset($context["v"]) ? $context["v"] : null), "departID", array()) == $this->getAttribute($context["city"], "ID", array()))) {
-                    // line 32
+                    // line 33
                     echo "                            <option value=";
                     echo twig_escape_filter($this->env, $this->getAttribute($context["city"], "ID", array()), "html", null, true);
                     echo " selected>";
@@ -118,42 +116,42 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
                     echo "</option>
                         ";
                 } else {
-                    // line 33
+                    // line 34
                     echo " 
                             <option value=";
-                    // line 34
+                    // line 35
                     echo twig_escape_filter($this->env, $this->getAttribute($context["city"], "ID", array()), "html", null, true);
                     echo ">";
                     echo twig_escape_filter($this->env, $this->getAttribute($context["city"], "name", array()), "html", null, true);
                     echo "</option>
                         ";
                 }
-                // line 36
+                // line 37
                 echo "                    ";
             }
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['city'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 37
+            // line 38
             echo "                
                 ";
         }
-        // line 39
+        // line 40
         echo "            </select>
             <p>Arrive To: </p><select name=\"arriveID\" class=\"select_join\" >
                 <option>-- Select City To--</option>
                 ";
-        // line 42
+        // line 43
         if ((isset($context["cityList"]) ? $context["cityList"] : null)) {
-            // line 43
+            // line 44
             echo "                    ";
             $context['_parent'] = $context;
             $context['_seq'] = twig_ensure_traversable((isset($context["cityList"]) ? $context["cityList"] : null));
             foreach ($context['_seq'] as $context["_key"] => $context["city"]) {
-                // line 44
+                // line 45
                 echo "                        ";
                 if (($this->getAttribute((isset($context["v"]) ? $context["v"] : null), "arriveID", array()) == $this->getAttribute($context["city"], "ID", array()))) {
-                    // line 45
+                    // line 46
                     echo "                            <option value=";
                     echo twig_escape_filter($this->env, $this->getAttribute($context["city"], "ID", array()), "html", null, true);
                     echo " selected>";
@@ -161,28 +159,28 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
                     echo "</option>
                         ";
                 } else {
-                    // line 46
+                    // line 47
                     echo " 
                             <option value=";
-                    // line 47
+                    // line 48
                     echo twig_escape_filter($this->env, $this->getAttribute($context["city"], "ID", array()), "html", null, true);
                     echo ">";
                     echo twig_escape_filter($this->env, $this->getAttribute($context["city"], "name", array()), "html", null, true);
                     echo "</option>
                         ";
                 }
-                // line 48
+                // line 49
                 echo "                    
                     ";
             }
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['city'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 49
+            // line 50
             echo " 
                 ";
         }
-        // line 50
+        // line 51
         echo "                
             </select><br/>
             <p>Depart On: </p><input type=\"date\" name=\"dateTimeDepart\" class=\"select_join\" >
@@ -190,37 +188,37 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
             <p>Trip: </p><select name=\"typeTrip\" class=\"select_join\" >
                 <!--<option>-- Select Trip Type--</option>-->
                 ";
-        // line 56
+        // line 57
         if (($this->getAttribute((isset($context["v"]) ? $context["v"] : null), "typeTrip", array()) == "oneway")) {
-            // line 57
+            // line 58
             echo "                    <option value=\"oneway\" selected>One-way</option>
                 ";
         } else {
-            // line 58
+            // line 59
             echo " 
                     <option value=\"oneway\">One-way</option>
                 ";
         }
-        // line 61
+        // line 62
         echo "                ";
         if (($this->getAttribute((isset($context["v"]) ? $context["v"] : null), "typeTrip", array()) == "round")) {
-            // line 62
+            // line 63
             echo "                    <option value=\"round\" selected>Round trip</option>
                 ";
         } else {
-            // line 63
+            // line 64
             echo " 
                     <option value=\"round\">Round trip</option>
                 ";
         }
-        // line 66
+        // line 67
         echo "                                                
             </select>
             <input type=\"submit\" Value=\"CONTINUE\" class=\"submitButton\">
             <!--<button id=\"selectContinue\">CONTINUE</button>-->
         </form>    
     </div>
-    
+</div>    
 ";
     }
 
@@ -236,7 +234,7 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
 
     public function getDebugInfo()
     {
-        return array (  217 => 66,  212 => 63,  208 => 62,  205 => 61,  200 => 58,  196 => 57,  194 => 56,  186 => 50,  182 => 49,  175 => 48,  168 => 47,  165 => 46,  157 => 45,  154 => 44,  149 => 43,  147 => 42,  142 => 39,  138 => 37,  132 => 36,  125 => 34,  122 => 33,  114 => 32,  112 => 31,  105 => 30,  103 => 29,  97 => 25,  92 => 22,  83 => 20,  79 => 19,  75 => 17,  73 => 16,  68 => 15,  63 => 13,  59 => 11,  53 => 9,  51 => 8,  44 => 7,  42 => 6,  39 => 5,  36 => 4,  30 => 3,  11 => 1,);
+        return array (  215 => 67,  210 => 64,  206 => 63,  203 => 62,  198 => 59,  194 => 58,  192 => 57,  184 => 51,  180 => 50,  173 => 49,  166 => 48,  163 => 47,  155 => 46,  152 => 45,  147 => 44,  145 => 43,  140 => 40,  136 => 38,  130 => 37,  123 => 35,  120 => 34,  112 => 33,  110 => 32,  103 => 31,  101 => 30,  95 => 26,  90 => 23,  81 => 21,  77 => 20,  73 => 18,  71 => 17,  68 => 16,  65 => 15,  60 => 13,  56 => 11,  50 => 9,  48 => 8,  41 => 7,  39 => 6,  36 => 5,  30 => 3,  11 => 1,);
     }
 
     public function getSource()
@@ -244,8 +242,8 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
         return "{% extends \"master.html.twig\" %}
 
 {% block title %}TORS{% endblock %}
+
 {% block login %}
-    
 {% if currentUser %}
         <p class=\"pLongRight\">Welcome, {{currentUser.email}}. <a href=\"index.php/profile/{{currentUser.ID}}\">EDIT PROFILE </a>  | <a href=\"index.php/logout\"> LOGOUT</a></p>
      {% elseif fbUser %}
@@ -255,7 +253,8 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
     {% endif %}
     <hr/>
 {% endblock %}        
-{% block content %} 
+{% block content %}
+<div id=\"indexForm\">    
     {% if errorList %}
     <div id=\"errorList\">    
 \t<ul>
@@ -312,7 +311,7 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
             <!--<button id=\"selectContinue\">CONTINUE</button>-->
         </form>    
     </div>
-    
+</div>    
 {% endblock %}
 ";
     }

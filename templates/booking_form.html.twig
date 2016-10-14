@@ -23,17 +23,17 @@ $(document).ready(function () {
 
         <p>Passenger: <span style="font-weight: bold;">{{currentUser.userName}}</span></p>
         <p>Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-weight: bold;"> {{currentUser.email}}</span></p>
-        <p>-------------------------------------------------------------------------</p>
+        <p>---------------------------------------------------------------------------</p>
         <p>Trip from:  <span style="font-weight: bold;">{{booking.2.name}} ({{booking.2.Country}})</span></p>
         <p>--------to:  <span style="font-weight: bold;">{{booking.3.name}} ({{booking.3.Country}})</span></p>
-        <p>-------------------------------------------------------------------------</p>
+        <p>---------------------------------------------------------------------------</p>
         <p>Depart:&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.0.DateTimeDepart}}</span></p>
         <p>Arrive:&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.0.DateTimeArrive}}</span></p>
-        <p>-------------------------------------------------------------------------</p>
+        <p>---------------------------------------------------------------------------</p>
         <p>Seats:&nbsp;&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.seats}}</span></p>
-        <p>-------------------------------------------------------------------------</p>
+        <p>---------------------------------------------------------------------------</p>
         <p>Bus:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span style="font-weight: bold;">{{booking.1.MakeModel}}</span></p>
-        <p>-------------------------------------------------------------------------</p>
+        <p>---------------------------------------------------------------------------</p>
         <p>Amenities:</p>
         {% if booking.0.WiFi==1 %}  
             <p>----------------------WiFi:  <span style="font-weight: bold;">YES</span></p>
@@ -55,11 +55,11 @@ $(document).ready(function () {
         {% else %}
             <p>----------PowerOutlets:  <span style="font-weight: bold;">NO</span></p>
         {% endif %} 
-        <p>-------------------------------------------------------------------------</p><br/>
+        <p>---------------------------------------------------------------------------</p><br/>
         <p>Price one ticket:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span style="font-weight: bold;">$ {{booking.0.Price}}</span></p>
-        <p>-------------------------------------------------------------------------</p><br/>
+        <p>---------------------------------------------------------------------------</p><br/>
         <p>Summary price:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span style="font-weight: bold;">$ {{paymentSum.sum}}</span></p>
-        <p>-------------------------------------------------------------------------</p><br/>
+        <p>---------------------------------------------------------------------------</p><br/>
         
     <!--    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
         <input type="hidden" name="cmd" value="_s-xclick">

@@ -1,8 +1,8 @@
 {% extends "master.html.twig" %}
 
 {% block title %}TORS{% endblock %}
+
 {% block login %}
-    
 {% if currentUser %}
         <p class="pLongRight">Welcome, {{currentUser.email}}. <a href="index.php/profile/{{currentUser.ID}}">EDIT PROFILE </a>  | <a href="index.php/logout"> LOGOUT</a></p>
      {% elseif fbUser %}
@@ -12,7 +12,8 @@
     {% endif %}
     <hr/>
 {% endblock %}        
-{% block content %} 
+{% block content %}
+<div id="indexForm">    
     {% if errorList %}
     <div id="errorList">    
 	<ul>
@@ -69,5 +70,5 @@
             <!--<button id="selectContinue">CONTINUE</button>-->
         </form>    
     </div>
-    
+</div>    
 {% endblock %}
