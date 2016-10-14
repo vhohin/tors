@@ -143,4 +143,40 @@ Nazar
  - cart page???
  - Admin part
 
+Valeriy
+
+Was sick
+
+
+---------------------------
+October 14, 2016 - DAY09
+---------------------------
+
+Valeriy
+
+1) FINISHED: 
+   - test Pypal,   
+   - booking (rebuild),
+   - saving booking information after loging.
+2) DIDN'T FINISHED: 
+   - save success result from Pypal to DB,
+   - admin part.
+3) TO DO: 
+   - save success result from Pypal to DB,    
+   - admin part. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
