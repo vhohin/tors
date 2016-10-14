@@ -1,8 +1,13 @@
-{# empty Twig template #}
+{% extends "master.html.twig"%}
+
+{% block title %}Internal error{% endblock %}
+
+{% block content %}
 
 <h1>Internal error</h1>
-
+<img src="/media/ninja.png" width="150">
 <p>Our appologies. We've encountered an internal error in our system</p>
 
-<a href='/'></a>
+<p><a href='/'>click here</a> to continue</p>
 
+{% endblock %}

@@ -5,7 +5,9 @@
 {% block content %}
     
 <h1>Login successful</h1>
-
-<a href="/">Click to continue</a>
-
+    {% if booking %}
+        <a href="/bookingform">Click to continue</a>
+    {% else %}
+        <a href="/">Click to continue</a>
+    {% endif %}
 {% endblock %}

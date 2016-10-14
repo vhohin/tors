@@ -85,14 +85,17 @@
                     item = $(this).attr('title');                   
                     str.push(item);                   
                 });
-                if (userID>0){
-                    alert(str.join(',')+" is your choice, "+userID+" array length is "+str.length);
+                //if (userID>0){
+                    //alert(str.join(',')+" is your choice, "+userID+" array length is "+str.length);
                     if (str.length > 0) {
                         // INSERT
+                        if (!userID){
+                            userID=0;
+                        }
                     $.ajax({
                         url: "/api.php/selectedseats",
                         data: JSON.stringify({                        
-                        user: userID,
+                        //user: userID,
                         trip: tripID,
                         seats: str.join(',')
                         }),
@@ -103,13 +106,18 @@
                             //refreshTodoList();
                         }); 
                         //alert("str is "+str.length);
+                        if (userID>0){
                         window.location = "/bookingform";
+                        } else if (userID==0) {
+                            alert(str.join(',')+" is your choice, but you must login or register ");
+                            window.location = "/login";
+                        } 
                     }
                     else alert("You no seats chosed");
                     
-                } else {
-                    alert(str.join(',')+" is your choice, but you must login or register "+userID+" array length is "+str.length);
-                }  
+                //} else {
+                //    alert(str.join(',')+" is your choice, but you must login or register "+userID+" array length is "+str.length);
+                //}  
                 });
             });
             
@@ -150,14 +158,17 @@
                     item = $(this).attr('title');                   
                     str.push(item);                   
                 });
-                if (userID>0){
-                    alert(str.join(',')+" is your choice, "+userID+" array length is "+str.length);
+                //if (userID>0){
+                    //alert(str.join(',')+" is your choice, "+userID+" array length is "+str.length);
                     if (str.length > 0) {
                         // INSERT
+                    if (!userID){
+                            userID=0;
+                    }    
                     $.ajax({
                         url: "/api.php/selectedseats",
                         data: JSON.stringify({                        
-                        user: userID,
+                        //user: userID,
                         trip: tripID,
                         seats: str.join(',')
                         }),
@@ -168,13 +179,18 @@
                             //refreshTodoList();
                         }); 
                         //alert("str is "+str.length);
+                        if (userID>0){
                         window.location = "/bookingform";
+                        } else if (userID==0) {
+                            alert(str.join(',')+" is your choice, but you must login or register");
+                            window.location = "/login";
+                        } 
                     }
                     else alert("You no seats chosed");
                     
-                } else {
-                    alert(str.join(',')+" is your choice, but you must login or register "+userID+" array length is "+str.length);
-                }                
+                //} else {
+                //    alert(str.join(',')+" is your choice, but you must login or register "+userID+" array length is "+str.length);
+                //}                
                 });
                 //*****finish
             }        

@@ -7,15 +7,56 @@
         
 	// PayPal settings
 	$paypal_email = 'user@domain.com';
-	$return_url = 'http://tors.ipd8.info/paymentsuccess';
+	$return_url = 'http://tors.ipd8.info';
 	$cancel_url = 'http://tors.ipd8.info/paymentcancelled';
 	$notify_url = 'http://tors.ipd8.info/payments.php';
 	 
-	$item_name = 'Test Item';
-	$item_amount = 150.00;
+	//$item_name = 'Test Item';
+	//$item_amount = 150.00;
 	 
 	// Include Functions
-	include("functions.php");
+// functions.php
+	function check_txnid($tnxid){
+	    global $link;
+	    return true;
+	    $valid_txnid = true;
+	    //get result set
+	    $sql = mysql_query("SELECT * FROM `payments` WHERE txnid = '$tnxid'", $link);
+	    if ($row = mysql_fetch_array($sql)) {
+	        $valid_txnid = false;
+	    }
+	    return $valid_txnid;
+	}
+	function check_price($price, $id){
+	    $valid_price = false;
+	    //you could use the below to check whether the correct price has been paid for the product
+	    /*
+	    $sql = mysql_query("SELECT amount FROM `products` WHERE id = '$id'");
+	    if (mysql_num_rows($sql) != 0) {
+	        while ($row = mysql_fetch_array($sql)) {
+	            $num = (float)$row['amount'];
+	            if($num == $price){
+	                $valid_price = true;
+	            }
+	        }
+	    }
+	    return $valid_price;
+	    */
+	    return true;
+	}
+	function updatePayments($data){
+	    global $link;
+	    if (is_array($data)) {
+	        $sql = mysql_query("INSERT INTO `payments` (txnid, payment_amount, payment_status, itemid, createdtime) VALUES (
+	                '".$data['txn_id']."' ,
+	                '".$data['payment_amount']."' ,
+	                '".$data['payment_status']."' ,
+	                '".$data['item_number']."' ,
+	                '".date("Y-m-d H:i:s")."'
+	                )", $link);
+	        return mysql_insert_id($link);
+	    }
+	}
 	 
 	// Check if paypal request or response
 	if (!isset($_POST["txn_id"]) && !isset($_POST["txn_type"])){
@@ -24,8 +65,8 @@
 	    $querystring .= "?business=".urlencode($paypal_email)."&";
 	    // Append amount&amp;amp;amp;amp;amp;amp; currency (£) to quersytring so it cannot be edited in html
 	    //The item name and amount can be brought in dynamically by querying the $_POST['item_number'] variable.
-	    $querystring .= "item_name=".urlencode($item_name)."&";
-	    $querystring .= "amount=".urlencode($item_amount)."&";
+	    //$querystring .= "item_name=".urlencode($item_name)."&";
+	    //$querystring .= "amount=".urlencode($item_amount)."&";
 	    //loop for posted values and append to querystring
 	    foreach($_POST as $key => $value) {
 	        $value = urlencode(stripslashes($value));
@@ -41,7 +82,10 @@
 	    header('location:https://www.sandbox.paypal.com/cgi-bin/webscr'.$querystring);
 	    exit();
 	} else {
-	   // Response from PayPal
+            print '<script type="text/javascript">'; 
+            print 'alert("The - else.")'; 
+            print '</script>';
+	  /* // Response from PayPal
             //Database Connection
 	    $link = mysql_connect($host, $user, $pass);
 	    mysql_select_db($db_name);
@@ -107,6 +151,6 @@
 	            }
 	        }
 	    fclose ($fp);
-	    }
+	    }*/
 	}
 

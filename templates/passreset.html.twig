@@ -1,0 +1,30 @@
+
+{% extends "master.html.twig"%}
+
+{% block title %}Password reset{% endblock %}
+
+
+{% block content %}
+    <div id="divPasswordReminder">
+        <h2 style="font-family: sans-serif;">Password reset</h2>
+        <p>Please enter the email address associated with your account.<br>
+            We will send you an email which will allow you to create a new password.</p>
+
+
+        {%  if error %}
+            <p><b>We could not find email you provided in our system.
+                    Try again or register a new account</b></p>
+                {% endif %}
+
+        <form method="post" id="forgetForm">
+            <label for="loginEmail" style="font-weight: bold;">Email Address</label><br><br>
+            <input type="email" name="email" placeholder="Email your email address"><br><br><br>
+            <!-- <span id="result" style="color:red" >Email does not exist.</span><br> -->
+            <input type="submit" name="btnSubmit" value="Send">
+        </form>
+
+
+
+    </div>
+            
+            {% endblock %} 
