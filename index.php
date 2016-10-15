@@ -645,5 +645,38 @@ $app->post('/profile/:ID', function($ID) use ($app, $log) {
     }
 });
 
+///////////////////////// CURL /CRON SCHEDULAR CLEAN-UP///////////////////////////
+
+//Scheduled daily database clean-up for "passresets" table 
+
+$app->get('/scheduler/daily', function() use ($app, $log) {
+    DB::$error_handler = FALSE;
+    DB::$throw_exception_on_error = TRUE;
+            // PLACE THE ORDER
+    $log->debug("Daily scheduler run started");
+    // 1. clean up old password reset requests
+    try {
+        DB::delete('passresets', "expiryDateTime < NOW()");    
+        $log->debug("Password resets clean up, removed " . DB::affectedRows());
+    } catch (MeekroDBException $e) {
+        sql_error_handler(array(
+                    'error' => $e->getMessage(),
+                    'query' => $e->getQuery()
+                ));
+    }
+    /*// 2. clean up old cart items (normally we never do!)
+    try {
+        DB::delete('cartitems', "createdTS < DATE(DATE_ADD(NOW(), INTERVAL -1 DAY))");
+    } catch (MeekroDBException $e) {
+        sql_error_handler(array(
+                    'error' => $e->getMessage(),
+                    'query' => $e->getQuery()
+                ));
+    }
+    $log->debug("Cart items clean up, removed " . DB::affectedRows());
+    $log->debug("Daily scheduler run completed");
+    echo "Completed";*/
+});
+
 
 $app->run();
