@@ -1,0 +1,14 @@
+Array
+(
+    [item_name] => Montreal (Canada) - Boston (USA) trip. Depart at: 2016-10-06 19:01:46. Seats: 77,78
+    [amount] => 25.00
+    [cmd] => _xclick
+    [quantity] => 2
+    [no_note] => 1
+    [lc] => CA
+    [currency_code] => CAD
+    [bn] => PP-BuyNowBF:btn_buynow_LG.gif:NonHostedGuest
+    [first_name] => vhohin
+    [email] => vhohin@hotmail.com
+    [submit] => PAYPAL PAYMENT
+)
