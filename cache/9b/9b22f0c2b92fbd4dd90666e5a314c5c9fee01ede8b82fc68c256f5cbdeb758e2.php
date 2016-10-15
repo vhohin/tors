@@ -56,13 +56,13 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
 
         <div id=\"content\">
             <div id=\"loginBlock\">";
-        // line 30
+        // line 31
         $this->displayBlock('login', $context, $blocks);
         echo "</div>    
         ";
-        // line 31
-        $this->displayBlock('content', $context, $blocks);
         // line 32
+        $this->displayBlock('content', $context, $blocks);
+        // line 33
         echo "    </div>
 
 </div>
@@ -123,12 +123,12 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
     {
     }
 
-    // line 30
+    // line 31
     public function block_login($context, array $blocks = array())
     {
     }
 
-    // line 31
+    // line 32
     public function block_content($context, array $blocks = array())
     {
     }
@@ -140,7 +140,7 @@ class __TwigTemplate_940d965ecc5909e9df61df45bbdfd9e74f27f73ba332ff616e5890f816d
 
     public function getDebugInfo()
     {
-        return array (  132 => 31,  127 => 30,  122 => 11,  117 => 5,  66 => 32,  64 => 31,  60 => 30,  40 => 12,  38 => 11,  29 => 5,  23 => 1,);
+        return array (  133 => 32,  128 => 31,  123 => 11,  118 => 5,  67 => 33,  65 => 32,  61 => 31,  40 => 12,  38 => 11,  29 => 5,  23 => 1,);
     }
 
     public function getSource()

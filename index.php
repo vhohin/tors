@@ -288,10 +288,8 @@ $twig->addGlobal('logoutUrl', $logoutUrl);
 
 //print_r($fbUser);
 //print_r($_SESSION['fbmetadata']);
-//
-//
+
 //**************************REGISTER************************** 
-//require_once 'register.php';
 
 
 $app->get('/emailexists/:email', function($email) use ($app, $log) {
@@ -317,7 +315,6 @@ $app->get('/register', function() use ($app, $log) {
     //unset users
     $_SESSION['user'] = array();
     $_SESSION['facebook_access_token'] = array();
-
 
     $app->render('register.html.twig');
 });
@@ -400,11 +397,9 @@ $app->post('/register', function() use ($app, $log) {
     }
 });
 
-
 //************************ LOGIN/LOGOUT****************************
-//require_once 'login.php';
 
-//session_start();
+
 // State 1: first show
 $app->get('/login', function() use ($app, $log) {
     $app->render('login.html.twig');
@@ -476,7 +471,6 @@ $app->map('/passreset', function () use ($app, $log) {
               'expirydateTime' => date("Y-m-d H:i:s", strtotime("+5 hours"))
               )); */
 
-
             // VERSION 2: insert-update "passresets" table
             DB::insertUpdate('passresets', array(
                 'userID' => $user['ID'],
@@ -501,12 +495,12 @@ $app->map('/passreset', function () use ($app, $log) {
 })->via("GET", "POST");
 
 
-$app->map('/passreset/:secretToken', function() use ($app) {
+$app->map('/passreset/:secretToken', function($secretToken) use ($app) {
     $row = DB::queryFirstRow("SELECT * FROM passresets WHERE secretToken=%s", $secretToken);
-    /*if (!$row) {
+    if (!$row) {
         $app->render('passreset_notfound_expired.html.twig');
         return;
-    }*/
+    }
     if (strtotime($row['expiryDateTime']) < time()) {
         $app->render('passreset_notfound_expired.html.twig');
         return;
@@ -541,7 +535,6 @@ $app->map('/passreset/:secretToken', function() use ($app) {
         }
     }
 })->via('GET', 'POST');
-
 
 
 // *************************** EDIT PROFILE *********************
@@ -652,58 +645,38 @@ $app->post('/profile/:ID', function($ID) use ($app, $log) {
     }
 });
 
-// ************************* PASSWORD FORGOT*********************
-/* $app->get('/passwordForgot', function() use ($app, $log) {
-  $app->render('passwordForgot.html.twig');
-  });
+///////////////////////// CURL /CRON SCHEDULAR CLEAN-UP///////////////////////////
 
+//Scheduled daily database clean-up for "passresets" table 
 
-  $app->post('/passwordForgot', function() use ($app, $log) {
+$app->get('/scheduler/daily', function() use ($app, $log) {
+    DB::$error_handler = FALSE;
+    DB::$throw_exception_on_error = TRUE;
+            // PLACE THE ORDER
+    $log->debug("Daily scheduler run started");
+    // 1. clean up old password reset requests
+    try {
+        DB::delete('passresets', "expiryDateTime < NOW()");    
+        $log->debug("Password resets clean up, removed " . DB::affectedRows());
+    } catch (MeekroDBException $e) {
+        sql_error_handler(array(
+                    'error' => $e->getMessage(),
+                    'query' => $e->getQuery()
+                ));
+    }
+    /*// 2. clean up old cart items (normally we never do!)
+    try {
+        DB::delete('cartitems', "createdTS < DATE(DATE_ADD(NOW(), INTERVAL -1 DAY))");
+    } catch (MeekroDBException $e) {
+        sql_error_handler(array(
+                    'error' => $e->getMessage(),
+                    'query' => $e->getQuery()
+                ));
+    }
+    $log->debug("Cart items clean up, removed " . DB::affectedRows());
+    $log->debug("Daily scheduler run completed");
+    echo "Completed";*/
+});
 
-  if (isset($_POST['email'])) {
-
-  $email = $app->request->post('email');
-  $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
-
-  if ($user) {
-
-  $pass = $user['password']; //FETCHING PASS
-  $to = $email;
-  //Details for sending E-mail
-  $from = "TORS";
-  $url = "http://tors.ipd8.info";
-  $body = "TORS password recovery Script
-  -----------------------------------------------
-  Url : $url;
-  email Details is : $to;
-  Here is your password  : $pass;
-  Sincerely,
-  TORS";
-  $from = "Your-email-address@domaindotcom";
-  $subject = "TORS Password recovered";
-  $headers1 = "From: $from\n";
-  //$headers1 .= "Content-type: text/html;charset=iso-8859-1\r\n";
-  // $headers1 .= "X-Priority: 1\r\n";
-  //$headers1 .= "X-MSMail-Priority: High\r\n";
-  // $headers1 .= "X-Mailer: Just My Server\r\n";
-  $sentmail = mail($to, $subject, $body, $headers1);
-  } else {
-  if ($_POST ['email'] != "") {
-  echo "Not found your email in our database";
-  $log->debug("Not found your email in our database");
-  }
-  }
-  //If the message is sent successfully, display sucess message otherwise display an error message.
-  if ($sentmail == 1) {
-  $app->render('passwordForgot_success.html.twig');
-  //echo "Your Password Has Been Sent To Your Email Address.";
-  $log->debug("Your Password Has Been Sent To Your Email Address.");
-  } else {
-  if ($_POST['email'] != "")
-  $log->debug("Your Password Has NOT Been Sent To Your Email Address.");
-  }
-  }
-  });
- */
 
 $app->run();
