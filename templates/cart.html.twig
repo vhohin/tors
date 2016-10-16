@@ -1,0 +1,40 @@
+{% extends "master.html.twig" %}
+
+
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+    <table border="1" id="SelectedBuses">
+          <tr>
+                <th width="150">Departure From</th>
+                <th width="150">Arrive To</th>
+                <th width="180">Departure Time</th>
+                <th width="180">Price per ticket</th>
+                <th width="180">Quantity</th>
+                <th width="180">Total cost</th>
+                <th width="180">Op</th>
+
+            </tr>
+        
+        {% for ci in cartitemList %}
+
+            <tr>
+                <td>Montreal</td>
+                <td>Toronto</td>
+                <td>Today</td>
+                <td>{{ci.pricePerSeat}}</td>
+                <td>{{ci.numberOfSeats}}</td>
+                <td>{{ci.totalPrice}}</td>
+                <td>111</td>
+
+            </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/">Add item</a><br><br>
+    
+    <a href="/api.php/payment">Proceed with payment</a>
+
+
+{% endblock %}

@@ -239,6 +239,47 @@ $app->get('/selectbus', function() use ($app, $log) {
     $app->render('selected_bus.html.twig', array('currentUser' => $_SESSION['user']));
 });
 
+// cart
+/*
+  $app->get('/cart', function() use ($app) {
+  $cartitemList = DB::query(
+  "SELECT cartitems.ID as ID, productID, quantity,"
+  . " name, description, imagePath, price "
+  . " FROM cartitems, products "
+  . " WHERE cartitems.productID = products.ID AND sessionID=%s", session_id());
+  $app->render('cart.html.twig', array(
+  'currentUser' => $_SESSION['user'],
+  'cartitemList' => $cartitemList
+  ));
+  });
+ */
+
+$app->post('/cart', function() use ($app) {
+
+    DB::insert('cartitems', array(
+        'sessionID' => session_id(),
+        'userID' => $_SESSION['user'][ID],
+        'tripID' => $_SESSION['booking'][0][ID],
+        'pricePerSeat' => $_SESSION['booking'][0][Price],
+        'numberOfSeats' => $_SESSION['countSeats'][seats],
+        'totalPrice' => $_SESSION['price']
+    ));
+
+    $app->render('cart.html.twig');
+
+    //}
+    // show current contents of the cart
+    $cartitemList = DB::query(
+                    "SELECT cartitems.ID as ID, userID, pricePerSeat,numberOfSeats,totalPrice"
+                    . "name"
+                    . " FROM cartitems, booking "
+                    . " WHERE cartitems.tripID = booking.tripID AND sessionID=%s", session_id());
+    $app->render('cart.html.twig', array(
+        'currentUser' => $_SESSION['user'],
+        'cartitemList' => $cartitemList
+    ));
+});
+
 
 //facebook login
 
@@ -298,7 +339,6 @@ $twig->addGlobal('logoutUrl', $logoutUrl);
 
 //print_r($fbUser);
 //print_r($_SESSION['fbmetadata']);
-
 //**************************REGISTER************************** 
 
 
@@ -369,7 +409,7 @@ $app->post('/register', function() use ($app, $log) {
             unset($valueList['email']);
         }
     }
-    
+
     // verify password
     $msg = verifyPassword($pass1);
 
@@ -408,8 +448,6 @@ $app->post('/register', function() use ($app, $log) {
 });
 
 //************************ LOGIN/LOGOUT****************************
-
-
 // State 1: first show
 $app->get('/login', function() use ($app, $log) {
     $app->render('login.html.twig');
@@ -432,11 +470,11 @@ $app->post('/login', function() use ($app, $log) {
             $_SESSION['user'] = $user;
             $_SESSION['facebook_access_token'] = array();
             $log->debug(sprintf("User %s logged in successfuly from IP %s", $user['ID'], $_SERVER['REMOTE_ADDR']));
-            if (isset($_SESSION['booking']) && !empty($_SESSION['booking'])){
-                $app->render('login_success.html.twig',array('booking' => "TRUE"));
+            if (isset($_SESSION['booking']) && !empty($_SESSION['booking'])) {
+                $app->render('login_success.html.twig', array('booking' => "TRUE"));
             } else {
                 $app->render('login_success.html.twig');
-            }            
+            }
         } else {
             $log->debug(sprintf("User failed again for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
             $app->render('login.html.twig', array('loginFailed' => TRUE));
@@ -656,37 +694,37 @@ $app->post('/profile/:ID', function($ID) use ($app, $log) {
 });
 
 ///////////////////////// CURL /CRON SCHEDULAR CLEAN-UP///////////////////////////
-
 //Scheduled daily database clean-up for "passresets" table 
 
 $app->get('/scheduler/daily', function() use ($app, $log) {
     DB::$error_handler = FALSE;
     DB::$throw_exception_on_error = TRUE;
-            // PLACE THE ORDER
+    // PLACE THE ORDER
     $log->debug("Daily scheduler run started");
     // 1. clean up old password reset requests
     try {
-        DB::delete('passresets', "expiryDateTime < NOW()");    
+        DB::delete('passresets', "expiryDateTime < NOW()");
         $log->debug("Password resets clean up, removed " . DB::affectedRows());
     } catch (MeekroDBException $e) {
         sql_error_handler(array(
-                    'error' => $e->getMessage(),
-                    'query' => $e->getQuery()
-                ));
+            'error' => $e->getMessage(),
+            'query' => $e->getQuery()
+        ));
     }
-    /*// 2. clean up old cart items (normally we never do!)
-    try {
-        DB::delete('cartitems', "createdTS < DATE(DATE_ADD(NOW(), INTERVAL -1 DAY))");
-    } catch (MeekroDBException $e) {
-        sql_error_handler(array(
-                    'error' => $e->getMessage(),
-                    'query' => $e->getQuery()
-                ));
-    }
-    $log->debug("Cart items clean up, removed " . DB::affectedRows());
-    $log->debug("Daily scheduler run completed");
-    echo "Completed";*/
+    /* // 2. clean up old cart items (normally we never do!)
+      try {
+      DB::delete('cartitems', "createdTS < DATE(DATE_ADD(NOW(), INTERVAL -1 DAY))");
+      } catch (MeekroDBException $e) {
+      sql_error_handler(array(
+      'error' => $e->getMessage(),
+      'query' => $e->getQuery()
+      ));
+      }
+      $log->debug("Cart items clean up, removed " . DB::affectedRows());
+      $log->debug("Daily scheduler run completed");
+      echo "Completed"; */
 });
+
 
 
 $app->run();
