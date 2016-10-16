@@ -2,19 +2,29 @@
 
 {% block title %}TORS{% endblock %}
 
+{% block head %}
+<script> 
+src="http://maps.googleapis.com/maps/api/js">
+    function initialize()
+        {
+        var mapProp = {
+            center: new google.maps.LatLng(46.1759111,-74.7324117),
+            zoom:9,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    };
+google.maps.event.addDomListener(window, 'load', initialize);  
+</script> 
+{% endblock %} 
 {% block login %}
-{% if currentUser %}
-        <p class="pLongRight">Welcome, {{currentUser.email}}. <a href="index.php/profile/{{currentUser.ID}}">EDIT PROFILE </a>  | <a href="index.php/logout"> LOGOUT</a></p>
-     {% elseif fbUser %}
-         <p class="pLongRight">Welcome, {{fbUser.email}}. <a href="fblogout.php"> LOGOUT</a></p>
-{% else %}
-        <p class="pLongRight"><a href="index.php/login">LOGIN </a> | <a href="index.php/register"> REGISTER</a></p>       
-    {% endif %}
-    <hr/>
-{% endblock %}        
+<h2>About as information</h2>
+<p class="pLongRight"><a href="/">HOME </a></p>
+<hr/>
+{% endblock %}    
 {% block content %}
 <div id="menuForm">  
-    
+    <div id="googleMap" style="width:200px;height:150px;"></div>    
     
     
     

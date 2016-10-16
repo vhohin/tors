@@ -2,16 +2,15 @@
 
 {% block title %}TORS{% endblock %}
 
+{% block head %}
+<script> 
+</script> 
+{% endblock %} 
 {% block login %}
-{% if currentUser %}
-        <p class="pLongRight">Welcome, {{currentUser.email}}. <a href="index.php/profile/{{currentUser.ID}}">EDIT PROFILE </a>  | <a href="index.php/logout"> LOGOUT</a></p>
-     {% elseif fbUser %}
-         <p class="pLongRight">Welcome, {{fbUser.email}}. <a href="fblogout.php"> LOGOUT</a></p>
-{% else %}
-        <p class="pLongRight"><a href="index.php/login">LOGIN </a> | <a href="index.php/register"> REGISTER</a></p>       
-    {% endif %}
-    <hr/>
-{% endblock %}        
+<h2>Contact information</h2>
+<p class="pLongRight"><a href="/">HOME </a></p>
+<hr/>
+{% endblock %}         
 {% block content %}
 <div id="menuForm">  
     
