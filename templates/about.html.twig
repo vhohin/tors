@@ -3,13 +3,15 @@
 {% block title %}TORS{% endblock %}
 
 {% block head %}
-<script> 
-src="http://maps.googleapis.com/maps/api/js">
-    function initialize()
-        {
+<script
+    src="http://maps.googleapis.com/maps/api/js">
+</script>
+
+<script>
+    function initialize(){
         var mapProp = {
-            center: new google.maps.LatLng(46.1759111,-74.7324117),
-            zoom:9,
+            center: new google.maps.LatLng(45.40618171,-73.9419105),
+            zoom:15,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         }
     var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
@@ -23,10 +25,11 @@ google.maps.event.addDomListener(window, 'load', initialize);
 <hr/>
 {% endblock %}    
 {% block content %}
-<div id="menuForm">  
-    <div id="googleMap" style="width:200px;height:150px;"></div>    
-    
-    
-    
+<div id="menuForm"> 
+<h3>Office our company location "John Abbott College"</h3>
+    <div id="googleMap" style="width:740px;height:550px;"></div>
+<h3>Company name "Ticket Online Registration Service"</h3>
+<p>John Abbott IPD8 course team:</p> 
+<p><img src="/images/guy2.jpg" alt="photo Nazar" height="150">    Nazar Golyanskiy<img src="/images/guy1.jpg" alt="photo Valeriy" height="150">    Valeriy Hohin</p> 
 </div>    
 {% endblock %}
