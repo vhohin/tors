@@ -5,13 +5,156 @@
 <script>  
 
 $(document).ready(function () {
-    $("#slide2").hide(); 
+    $("#slide1").show(); 
+    $("#slide2").hide();
     $("#slide3").hide(); 
     $("#slide4").hide(); 
     $("#slide5").hide(); 
     $("#slide6").hide(); 
     $("#slide7").hide(); 
-    $("#slide8").hide();     
+    $("#slide8").hide();
+    
+    $("#next2").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").show();
+        $("#slide3").hide(); 
+        $("#slide4").hide(); 
+        $("#slide5").hide(); 
+        $("#slide6").hide(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#next3").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").show(); 
+        $("#slide4").hide(); 
+        $("#slide5").hide(); 
+        $("#slide6").hide(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#next4").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").hide(); 
+        $("#slide4").show(); 
+        $("#slide5").hide(); 
+        $("#slide6").hide(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#next5").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").hide(); 
+        $("#slide4").hide(); 
+        $("#slide5").show(); 
+        $("#slide6").hide(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#next6").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").hide(); 
+        $("#slide4").hide(); 
+        $("#slide5").hide(); 
+        $("#slide6").show(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#next7").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").hide(); 
+        $("#slide4").hide(); 
+        $("#slide5").hide(); 
+        $("#slide6").hide(); 
+        $("#slide7").show(); 
+        $("#slide8").hide();
+    })
+    $("#next8").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").hide(); 
+        $("#slide4").hide(); 
+        $("#slide5").hide(); 
+        $("#slide6").hide(); 
+        $("#slide7").hide(); 
+        $("#slide8").show();
+    })
+    
+    $("#prev1").click(function(){
+        $("#slide1").show(); 
+        $("#slide2").hide();
+        $("#slide3").hide(); 
+        $("#slide4").hide(); 
+        $("#slide5").hide(); 
+        $("#slide6").hide(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#prev2").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").show();
+        $("#slide3").hide(); 
+        $("#slide4").hide(); 
+        $("#slide5").hide(); 
+        $("#slide6").hide(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#prev3").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").show(); 
+        $("#slide4").hide(); 
+        $("#slide5").hide(); 
+        $("#slide6").hide(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#prev4").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").hide(); 
+        $("#slide4").show(); 
+        $("#slide5").hide(); 
+        $("#slide6").hide(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#prev5").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").hide(); 
+        $("#slide4").hide(); 
+        $("#slide5").show(); 
+        $("#slide6").hide(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#prev6").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").hide(); 
+        $("#slide4").hide(); 
+        $("#slide5").hide(); 
+        $("#slide6").show(); 
+        $("#slide7").hide(); 
+        $("#slide8").hide();
+    })
+    $("#prev7").click(function(){
+        $("#slide1").hide(); 
+        $("#slide2").hide();
+        $("#slide3").hide(); 
+        $("#slide4").hide(); 
+        $("#slide5").hide(); 
+        $("#slide6").hide(); 
+        $("#slide7").show(); 
+        $("#slide8").hide();
+    })    
 });    
 </script> 
 {% endblock %}
@@ -61,13 +204,13 @@ $(document).ready(function () {
     <div id="slide7">
     <h3>7. After login you have to press Continue to look result your selection:</h3> 
     <img src="/images/step_c.JPG" alt="help step 1" width="740"><br/><br/>    
-    <button id="prev5">PREV</button><button id="next7">NEXT</button>    
+    <button id="prev6">PREV</button><button id="next8">NEXT</button>    
     </div>
     
     <div id="slide8">
     <h3>8. Last step - press Paypal payment to pay or Cansel to refuse your selection:</h3> 
     <img src="/images/step_b.JPG" alt="help step 1" width="740"><br/><br/>    
-    <button id="prev5">PREV</button>
+    <button id="prev7">PREV</button>
     </div>
     
 </div>    
