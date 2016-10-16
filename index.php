@@ -74,6 +74,16 @@ $twig = $app->view()->getEnvironment();
 $twig->addGlobal('currentUser', $_SESSION['user']); // replace 'currentUser' => $_SESSION['user'],
 
 $cityList = array();
+//**************************************************** MENU
+$app->get('/help', function() use ($app) {
+    $app->render('help.html.twig');
+});
+$app->get('/contact', function() use ($app) {
+    $app->render('contact.html.twig');
+});
+$app->get('/about', function() use ($app) {
+    $app->render('about.html.twig');
+});
 //**************************************************** HOME select trip
 $app->get('/', function() use ($app, $log) {
     GLOBAL $cityList;
@@ -172,11 +182,11 @@ $app->post('/payment', function() use ($app, $log) {
     $TripID = $app->request->post('TripID');
     $PaymentInfo = $app->request->post('PaymentInfo');
     $PaymentDate = $app->request->post('PaymentDate');
-    $BookesSeats = $app->request->post('BookesSeats');
+    $BookedSeats = $app->request->post('BookedSeats');
 
     $log->debug(sprintf("Booking %s seat to trip %s information", $BookesSeats, $TripID));
 
-    $arr = explode(",", $BookesSeats);
+    $arr = explode(",", $BookedSeats);
     $countSeats = count($arr);
 
     foreach ($arr as $seat) {

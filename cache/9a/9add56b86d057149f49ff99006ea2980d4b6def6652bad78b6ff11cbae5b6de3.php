@@ -216,7 +216,14 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
             </select>
             <input type=\"submit\" Value=\"CONTINUE\" class=\"submitButton\">
             <!--<button id=\"selectContinue\">CONTINUE</button>-->
-        </form>    
+        </form>   
+        <div id=\"indexAdvertising\">
+            <img src=\"/images/advert1.jpg\" alt=\"Advertising 1\" style=\"float:left;\">
+            <img src=\"/images/advert2.jpg\" alt=\"Advertising 2\">
+            <img src=\"/images/advert3.jpg\" alt=\"Advertising 3\">
+                    
+        </div>        
+                
     </div>
 </div>    
 ";
@@ -309,7 +316,14 @@ class __TwigTemplate_5c79871831b4bc6a1e9bc6c5322359ff5e16ce03d442e08fa0a1a8c48d5
             </select>
             <input type=\"submit\" Value=\"CONTINUE\" class=\"submitButton\">
             <!--<button id=\"selectContinue\">CONTINUE</button>-->
-        </form>    
+        </form>   
+        <div id=\"indexAdvertising\">
+            <img src=\"/images/advert1.jpg\" alt=\"Advertising 1\" style=\"float:left;\">
+            <img src=\"/images/advert2.jpg\" alt=\"Advertising 2\">
+            <img src=\"/images/advert3.jpg\" alt=\"Advertising 3\">
+                    
+        </div>        
+                
     </div>
 </div>    
 {% endblock %}
