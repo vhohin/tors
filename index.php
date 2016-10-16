@@ -69,11 +69,29 @@ $view->setTemplatesDirectory(dirname(__FILE__) . '/templates');
 if (!isset($_SESSION['user'])) {
     $_SESSION['user'] = array();
 }
+if (!isset($_SESSION['startCart'])) {
+    $_SESSION['startCart'] = array();
+}
 
 $twig = $app->view()->getEnvironment();
 $twig->addGlobal('currentUser', $_SESSION['user']); // replace 'currentUser' => $_SESSION['user'],
 
 $cityList = array();
+
+function clearSession(){
+    if (isset($_SESSION['countSeats'])) {
+        $_SESSION['countSeats'] = array();
+    }
+    if (isset($_SESSION['booking'])) {
+        $_SESSION['booking'] = array();
+    }
+    if (isset($_SESSION['paymentSum'])) {
+        $_SESSION['paymentSum'] = array();
+    }
+    if (isset($_SESSION['price'])) {
+        $_SESSION['price'] = array();
+    }
+}
 //**************************************************** MENU
 $app->get('/help', function() use ($app) {
     $app->render('help.html.twig');
@@ -95,10 +113,10 @@ $app->get('/', function() use ($app, $log) {
     if ($errorList) {
         $app->render('index.html.twig', array('errorList' => $errorList));
     } else {
-        $app->render('index.html.twig', array('currentUser' => $_SESSION['user'], 'cityList' => $cityList));
+        $app->render('index.html.twig', array('currentUser' => $_SESSION['user'], 'cityList' => $cityList,'startCart' => $_SESSION['startCart']));
     }
-
-    if (isset($_SESSION['countSeats'])) {
+    clearSession();
+    /*if (isset($_SESSION['countSeats'])) {
         $_SESSION['countSeats'] = array();
     }
     if (isset($_SESSION['booking'])) {
@@ -109,7 +127,7 @@ $app->get('/', function() use ($app, $log) {
     }
     if (isset($_SESSION['price'])) {
         $_SESSION['price'] = array();
-    }
+    }*/
 });
 //**************************************************** Selected trip
 $app->post('/select', function() use ($app, $log) {
@@ -253,27 +271,58 @@ $app->get('/selectbus', function() use ($app, $log) {
   ));
   });
  */
-
+//**************************************************** CART
 $app->post('/cart', function() use ($app) {
+    /*$userID = $app->request()->post('PassengerID');
+    $tripID = $app->request()->post('TripID');
+    $pricePerSeat = $app->request()->post('UnitPrice');
+    $bookedSeats = $app->request()->post('BookedSeats');
+    $item_name = $app->request()->post('item_name');
+    $totalPrice = $app->request()->post('amount');
+    $numberOfSeats = $app->request()->post('quantity');
+    $first_name = $app->request()->post('first_name');
+    $email = $app->request()->post('email');*/
+    if (!empty($_SESSION['booking'])) {
+        $userID = $_SESSION['user']['ID'];
+        $tripID = $_SESSION['booking']['0']['ID'];
+        $pricePerSeat = $_SESSION['booking']['0']['Price'];
+        $bookedSeats = $_SESSION['booking']['seats'];
+        $item_name = $_SESSION['booking']['2']['name']." (".$_SESSION['booking']['2']['Country'].") - ".$_SESSION['booking']['3']['name']." (".$_SESSION['booking']['3']['Country'].") trip. Depart at ".$_SESSION['booking']['0']['DateTimeDepart'].". Seats: ".$_SESSION['booking']['seats'];
+        $totalPrice = $_SESSION['paymentSum']['sum'];
+        $numberOfSeats = $_SESSION['countSeats']['seats'];
+        $first_name = $_SESSION['user']['userName'];
+        $email = $_SESSION['user']['email'];
 
-    DB::insert('cartitems', array(
-        'sessionID' => session_id(),
-        'userID' => $_SESSION['user'][ID],
-        'tripID' => $_SESSION['booking'][0][ID],
-        'pricePerSeat' => $_SESSION['booking'][0][Price],
-        'numberOfSeats' => $_SESSION['countSeats'][seats],
-        'totalPrice' => $_SESSION['price']
+
+        DB::insert('cartitems', array(
+            'userID' => $userID,
+            'tripID' => $tripID,
+            'pricePerSeat' => $pricePerSeat,
+            'bookedSeats' => $bookedSeats,
+            'item_name' => $item_name,
+            'totalPrice' => $totalPrice,
+            'numberOfSeats' => $numberOfSeats,
+            'first_name' => $first_name,
+            'email' => $email
     ));
-
-    $app->render('cart.html.twig');
-
-    //}
+    
+    clearSession();
+    }
     // show current contents of the cart
-    $cartitemList = DB::query(
-                    "SELECT cartitems.ID as ID, userID, pricePerSeat,numberOfSeats,totalPrice"
-                    . "name"
-                    . " FROM cartitems, booking "
-                    . " WHERE cartitems.tripID = booking.tripID AND sessionID=%s", session_id());
+    $cartitemList = DB::query("SELECT * FROM cartitems WHERE userID=%d", $_SESSION['user']['ID']);
+    $_SESSION['cartitemList']=$cartitemList;
+    $_SESSION['startCart']='true';
+    $app->render('cart.html.twig', array(
+        'currentUser' => $_SESSION['user'],
+        'cartitemList' => $cartitemList
+    ));
+});
+
+$app->get('/cartview', function() use ($app) {
+    // show current contents of the cart
+    $cartitemList = DB::query("SELECT * FROM cartitems WHERE userID=%d", $_SESSION['user']['ID']);
+    $_SESSION['cartitemList']=$cartitemList;
+    $_SESSION['startCart']='true';
     $app->render('cart.html.twig', array(
         'currentUser' => $_SESSION['user'],
         'cartitemList' => $cartitemList
@@ -281,7 +330,7 @@ $app->post('/cart', function() use ($app) {
 });
 
 
-//facebook login
+//************************************************************facebook login
 
 $fb = new Facebook\Facebook([
     'app_id' => "312636035778552",

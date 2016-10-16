@@ -235,7 +235,7 @@ $app->post('/payment', function() use ($app, $log) {
 }
     
 });
-//******************************************************* PAYMENT
+//******************************************************* PAYMENT do not use (test)
 $app->post('/paymentpaypal', function() use ($app, $log) {
 
 //header( 'Location: www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=' . urlencode($token) );    

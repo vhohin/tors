@@ -72,11 +72,17 @@ $(document).ready(function () {
         <!--<a href="/api.php/payment"><button id="selectContinue">PAYPAL PAYMENT</button></a>
         <a href="/"><button id="selectContinue">CANCEL</button></a>-->
         <form action="/cart" method="post" style="display:inline-block;">
-           <input type="hidden" name="PassengerID" value="{{currentUser.ID}}">
+            <input type="hidden" name="PassengerID" value="{{currentUser.ID}}">
             <input type="hidden" name="TripID" value="{{booking.0.ID}}">
-            <input type="hidden" name="PaymentInfo" value="VISA">
-            <input type="hidden" name="PaymentDate" value={{booking.0.DateTimeDepart}}>
+            <input type="hidden" name="UnitPrice" value="{{booking.0.Price}}">
             <input type="hidden" name="BookedSeats" value="{{booking.seats}}">
+            
+            <input type="hidden" name="item_name" value="{{booking.2.name}} ({{booking.2.Country}}) - {{booking.3.name}} ({{booking.3.Country}}) trip. Depart at: {{booking.0.DateTimeDepart}}. Seats: {{booking.seats}}" />
+            <input type="hidden" name="amount" value="{{booking.0.Price}}" />   
+            <input type="hidden" name="quantity" value="{{countSeats.seats}}" />
+            <input type="hidden" name="first_name" value="{{currentUser.userName}}" />
+	    <input type="hidden" name="email" value="{{currentUser.email}}" />
+            
             <input type="submit" value="ADD TO CART">
         </form>
         <p style="padding-left:140px;"> or <a href="/"> CANCEL </a> or </p>

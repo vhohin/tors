@@ -5,24 +5,19 @@
 {% block title %}Cart{% endblock %}
 
 {% block content %}
-    <table border="1" id="SelectedBuses">
+    <table id="CartView">
           <tr>
-                <th width="150">Departure From</th>
-                <th width="150">Arrive To</th>
-                <th width="180">Departure Time</th>
-                <th width="180">Price per ticket</th>
-                <th width="180">Quantity</th>
-                <th width="180">Total cost</th>
-                <th width="180">Op</th>
+                <th width="540">Trip information</th>
+                <th width="80">Unit price</th>
+                <th width="70">Quantity</th>
+                <th width="80">Total cost</th>
+                <th width="30">Op</th>
 
             </tr>
         
         {% for ci in cartitemList %}
-
             <tr>
-                <td>Montreal</td>
-                <td>Toronto</td>
-                <td>Today</td>
+                <td>{{ci.item_name}}</td>                
                 <td>{{ci.pricePerSeat}}</td>
                 <td>{{ci.numberOfSeats}}</td>
                 <td>{{ci.totalPrice}}</td>
