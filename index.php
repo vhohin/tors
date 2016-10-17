@@ -166,9 +166,9 @@ $app->post('/select', function() use ($app, $log) {
             $log->debug("Not enough datas in Arrive Date");
         } elseif (!checkdate($tempDateA[1], $tempDateA[2], $tempDateA[0])) {
             $log->debug("Bad format Arrive Date");
-        } elseif (date("Y-m-d") > date($tempDateA,"Y-m-d")) {
+        } /*elseif (date("Y-m-d") > date($tempDateA,"Y-m-d")) {
           array_push($errorList, "Arrive Date must be later then Now");
-          } 
+          } */
     } elseif (!empty($dateTimeDepart) && !empty($dateTimeArrive) && ($tempDateD > $tempDateA)) {
         $log->debug("ERROR: Depart Date later then Arrive Date");
     }
