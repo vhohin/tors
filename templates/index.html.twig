@@ -5,11 +5,14 @@
 {% block login %}
 {% if currentUser %}
         <p class="pLongRight">Welcome, {{currentUser.email}}. <a href="index.php/profile/{{currentUser.ID}}">EDIT PROFILE </a>  | <a href="index.php/logout"> LOGOUT</a></p>
-     {% elseif fbUser %}
+        {% if startCart %}
+        <p class="pLongRight"><a href="index.php/cartview">CART VIEW</a></p>    
+        {% endif %}
+{% elseif fbUser %}
          <p class="pLongRight">Welcome, {{fbUser.email}}. <a href="fblogout.php"> LOGOUT</a></p>
 {% else %}
         <p class="pLongRight"><a href="index.php/login">LOGIN </a> | <a href="index.php/register"> REGISTER</a></p>       
-    {% endif %}
+{% endif %}
     <hr/>
 {% endblock %}        
 {% block content %}
@@ -68,7 +71,14 @@
             </select>
             <input type="submit" Value="CONTINUE" class="submitButton">
             <!--<button id="selectContinue">CONTINUE</button>-->
-        </form>    
+        </form>   
+        <div id="indexAdvertising">
+            <img src="/images/advert1.jpg" alt="Advertising 1" style="float:left;">
+            <img src="/images/advert2.jpg" alt="Advertising 2">
+            <img src="/images/advert3.jpg" alt="Advertising 3">
+                    
+        </div>        
+                
     </div>
 </div>    
 {% endblock %}

@@ -1,0 +1,36 @@
+{% extends "master.html.twig" %}
+
+{% block title %}TORS{% endblock %}
+
+{% block head %}
+<script
+    src="http://maps.googleapis.com/maps/api/js">
+</script>
+
+{% endblock %} 
+{% block login %}
+<h2>About as information</h2>
+<p class="pLongRight"><a href="/">HOME </a></p>
+<hr/>
+{% endblock %}    
+{% block content %}
+<div id="menuForm"> 
+<h3>Office our company location "John Abbott College"</h3>
+    <!--<div id="googleMap" style="width:740px;height:550px;"></div>-->
+    <div id="map" style="width:740px;height:550px;"></div>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 45.40618171, lng: -73.9419105},
+          zoom: 15
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAa3gl8eX8PgdJ93XUALO5xYYO02ggiw6M&callback=initMap"
+    async defer></script>
+<h3>Company name "Ticket Online Registration Service"</h3>
+<p>John Abbott IPD8 course team:</p> 
+<p><img src="/images/guy2.jpg" alt="photo Nazar" height="150">    Nazar Golyanskiy<img src="/images/guy1.jpg" alt="photo Valeriy" height="150">    Valeriy Hohin</p> 
+</div>    
+{% endblock %}

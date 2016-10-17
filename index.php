@@ -69,25 +69,16 @@ $view->setTemplatesDirectory(dirname(__FILE__) . '/templates');
 if (!isset($_SESSION['user'])) {
     $_SESSION['user'] = array();
 }
+if (!isset($_SESSION['startCart'])) {
+    $_SESSION['startCart'] = array();
+}
 
 $twig = $app->view()->getEnvironment();
 $twig->addGlobal('currentUser', $_SESSION['user']); // replace 'currentUser' => $_SESSION['user'],
 
 $cityList = array();
-//**************************************************** HOME select trip
-$app->get('/', function() use ($app, $log) {
-    GLOBAL $cityList;
-    $errorList = array();
-    $cityList = DB::query("SELECT * FROM citys ORDER BY name");
-    if (!$cityList) {
-        array_push($errorList, "Not citys in database");
-    }
-    if ($errorList) {
-        $app->render('index.html.twig', array('errorList' => $errorList));
-    } else {
-        $app->render('index.html.twig', array('currentUser' => $_SESSION['user'], 'cityList' => $cityList));
-    }
 
+function clearSession(){
     if (isset($_SESSION['countSeats'])) {
         $_SESSION['countSeats'] = array();
     }
@@ -100,6 +91,43 @@ $app->get('/', function() use ($app, $log) {
     if (isset($_SESSION['price'])) {
         $_SESSION['price'] = array();
     }
+}
+//**************************************************** MENU
+$app->get('/help', function() use ($app) {
+    $app->render('help.html.twig');
+});
+$app->get('/contact', function() use ($app) {
+    $app->render('contact.html.twig');
+});
+$app->get('/about', function() use ($app) {
+    $app->render('about.html.twig');
+});
+//**************************************************** HOME select trip
+$app->get('/', function() use ($app, $log) {
+    GLOBAL $cityList;
+    $errorList = array();
+    $cityList = DB::query("SELECT * FROM citys ORDER BY name");
+    if (!$cityList) {
+        array_push($errorList, "Not citys in database");
+    }
+    if ($errorList) {
+        $app->render('index.html.twig', array('errorList' => $errorList));
+    } else {
+        $app->render('index.html.twig', array('currentUser' => $_SESSION['user'], 'cityList' => $cityList,'startCart' => $_SESSION['startCart']));
+    }
+    clearSession();
+    /*if (isset($_SESSION['countSeats'])) {
+        $_SESSION['countSeats'] = array();
+    }
+    if (isset($_SESSION['booking'])) {
+        $_SESSION['booking'] = array();
+    }
+    if (isset($_SESSION['paymentSum'])) {
+        $_SESSION['paymentSum'] = array();
+    }
+    if (isset($_SESSION['price'])) {
+        $_SESSION['price'] = array();
+    }*/
 });
 //**************************************************** Selected trip
 $app->post('/select', function() use ($app, $log) {
@@ -122,26 +150,32 @@ $app->post('/select', function() use ($app, $log) {
     $tempDateD = explode('-', $dateTimeDepart);
     $tempDateA = explode('-', $dateTimeArrive);
     if (empty($dateTimeDepart) && empty($dateTimeArrive)) {
-        array_push($errorList, "ERROR: Select Depart or Arrive Date");
+        array_push($errorList, "Select Depart or Arrive Date");
+        //echo "<script> alert('Select Depart or Arrive Date');</script>";
+        //exit();
     } elseif (!empty($dateTimeDepart)) {
         if (count($tempDateD) != 3) {
-            $log->debug("ERROR: Not enough datas in Depart Date");
+            $log->debug("Not enough datas in Depart Date");
         } elseif (!checkdate($tempDateD[1], $tempDateD[2], $tempDateD[0])) {
-            $log->debug("ERROR: Bad format Depart Date");
+            $log->debug("Bad format Depart Date");
         }/* elseif (date("Y-m-d") > date($tempDateD,"Y-m-d")) {
           array_push($errorList, "Depart Date must be later then Now");
           } */
     } elseif (!empty($dateTimeArrive)) {
         if (count($tempDateA) != 3) {
-            $log->debug("ERROR: Not enough datas in Arrive Date");
+            $log->debug("Not enough datas in Arrive Date");
         } elseif (!checkdate($tempDateA[1], $tempDateA[2], $tempDateA[0])) {
-            $log->debug("ERROR: Bad format Arrive Date");
-        }/* elseif (date("Y-m-d") > date($tempDateA,"Y-m-d")) {
+            $log->debug("Bad format Arrive Date");
+        } elseif (date("Y-m-d") > date($tempDateA,"Y-m-d")) {
           array_push($errorList, "Arrive Date must be later then Now");
-          } */
+          } 
     } elseif (!empty($dateTimeDepart) && !empty($dateTimeArrive) && ($tempDateD > $tempDateA)) {
         $log->debug("ERROR: Depart Date later then Arrive Date");
     }
+    
+    
+    
+    //$app->render('index.html.twig', array('cityList' => $cityList, 'currentUser' => $_SESSION['user'], 'errorList' => $errorList, 'v' => $v));
 // State 2: Submission    
 //$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s and DateTimeDepart<%s and DateTimeArrive<%s", $depart,$arrive,$dateTimeDepart,$dateTimeArrive); 
     $result = DB::query("SELECT trips.ID as ID,NumberOfSeats, BusID, DepartID, ArriveID, DateTimeDepart, DateTimeArrive, Price, Description,MakeModel, WiFi, AirConditioning, Toilet, PowerOutlets "
@@ -149,7 +183,7 @@ $app->post('/select', function() use ($app, $log) {
 ////$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s", $depart,$arrive); 
     GLOBAL $cityList;
     if (!$result) {
-        $errorList = array();
+        //$errorList = array();
         $cityList = DB::query("SELECT * FROM citys ORDER BY name");
         if (!$cityList) {
             array_push($errorList, "Not citys in database");
@@ -158,13 +192,18 @@ $app->post('/select', function() use ($app, $log) {
         array_push($errorList, "Not this dastination, change date or destination and try again");
         $app->render('index.html.twig', array('cityList' => $cityList, 'currentUser' => $_SESSION['user'], 'errorList' => $errorList, 'v' => $v));
     } else {
-        $departCity = DB::queryFirstField("SELECT name FROM citys WHERE ID=%d", $depart);
-        $arriveCity = DB::queryFirstField("SELECT name FROM citys WHERE ID=%d", $arrive);
-        if (!$departCity || !$arriveCity) {
-            $log->debug("ERROR: Not found names of city for select destination");
+        if ($errorList) {
+        $app->render('index.html.twig', array('cityList' => $cityList, 'currentUser' => $_SESSION['user'], 'errorList' => $errorList, 'v' => $v));
+        } else {
+            $departCity = DB::queryFirstField("SELECT name FROM citys WHERE ID=%d", $depart);
+            $arriveCity = DB::queryFirstField("SELECT name FROM citys WHERE ID=%d", $arrive);
+            if (!$departCity || !$arriveCity) {
+                $log->debug("ERROR: Not found names of city for select destination");
+            }
+            $app->render('selected_destination.html.twig', array('valueList' => $result, 'currentUser' => $_SESSION['user'], 'departCity' => $departCity, 'arriveCity' => $arriveCity));
         }
-        $app->render('selected_destination.html.twig', array('valueList' => $result, 'currentUser' => $_SESSION['user'], 'departCity' => $departCity, 'arriveCity' => $arriveCity));
     }
+  
 });
 //**************************************************** Payment
 $app->post('/payment', function() use ($app, $log) {
@@ -172,11 +211,11 @@ $app->post('/payment', function() use ($app, $log) {
     $TripID = $app->request->post('TripID');
     $PaymentInfo = $app->request->post('PaymentInfo');
     $PaymentDate = $app->request->post('PaymentDate');
-    $BookesSeats = $app->request->post('BookesSeats');
+    $BookedSeats = $app->request->post('BookedSeats');
 
     $log->debug(sprintf("Booking %s seat to trip %s information", $BookesSeats, $TripID));
 
-    $arr = explode(",", $BookesSeats);
+    $arr = explode(",", $BookedSeats);
     $countSeats = count($arr);
 
     foreach ($arr as $seat) {
@@ -229,8 +268,80 @@ $app->get('/selectbus', function() use ($app, $log) {
     $app->render('selected_bus.html.twig', array('currentUser' => $_SESSION['user']));
 });
 
+// cart
+/*
+  $app->get('/cart', function() use ($app) {
+  $cartitemList = DB::query(
+  "SELECT cartitems.ID as ID, productID, quantity,"
+  . " name, description, imagePath, price "
+  . " FROM cartitems, products "
+  . " WHERE cartitems.productID = products.ID AND sessionID=%s", session_id());
+  $app->render('cart.html.twig', array(
+  'currentUser' => $_SESSION['user'],
+  'cartitemList' => $cartitemList
+  ));
+  });
+ */
+//**************************************************** CART
+$app->post('/cart', function() use ($app) {
+    /*$userID = $app->request()->post('PassengerID');
+    $tripID = $app->request()->post('TripID');
+    $pricePerSeat = $app->request()->post('UnitPrice');
+    $bookedSeats = $app->request()->post('BookedSeats');
+    $item_name = $app->request()->post('item_name');
+    $totalPrice = $app->request()->post('amount');
+    $numberOfSeats = $app->request()->post('quantity');
+    $first_name = $app->request()->post('first_name');
+    $email = $app->request()->post('email');*/
+    if (!empty($_SESSION['booking'])) {
+        $userID = $_SESSION['user']['ID'];
+        $tripID = $_SESSION['booking']['0']['ID'];
+        $pricePerSeat = $_SESSION['booking']['0']['Price'];
+        $bookedSeats = $_SESSION['booking']['seats'];
+        $item_name = $_SESSION['booking']['2']['name']." (".$_SESSION['booking']['2']['Country'].") - ".$_SESSION['booking']['3']['name']." (".$_SESSION['booking']['3']['Country'].") trip. Depart at ".$_SESSION['booking']['0']['DateTimeDepart'].". Seats: ".$_SESSION['booking']['seats'];
+        $totalPrice = $_SESSION['paymentSum']['sum'];
+        $numberOfSeats = $_SESSION['countSeats']['seats'];
+        $first_name = $_SESSION['user']['userName'];
+        $email = $_SESSION['user']['email'];
 
-//facebook login
+
+        DB::insert('cartitems', array(
+            'userID' => $userID,
+            'tripID' => $tripID,
+            'pricePerSeat' => $pricePerSeat,
+            'bookedSeats' => $bookedSeats,
+            'item_name' => $item_name,
+            'totalPrice' => $totalPrice,
+            'numberOfSeats' => $numberOfSeats,
+            'first_name' => $first_name,
+            'email' => $email
+    ));
+    
+    clearSession();
+    }
+    // show current contents of the cart
+    $cartitemList = DB::query("SELECT * FROM cartitems WHERE userID=%d", $_SESSION['user']['ID']);
+    $_SESSION['cartitemList']=$cartitemList;
+    $_SESSION['startCart']='true';
+    $app->render('cart.html.twig', array(
+        'currentUser' => $_SESSION['user'],
+        'cartitemList' => $cartitemList
+    ));
+});
+
+$app->get('/cartview', function() use ($app) {
+    // show current contents of the cart
+    $cartitemList = DB::query("SELECT * FROM cartitems WHERE userID=%d", $_SESSION['user']['ID']);
+    $_SESSION['cartitemList']=$cartitemList;
+    $_SESSION['startCart']='true';
+    $app->render('cart.html.twig', array(
+        'currentUser' => $_SESSION['user'],
+        'cartitemList' => $cartitemList
+    ));
+});
+
+
+//************************************************************facebook login
 
 $fb = new Facebook\Facebook([
     'app_id' => "312636035778552",
@@ -288,10 +399,7 @@ $twig->addGlobal('logoutUrl', $logoutUrl);
 
 //print_r($fbUser);
 //print_r($_SESSION['fbmetadata']);
-//
-//
 //**************************REGISTER************************** 
-//require_once 'register.php';
 
 
 $app->get('/emailexists/:email', function($email) use ($app, $log) {
@@ -317,8 +425,7 @@ $app->get('/register', function() use ($app, $log) {
     //unset users
     $_SESSION['user'] = array();
     $_SESSION['facebook_access_token'] = array();
-
-
+    $_SESSION['startCart']= array();
     $app->render('register.html.twig');
 });
 // State 2: submission
@@ -362,7 +469,7 @@ $app->post('/register', function() use ($app, $log) {
             unset($valueList['email']);
         }
     }
-    
+
     // verify password
     $msg = verifyPassword($pass1);
 
@@ -400,17 +507,15 @@ $app->post('/register', function() use ($app, $log) {
     }
 });
 
-
 //************************ LOGIN/LOGOUT****************************
-//require_once 'login.php';
-
-//session_start();
 // State 1: first show
 $app->get('/login', function() use ($app, $log) {
+    $_SESSION['startCart']= array();
     $app->render('login.html.twig');
 });
 // State 2: submission
 $app->post('/login', function() use ($app, $log) {
+    $_SESSION['startCart']= array();
     $email = $app->request->post('email');
     $pass = $app->request->post('pass');
     $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
@@ -427,11 +532,11 @@ $app->post('/login', function() use ($app, $log) {
             $_SESSION['user'] = $user;
             $_SESSION['facebook_access_token'] = array();
             $log->debug(sprintf("User %s logged in successfuly from IP %s", $user['ID'], $_SERVER['REMOTE_ADDR']));
-            if (isset($_SESSION['booking']) && !empty($_SESSION['booking'])){
-                $app->render('login_success.html.twig',array('booking' => "TRUE"));
+            if (isset($_SESSION['booking']) && !empty($_SESSION['booking'])) {
+                $app->render('login_success.html.twig', array('booking' => "TRUE"));
             } else {
                 $app->render('login_success.html.twig');
-            }            
+            }
         } else {
             $log->debug(sprintf("User failed again for email %s from IP %s", $email, $_SERVER['REMOTE_ADDR']));
             $app->render('login.html.twig', array('loginFailed' => TRUE));
@@ -442,6 +547,7 @@ $app->post('/login', function() use ($app, $log) {
 $app->get('/logout', function() use ($app, $log) {
     $_SESSION['user'] = array();
     $_SESSION['facebook_access_token'] = array();
+    $_SESSION['startCart']= array();
     $app->render('logout_success.html.twig');
 });
 
@@ -476,7 +582,6 @@ $app->map('/passreset', function () use ($app, $log) {
               'expirydateTime' => date("Y-m-d H:i:s", strtotime("+5 hours"))
               )); */
 
-
             // VERSION 2: insert-update "passresets" table
             DB::insertUpdate('passresets', array(
                 'userID' => $user['ID'],
@@ -501,12 +606,12 @@ $app->map('/passreset', function () use ($app, $log) {
 })->via("GET", "POST");
 
 
-$app->map('/passreset/:secretToken', function() use ($app) {
+$app->map('/passreset/:secretToken', function($secretToken) use ($app) {
     $row = DB::queryFirstRow("SELECT * FROM passresets WHERE secretToken=%s", $secretToken);
-    /*if (!$row) {
+    if (!$row) {
         $app->render('passreset_notfound_expired.html.twig');
         return;
-    }*/
+    }
     if (strtotime($row['expiryDateTime']) < time()) {
         $app->render('passreset_notfound_expired.html.twig');
         return;
@@ -541,7 +646,6 @@ $app->map('/passreset/:secretToken', function() use ($app) {
         }
     }
 })->via('GET', 'POST');
-
 
 
 // *************************** EDIT PROFILE *********************
@@ -652,58 +756,38 @@ $app->post('/profile/:ID', function($ID) use ($app, $log) {
     }
 });
 
-// ************************* PASSWORD FORGOT*********************
-/* $app->get('/passwordForgot', function() use ($app, $log) {
-  $app->render('passwordForgot.html.twig');
-  });
+///////////////////////// CURL /CRON SCHEDULAR CLEAN-UP///////////////////////////
+//Scheduled daily database clean-up for "passresets" table 
+
+$app->get('/scheduler/daily', function() use ($app, $log) {
+    DB::$error_handler = FALSE;
+    DB::$throw_exception_on_error = TRUE;
+    // PLACE THE ORDER
+    $log->debug("Daily scheduler run started");
+    // 1. clean up old password reset requests
+    try {
+        DB::delete('passresets', "expiryDateTime < NOW()");
+        $log->debug("Password resets clean up, removed " . DB::affectedRows());
+    } catch (MeekroDBException $e) {
+        sql_error_handler(array(
+            'error' => $e->getMessage(),
+            'query' => $e->getQuery()
+        ));
+    }
+    /* // 2. clean up old cart items (normally we never do!)
+      try {
+      DB::delete('cartitems', "createdTS < DATE(DATE_ADD(NOW(), INTERVAL -1 DAY))");
+      } catch (MeekroDBException $e) {
+      sql_error_handler(array(
+      'error' => $e->getMessage(),
+      'query' => $e->getQuery()
+      ));
+      }
+      $log->debug("Cart items clean up, removed " . DB::affectedRows());
+      $log->debug("Daily scheduler run completed");
+      echo "Completed"; */
+});
 
 
-  $app->post('/passwordForgot', function() use ($app, $log) {
-
-  if (isset($_POST['email'])) {
-
-  $email = $app->request->post('email');
-  $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
-
-  if ($user) {
-
-  $pass = $user['password']; //FETCHING PASS
-  $to = $email;
-  //Details for sending E-mail
-  $from = "TORS";
-  $url = "http://tors.ipd8.info";
-  $body = "TORS password recovery Script
-  -----------------------------------------------
-  Url : $url;
-  email Details is : $to;
-  Here is your password  : $pass;
-  Sincerely,
-  TORS";
-  $from = "Your-email-address@domaindotcom";
-  $subject = "TORS Password recovered";
-  $headers1 = "From: $from\n";
-  //$headers1 .= "Content-type: text/html;charset=iso-8859-1\r\n";
-  // $headers1 .= "X-Priority: 1\r\n";
-  //$headers1 .= "X-MSMail-Priority: High\r\n";
-  // $headers1 .= "X-Mailer: Just My Server\r\n";
-  $sentmail = mail($to, $subject, $body, $headers1);
-  } else {
-  if ($_POST ['email'] != "") {
-  echo "Not found your email in our database";
-  $log->debug("Not found your email in our database");
-  }
-  }
-  //If the message is sent successfully, display sucess message otherwise display an error message.
-  if ($sentmail == 1) {
-  $app->render('passwordForgot_success.html.twig');
-  //echo "Your Password Has Been Sent To Your Email Address.";
-  $log->debug("Your Password Has Been Sent To Your Email Address.");
-  } else {
-  if ($_POST['email'] != "")
-  $log->debug("Your Password Has NOT Been Sent To Your Email Address.");
-  }
-  }
-  });
- */
 
 $app->run();

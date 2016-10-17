@@ -1,0 +1,35 @@
+{% extends "master.html.twig" %}
+
+
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+    <table id="CartView">
+          <tr>
+                <th width="540">Trip information</th>
+                <th width="80">Unit price</th>
+                <th width="70">Quantity</th>
+                <th width="80">Total cost</th>
+                <th width="30">Op</th>
+
+            </tr>
+        
+        {% for ci in cartitemList %}
+            <tr>
+                <td>{{ci.item_name}}</td>                
+                <td>{{ci.pricePerSeat}}</td>
+                <td>{{ci.numberOfSeats}}</td>
+                <td>{{ci.totalPrice}}</td>
+                <td>111</td>
+
+            </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/">Add item</a><br><br>
+    
+    <a href="">Proceed with payment</a>
+
+
+{% endblock %}

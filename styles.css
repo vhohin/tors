@@ -131,8 +131,23 @@ a:hover{
     padding: 20px;    
 }
 
-#contentSelectedDestination{
+#indexAdvertising{
+    padding: 20px;
+    margin-top: 30px;
     border:1px solid lightgray;
+    border-radius: 20px;
+    background-color: lightblue;
+}
+
+#indexAdvertising img{
+    width: 300px;
+    margin: 15px;
+    border: 5px solid white;
+    border-radius: 20px;
+}
+
+#contentSelectedDestination{
+    border:1px solid lightgray;    
     margin: 0;        
 }
 
@@ -140,6 +155,23 @@ a:hover{
     text-align: center;
 }
 
+/*
+* MENU (HELP,ABOUT,CONTACT) forms
+*/
+
+#menuForm{
+    border:1px solid lightgray;    
+    margin: 0;
+    padding:20px;
+}
+
+#menuForm button{
+    width: 70px;
+    height: 35px;
+    margin: 5px;
+    color: #05526B;
+    cursor: pointer;
+}
 /*
 * INDEX select form
 */
@@ -239,6 +271,23 @@ input[type=submit]:hover {
    text-align: center;
    padding: 10px 0;
    border-bottom: 1px lightblue dotted;
+}
+/*
+******************* CART VIEW
+*/
+#CartView{
+    border: 1px solid lightgray;
+    margin: 20px auto;
+}
+#CartView th{
+    border: 1px solid lightgray;
+    background-color: #05526B;
+    color: white;
+    height: 30px;
+}
+#CartView td{
+    border-bottom: 1px solid lightgray;
+   padding: 3px;
 }
 /*
 ******************* FOOTER

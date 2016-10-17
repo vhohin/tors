@@ -3,6 +3,16 @@
 {% block title %}Password reset form{% endblock %}
 
 
+{% block head %}
+   
+    <style>
+        .message{
+            color: red;
+            
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <div id="divPasswordReminder">
         <h2 style="font-family: sans-serif;">Password reset</h2><br><br>
@@ -12,7 +22,7 @@
         {% if errorList %}
             <ul>
                 {% for error in errorList %}
-                    <li>{{ error }}</li>
+                    <li class="message">{{ error }}</li>
                     {% endfor %}
             </ul>
         {% endif %}
@@ -20,10 +30,10 @@
         <form method="post" id="registerForm">
 
 
-            <label for="pass1">Password: <span class="message">&nbsp*</span></label> <br> 
+            <label for="pass1">Password: </label> <br> 
             <input type="password"  placeholder="Password" name="pass1"><br><br>
 
-            <label for="pass1">Re-type Password: <span class="message">&nbsp*</span></label> <br> 
+            <label for="pass1">Re-type Password: </label> <br> 
             <input type="password" placeholder="Password" name="pass2"><br><br>
 
 
