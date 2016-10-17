@@ -150,26 +150,32 @@ $app->post('/select', function() use ($app, $log) {
     $tempDateD = explode('-', $dateTimeDepart);
     $tempDateA = explode('-', $dateTimeArrive);
     if (empty($dateTimeDepart) && empty($dateTimeArrive)) {
-        array_push($errorList, "ERROR: Select Depart or Arrive Date");
+        array_push($errorList, "Select Depart or Arrive Date");
+        //echo "<script> alert('Select Depart or Arrive Date');</script>";
+        //exit();
     } elseif (!empty($dateTimeDepart)) {
         if (count($tempDateD) != 3) {
-            $log->debug("ERROR: Not enough datas in Depart Date");
+            $log->debug("Not enough datas in Depart Date");
         } elseif (!checkdate($tempDateD[1], $tempDateD[2], $tempDateD[0])) {
-            $log->debug("ERROR: Bad format Depart Date");
+            $log->debug("Bad format Depart Date");
         }/* elseif (date("Y-m-d") > date($tempDateD,"Y-m-d")) {
           array_push($errorList, "Depart Date must be later then Now");
           } */
     } elseif (!empty($dateTimeArrive)) {
         if (count($tempDateA) != 3) {
-            $log->debug("ERROR: Not enough datas in Arrive Date");
+            $log->debug("Not enough datas in Arrive Date");
         } elseif (!checkdate($tempDateA[1], $tempDateA[2], $tempDateA[0])) {
-            $log->debug("ERROR: Bad format Arrive Date");
-        }/* elseif (date("Y-m-d") > date($tempDateA,"Y-m-d")) {
+            $log->debug("Bad format Arrive Date");
+        } elseif (date("Y-m-d") > date($tempDateA,"Y-m-d")) {
           array_push($errorList, "Arrive Date must be later then Now");
-          } */
+          } 
     } elseif (!empty($dateTimeDepart) && !empty($dateTimeArrive) && ($tempDateD > $tempDateA)) {
         $log->debug("ERROR: Depart Date later then Arrive Date");
     }
+    
+    
+    
+    //$app->render('index.html.twig', array('cityList' => $cityList, 'currentUser' => $_SESSION['user'], 'errorList' => $errorList, 'v' => $v));
 // State 2: Submission    
 //$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s and DateTimeDepart<%s and DateTimeArrive<%s", $depart,$arrive,$dateTimeDepart,$dateTimeArrive); 
     $result = DB::query("SELECT trips.ID as ID,NumberOfSeats, BusID, DepartID, ArriveID, DateTimeDepart, DateTimeArrive, Price, Description,MakeModel, WiFi, AirConditioning, Toilet, PowerOutlets "
@@ -177,7 +183,7 @@ $app->post('/select', function() use ($app, $log) {
 ////$result = DB::query("SELECT * FROM trips WHERE Depart=%s and Arrive=%s", $depart,$arrive); 
     GLOBAL $cityList;
     if (!$result) {
-        $errorList = array();
+        //$errorList = array();
         $cityList = DB::query("SELECT * FROM citys ORDER BY name");
         if (!$cityList) {
             array_push($errorList, "Not citys in database");
@@ -186,13 +192,18 @@ $app->post('/select', function() use ($app, $log) {
         array_push($errorList, "Not this dastination, change date or destination and try again");
         $app->render('index.html.twig', array('cityList' => $cityList, 'currentUser' => $_SESSION['user'], 'errorList' => $errorList, 'v' => $v));
     } else {
-        $departCity = DB::queryFirstField("SELECT name FROM citys WHERE ID=%d", $depart);
-        $arriveCity = DB::queryFirstField("SELECT name FROM citys WHERE ID=%d", $arrive);
-        if (!$departCity || !$arriveCity) {
-            $log->debug("ERROR: Not found names of city for select destination");
+        if ($errorList) {
+        $app->render('index.html.twig', array('cityList' => $cityList, 'currentUser' => $_SESSION['user'], 'errorList' => $errorList, 'v' => $v));
+        } else {
+            $departCity = DB::queryFirstField("SELECT name FROM citys WHERE ID=%d", $depart);
+            $arriveCity = DB::queryFirstField("SELECT name FROM citys WHERE ID=%d", $arrive);
+            if (!$departCity || !$arriveCity) {
+                $log->debug("ERROR: Not found names of city for select destination");
+            }
+            $app->render('selected_destination.html.twig', array('valueList' => $result, 'currentUser' => $_SESSION['user'], 'departCity' => $departCity, 'arriveCity' => $arriveCity));
         }
-        $app->render('selected_destination.html.twig', array('valueList' => $result, 'currentUser' => $_SESSION['user'], 'departCity' => $departCity, 'arriveCity' => $arriveCity));
     }
+  
 });
 //**************************************************** Payment
 $app->post('/payment', function() use ($app, $log) {
@@ -414,7 +425,7 @@ $app->get('/register', function() use ($app, $log) {
     //unset users
     $_SESSION['user'] = array();
     $_SESSION['facebook_access_token'] = array();
-
+    $_SESSION['startCart']= array();
     $app->render('register.html.twig');
 });
 // State 2: submission
@@ -499,10 +510,12 @@ $app->post('/register', function() use ($app, $log) {
 //************************ LOGIN/LOGOUT****************************
 // State 1: first show
 $app->get('/login', function() use ($app, $log) {
+    $_SESSION['startCart']= array();
     $app->render('login.html.twig');
 });
 // State 2: submission
 $app->post('/login', function() use ($app, $log) {
+    $_SESSION['startCart']= array();
     $email = $app->request->post('email');
     $pass = $app->request->post('pass');
     $user = DB::queryFirstRow("SELECT * FROM users WHERE email=%s", $email);
@@ -534,6 +547,7 @@ $app->post('/login', function() use ($app, $log) {
 $app->get('/logout', function() use ($app, $log) {
     $_SESSION['user'] = array();
     $_SESSION['facebook_access_token'] = array();
+    $_SESSION['startCart']= array();
     $app->render('logout_success.html.twig');
 });
 
